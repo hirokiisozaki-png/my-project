@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今回案件の業務分担 ─ AGV/AMR導入プロジェクト</title>
+<style>
+  :root {
+    --ink: #1e2a38;
+    --ink-sub: #4a5568;
+    --ink-muted: #8896a5;
+    --border: #d1dce8;
+    --surface: #f8fafc;
+    --white: #ffffff;
+
+    --mirabot:       #0f6e56;
+    --mirabot-light: #e1f5ee;
+    --mirabot-mid:   #1d9e75;
+
+    --sier:       #3c3489;
+    --sier-light: #eeedfe;
+    --sier-mid:   #534ab7;
+
+    --aiten:       #712b13;
+    --aiten-light: #faece7;
+    --aiten-mid:   #993c1d;
+
+    --gray-dark:  #2e4057;
+    --warn:       #854f0b;
+    --warn-bg:    #faeeda;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Sans", "Meiryo", "Arial", sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--white);
+    line-height: 1.7;
+  }
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── ヘッダー ── */
+  .doc-header {
+    border-bottom: 3px solid var(--mirabot);
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+  .doc-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    color: var(--mirabot-mid);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .doc-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .doc-sub { font-size: 13px; color: var(--ink-sub); }
+  .doc-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  /* ── セクション ── */
+  .section { margin-bottom: 44px; }
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    border-left: 4px solid var(--mirabot);
+    padding-left: 12px;
+    margin-bottom: 14px;
+  }
+  .section-body {
+    font-size: 13.5px;
+    color: var(--ink-sub);
+    margin-bottom: 16px;
+    line-height: 1.8;
+  }
+
+  /* ── 前提条件 ── */
+  .premise-list {
+    list-style: none;
+    padding: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+  }
+  .premise-list li {
+    font-size: 13px;
+    color: var(--ink-sub);
+    padding: 4px 0 4px 18px;
+    position: relative;
+  }
+  .premise-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--mirabot-mid);
+  }
+
+  /* ── 商流図 ── */
+  .flow-wrap {
+    overflow-x: auto;
+    margin-bottom: 8px;
+  }
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    min-width: 680px;
+  }
+  .flow-node {
+    flex: 1;
+    text-align: center;
+    padding: 12px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .flow-node small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    margin-top: 3px;
+    opacity: .8;
+  }
+  .flow-arrow {
+    flex: 0 0 36px;
+    text-align: center;
+    font-size: 18px;
+    color: var(--ink-muted);
+    position: relative;
+  }
+  .flow-arrow span {
+    font-size: 10px;
+    display: block;
+    color: var(--ink-muted);
+    white-space: nowrap;
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .node-eu       { background: #2e4057; color: #fff; }
+  .node-miura    { background: #4a5568; color: #fff; }
+  .node-mirabot  { background: var(--mirabot); color: #fff; }
+  .node-aiten    { background: #6b3a2a; color: #fff; }
+  .note-miura {
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-align: center;
+    margin-top: 6px;
+    margin-bottom: 16px;
+  }
+
+  /* ── 契約構造テーブル ── */
+  .contract-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  .contract-table th {
+    background: var(--gray-dark);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 9px 14px;
+    text-align: left;
+    border: 1px solid var(--gray-dark);
+  }
+  .contract-table td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    vertical-align: top;
+  }
+  .contract-table tr:nth-child(even) td { background: var(--surface); }
+
+  /* ── 役割分担テーブル ── */
+  .role-table { width: 100%; border-collapse: collapse; }
+  .role-table th {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 12px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.3);
+    color: #fff;
+  }
+  .th-item      { background: var(--gray-dark); text-align: left !important; width: 18%; }
+  .th-mirabot   { background: var(--mirabot); width: 28%; }
+  .th-sier      { background: var(--sier); width: 28%; }
+  .th-aiten     { background: var(--aiten); width: 26%; }
+  .role-table td {
+    padding: 11px 12px;
+    border: 1px solid var(--border);
+    font-size: 12.5px;
+    vertical-align: top;
+    line-height: 1.65;
+  }
+  .td-item   { background: var(--surface); font-weight: 600; font-size: 13px; color: var(--ink); }
+  .td-m      { background: #f0fbf6; }
+  .td-s      { background: #f5f3ff; }
+  .td-a      { background: #fff5f2; }
+  .td-none   { background: #fafafa; color: var(--ink-muted); font-size: 12px; text-align: center; }
+  .badge-main {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 3px;
+    margin-bottom: 5px;
+  }
+  .badge-m { background: var(--mirabot); color: #fff; }
+  .badge-s { background: var(--sier); color: #fff; }
+  .badge-a { background: var(--aiten); color: #fff; }
+  .badge-co { background: #888; color: #fff; }
+
+  /* ── 責任分界点 ── */
+  .boundary-table { width: 100%; border-collapse: collapse; }
+  .boundary-table th {
+    background: var(--gray-dark);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 9px 14px;
+    text-align: left;
+    border: 1px solid var(--gray-dark);
+  }
+  .boundary-table td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    vertical-align: top;
+  }
+  .boundary-table tr:nth-child(even) td { background: var(--surface); }
+  .party-cell { font-weight: 600; white-space: nowrap; }
+
+  /* ── 留意事項 ── */
+  .caution-box {
+    background: var(--warn-bg);
+    border-left: 4px solid var(--warn);
+    border-radius: 4px;
+    padding: 14px 18px;
+  }
+  .caution-box ul { list-style: none; padding: 0; }
+  .caution-box ul li {
+    font-size: 13px;
+    color: #5a3a08;
+    padding: 4px 0 4px 18px;
+    position: relative;
+  }
+  .caution-box ul li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--warn);
+  }
+
+  /* ── フッター ── */
+  .doc-footer {
+    margin-top: 60px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--ink-muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media print {
+    body { font-size: 12px; }
+    .page { padding: 20px 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div class="doc-label">社内参考資料 ／ AGV・AMR導入プロジェクト</div>
+    <div class="doc-title">今回案件における業務分担</div>
+    <div class="doc-sub">三浦工業グループ ─ ミラボット・SIer・AiTEN 三者連携体制</div>
+    <div class="doc-meta">
+      <span>作成：ミラボット株式会社</span>
+      <span>区分：社外秘</span>
+    </div>
+  </div>
+
+  <!-- 1. 案件概要 -->
+  <div class="section">
+    <div class="section-title">1. 案件概要・前提条件</div>
+    <div class="section-body">
+      本案件は、三浦工業グループのAMR/AGF専業会社であるミラボット株式会社が、三浦工業経由のEU（エンドユーザー）に対してAiTEN製AGFを含む自動搬送システムを提供するプロジェクトである。ミラボットが実務を一括して統括し、建業法上の工事はSIer、AGF本体セッティングはAiTENに外注する三者連携体制を採用する。
+    </div>
+    <ul class="premise-list">
+      <li>AGFの誘導方式はRCS（Robot Control System）を使用。ランドマーク（QRコード・磁気テープ）は使用しない。</li>
+      <li>Wi-Fi整備はSIerが担当する（AiTENはWi-Fi設置の実績が少ないとの情報があるため）。</li>
+      <li>AiTENの担当はAGF本体セッティング・試運転・ハード保守に限定し、依存リスクを低減する。</li>
+      <li>EUへの一次窓口は三浦工業だが、実務対応はすべてミラボットが担う。</li>
+    </ul>
+  </div>
+
+  <!-- 2. 商流 -->
+  <div class="section">
+    <div class="section-title">2. 商流・契約構造</div>
+    <div class="section-body">商流および推奨契約構造は以下のとおりである。</div>
+
+    <div class="flow-wrap">
+      <div class="flow">
+        <div class="flow-node node-eu">EU<br><small>エンドユーザー</small></div>
+        <div class="flow-arrow"><span>発注・窓口</span>→</div>
+        <div class="flow-node node-miura">三浦工業<br><small>窓口・契約主体</small></div>
+        <div class="flow-arrow"><span>実務委託</span>→</div>
+        <div class="flow-node node-mirabot">ミラボット<br><small>実務一括請負</small></div>
+        <div class="flow-arrow"><span>仕入</span>→</div>
+        <div class="flow-node node-aiten">AiTEN<br><small>仕入先</small></div>
+      </div>
+    </div>
+    <div class="note-miura">※ 三浦工業はEUとの窓口・契約のみを担い、実務には介在しない</div>
+
+    <table class="contract-table">
+      <thead>
+        <tr><th style="width:30%">契約関係</th><th>内容</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>EU ─ 三浦工業</td><td>発注・窓口契約（実務は不介在）</td></tr>
+        <tr><td>三浦工業 ─ ミラボット</td><td>実務一括請負契約</td></tr>
+        <tr><td>ミラボット ─ SIer</td><td>工事請負契約（電源・Wi-Fi・PLC等）</td></tr>
+        <tr><td>ミラボット ─ AiTEN</td><td>業務委託契約（AGFセッティング・試運転・ハード保守）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. 役割分担 -->
+  <div class="section">
+    <div class="section-title">3. 三者の業務分担</div>
+    <div class="section-body">◎ 主担当　／　○ 協力・立ち会い　／　△ 管理・確認のみ　／　─ 対象外</div>
+    <table class="role-table">
+      <thead>
+        <tr>
+          <th class="th-item">業務項目</th>
+          <th class="th-mirabot">ミラボット</th>
+          <th class="th-sier">SIer（地場業者）</th>
+          <th class="th-aiten">AiTEN（再委託）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-item">コンサル・要件定義</td>
+          <td class="td-m"><span class="badge-main badge-m">◎ 主担当</span><br>ヒアリング・ROI試算・提案書作成・要件定義書管理（三者分を一本化）</td>
+          <td class="td-s"><span class="badge-main badge-co">○ 協力</span><br>設備要件・施工条件の確認</td>
+          <td class="td-a"><span class="badge-main badge-co">○ 協力</span><br>AGF走行要件・RCS仕様の確認</td>
+        </tr>
+        <tr>
+          <td class="td-item">ソフトウェア販売・設定</td>
+          <td class="td-m"><span class="badge-main badge-m">◎ 主担当</span><br>MIRABOT LINK 導入・設定・API連携・フリート管理設定</td>
+          <td class="td-none">─</td>
+          <td class="td-none">─</td>
+        </tr>
+        <tr>
+          <td class="td-item">電源・配線工事</td>
+          <td class="td-none">△ 仕様管理のみ</td>
+          <td class="td-s"><span class="badge-main badge-s">◎ 主担当</span><br>充電器電源引き込み・配線工事（電気工事士資格が必要）</td>
+          <td class="td-none">─</td>
+        </tr>
+        <tr>
+          <td class="td-item">Wi-Fi整備</td>
+          <td class="td-none">△ 仕様確認のみ</td>
+          <td class="td-s"><span class="badge-main badge-s">◎ 主担当</span><br>電波強度測定（サイトサーベイ）・アクセスポイント設置・設定</td>
+          <td class="td-none">─</td>
+        </tr>
+        <tr>
+          <td class="td-item">既存設備連携工事</td>
+          <td class="td-none">△ 仕様管理のみ</td>
+          <td class="td-s"><span class="badge-main badge-s">◎ 主担当</span><br>PLC・インターロック・シャッター接続工事</td>
+          <td class="td-none">─</td>
+        </tr>
+        <tr>
+          <td class="td-item">AGFセッティング（RCS）</td>
+          <td class="td-none">△ 進捗管理のみ</td>
+          <td class="td-s"><span class="badge-main badge-co">○ 協力</span><br>Wi-Fi通信確認の立ち会い</td>
+          <td class="td-a"><span class="badge-main badge-a">◎ 主担当</span><br>RCS設定・走行パラメータ調整・AGF通信確認</td>
+        </tr>
+        <tr>
+          <td class="td-item">試運転・立ち上げ</td>
+          <td class="td-m"><span class="badge-main badge-m">◎ 受入判定</span><br>受け入れ基準への適合確認・エンドユーザーへの引き渡し</td>
+          <td class="td-s"><span class="badge-main badge-co">○ 協力</span><br>設備側動作確認・立ち会い</td>
+          <td class="td-a"><span class="badge-main badge-a">◎ 主担当</span><br>走行テスト・負荷試験・全体試験</td>
+        </tr>
+        <tr>
+          <td class="td-item">ソフト保守</td>
+          <td class="td-m"><span class="badge-main badge-m">◎ 主担当</span><br>MIRABOT LINK 更新・ソフト障害対応・EU一次窓口</td>
+          <td class="td-none">─</td>
+          <td class="td-none">─</td>
+        </tr>
+        <tr>
+          <td class="td-item">設備ハード保守</td>
+          <td class="td-none">─</td>
+          <td class="td-s"><span class="badge-main badge-s">◎ 主担当</span><br>設備修繕・現地対応・Wi-Fi障害対応</td>
+          <td class="td-none">─</td>
+        </tr>
+        <tr>
+          <td class="td-item">AGFハード保守</td>
+          <td class="td-none">─</td>
+          <td class="td-none">─</td>
+          <td class="td-a"><span class="badge-main badge-a">◎ 主担当</span><br>AGF本体メンテ・部品交換・修理</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. 責任分界点 -->
+  <div class="section">
+    <div class="section-title">4. 責任分界点の確認事項</div>
+    <div class="section-body">プロジェクト開始前に三者間で以下の責任分界点を明確に取り決める必要がある。</div>
+    <table class="boundary-table">
+      <thead>
+        <tr><th style="width:28%">関係者</th><th>確認・取り決め事項</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="party-cell" style="color:var(--mirabot)">ミラボット ↔ SIer</td>
+          <td>MIRABOT LINKのSW設定と配線工事の境界を明確化（誰がどこまで設定するかを事前合意）</td>
+        </tr>
+        <tr>
+          <td class="party-cell" style="color:var(--mirabot)">ミラボット ↔ AiTEN</td>
+          <td>RCS設定とMIRABOT LINK連携の接続試験の主導者を決定（試験手順書をミラボットが管理）</td>
+        </tr>
+        <tr>
+          <td class="party-cell" style="color:var(--sier)">SIer ↔ AiTEN</td>
+          <td>Wi-Fi設定完了後のAGF通信確認はAiTENが実施・SIerが立ち会い。通信不良時の切り分け手順を事前策定。</td>
+        </tr>
+        <tr>
+          <td class="party-cell" style="color:var(--gray-dark)">三浦工業 ↔ ミラボット</td>
+          <td>EUからの問い合わせは三浦工業が受け付けた後、ミラボットへエスカレーションするルートを明確化</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 5. 留意事項 -->
+  <div class="section">
+    <div class="section-title">5. 留意事項</div>
+    <div class="caution-box">
+      <ul>
+        <li>AiTENへの業務委託範囲をAGFセッティング・試運転・ハード保守に限定することで、将来的なメーカー切り替えや体制変化へのリスクを低減する。</li>
+        <li>地場SIerは早期に選定・打ち合わせを開始し、Wi-Fiサイトサーベイ（電波強度測定）をAGF搬入前に完了させることが重要。</li>
+        <li>要件定義書はミラボットが一本化して管理する。SIer・AiTENがそれぞれ別仕様書を作成すると整合が取れなくなるリスクがある。</li>
+        <li>受け入れ基準（稼働率・サイクルタイム・エラー率の合格ライン）はEUと先に握り、その後三者に展開する順番を守ること。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <span>ミラボット株式会社　社外秘</span>
+    <span>本資料の外部への無断転用を禁じます</span>
+  </div>
+
+</div>
+</body>
+</html>
