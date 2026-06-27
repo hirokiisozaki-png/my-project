@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIer業務概要 ─ AGV/AMR導入プロジェクト</title>
+<style>
+  :root {
+    --ink: #1e2a38;
+    --ink-sub: #4a5568;
+    --ink-muted: #8896a5;
+    --accent: #0f6e56;
+    --accent-light: #e1f5ee;
+    --accent-mid: #1d9e75;
+    --border: #d1dce8;
+    --surface: #f8fafc;
+    --white: #ffffff;
+    --warn: #854f0b;
+    --warn-bg: #faeeda;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Sans", "Meiryo", "Arial", sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--white);
+    line-height: 1.7;
+  }
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── ヘッダー ── */
+  .doc-header {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+  .doc-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    color: var(--accent-mid);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .doc-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .doc-sub {
+    font-size: 13px;
+    color: var(--ink-sub);
+  }
+  .doc-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  /* ── セクション ── */
+  .section { margin-bottom: 44px; }
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    border-left: 4px solid var(--accent);
+    padding-left: 12px;
+    margin-bottom: 14px;
+  }
+  .section-body {
+    font-size: 13.5px;
+    color: var(--ink-sub);
+    margin-bottom: 16px;
+    line-height: 1.8;
+  }
+
+  /* ── フェーズテーブル ── */
+  .phase-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  .phase-table th {
+    background: var(--ink);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 14px;
+    text-align: left;
+    border: 1px solid var(--ink);
+  }
+  .phase-table td {
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .phase-table tr:nth-child(even) td { background: var(--surface); }
+  .phase-table tr:hover td { background: var(--accent-light); }
+  .phase-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    margin-bottom: 4px;
+  }
+  .phase-name { font-weight: 600; color: var(--ink); font-size: 13px; }
+  .col-phase { width: 14%; }
+  .col-name  { width: 20%; }
+  .col-work  { width: 34%; }
+  .col-eg    { width: 32%; }
+
+  /* ── 資格注記ボックス ── */
+  .notice-box {
+    background: var(--warn-bg);
+    border-left: 4px solid var(--warn);
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+  }
+  .notice-box .notice-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--warn);
+    margin-bottom: 8px;
+  }
+  .notice-box ul {
+    list-style: none;
+    padding: 0;
+  }
+  .notice-box ul li {
+    font-size: 13px;
+    color: #5a3a08;
+    padding: 3px 0 3px 16px;
+    position: relative;
+  }
+  .notice-box ul li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--warn);
+  }
+
+  /* ── フッター ── */
+  .doc-footer {
+    margin-top: 60px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--ink-muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media print {
+    body { font-size: 12px; }
+    .page { padding: 20px 24px; }
+    .phase-table tr:hover td { background: inherit; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div class="doc-label">社内参考資料 ／ AGV・AMR導入プロジェクト</div>
+    <div class="doc-title">SIer（システムインテグレーター）が担う業務概要</div>
+    <div class="doc-sub">AGV/AMR導入プロジェクトにおけるSIerの役割と業務範囲</div>
+    <div class="doc-meta">
+      <span>作成：ミラボット株式会社</span>
+      <span>区分：社外秘</span>
+    </div>
+  </div>
+
+  <!-- 1. 概要 -->
+  <div class="section">
+    <div class="section-title">1. SIerとは</div>
+    <div class="section-body">
+      SIer（システムインテグレーター）とは、AGV/AMR導入において機器単体の販売にとどまらず、要件定義からシステム設計・施工・試運転・保守までを一貫して請け負う事業者を指す。<br>
+      建設業法に基づく工事資格（電気工事士等）を有しており、電源・配線・既存設備との接続工事を合法的に実施できる点が最大の特徴であり、メーカーや販売会社との最大の違いである。
+    </div>
+  </div>
+
+  <!-- 2. フェーズ別業務 -->
+  <div class="section">
+    <div class="section-title">2. フェーズ別業務内容</div>
+    <div class="section-body">SIerが担う業務は導入プロジェクトの全フェーズにわたる。</div>
+    <table class="phase-table">
+      <thead>
+        <tr>
+          <th class="col-phase">フェーズ</th>
+          <th class="col-name">業務区分</th>
+          <th class="col-work">主な業務内容</th>
+          <th class="col-eg">具体的な作業例</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="phase-tag">① </span></td>
+          <td><span class="phase-name">コンサル・要件定義</span></td>
+          <td>現状把握ヒアリング、課題整理、ROI試算、提案書作成、機種選定支援</td>
+          <td>搬送工程ヒアリング、動線分析・ボトルネック可視化、投資回収年数試算</td>
+        </tr>
+        <tr>
+          <td><span class="phase-tag">② </span></td>
+          <td><span class="phase-name">システム設計</span></td>
+          <td>搬送フロー設計、走行マップ設計、安全設計、上位システム連携仕様策定</td>
+          <td>走行ルート・充電ステーション配置設計、PLC/API連携仕様、インターロック設計</td>
+        </tr>
+        <tr>
+          <td><span class="phase-tag">③ </span></td>
+          <td><span class="phase-name">設備・環境整備（施工）</span></td>
+          <td>電源・配線工事、Wi-Fiインフラ整備、既存設備との接続工事</td>
+          <td>充電器電源引き込み、Wi-Fi電波強度測定・AP設置、PLC・シャッター接続工事</td>
+        </tr>
+        <tr>
+          <td><span class="phase-tag">④ </span></td>
+          <td><span class="phase-name">システム構築・インテグレーション</span></td>
+          <td>AGV/AMR走行プログラミング、フリート管理設定、上位システム連携構築・テスト</td>
+          <td>ルートプログラム設定、WMS/MES API連携、テスト・デバッグ</td>
+        </tr>
+        <tr>
+          <td><span class="phase-tag">⑤ </span></td>
+          <td><span class="phase-name">試運転・立ち上げ</span></td>
+          <td>単体・全体走行テスト、負荷試験、干渉テスト、オペレーター教育・引き渡し</td>
+          <td>搬送タスク全体試験、エラー率測定、現場担当者への操作教育</td>
+        </tr>
+        <tr>
+          <td><span class="phase-tag">⑥ </span></td>
+          <td><span class="phase-name">保守・運用サポート</span></td>
+          <td>定期点検・予防保全、障害対応（リモート/オンサイト）、変更対応</td>
+          <td>定期メンテ、ルート変更・機体追加対応、ソフトウェアアップデート管理</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. SIerに依存する業務 -->
+  <div class="section">
+    <div class="section-title">3. SIerに依存する業務の特徴</div>
+    <div class="section-body">以下の領域はメーカーや販売会社が代替することが困難または法的に不可能である。</div>
+    <div class="notice-box">
+      <div class="notice-title">法的・技術的にSIerが必要な業務</div>
+      <ul>
+        <li>電源・配線工事：電気工事士資格（第一種または第二種）が法的に必要。メーカーや販売会社は実施不可。</li>
+        <li>PLC・インターロック接続：既存設備への介入を伴うため、施工業者による責任の明確化が不可欠。</li>
+        <li>Wi-Fiインフラ整備：電波強度測定・APの適切な設置はAMR稼働品質に直結する専門作業。AMRの通信品質が低下すると搬送停止の直接原因となる。</li>
+        <li>現地障害対応：障害発生時の迅速な現地対応には地場SIerの活用が効果的。遠隔対応には限界がある。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <span>ミラボット株式会社　社外秘</span>
+    <span>本資料の外部への無断転用を禁じます</span>
+  </div>
+
+</div>
+</body>
+</html>
