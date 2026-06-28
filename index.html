@@ -298,6 +298,9 @@
       <div class="sidebar-item sidebar-item-child" data-filter="folder-case-wa" onclick="filterSidebar('folder-case-wa', this)">
         <i class="ti ti-folder" aria-hidden="true"></i> ワ行
       </div>
+      <div class="sidebar-item sidebar-item-grandchild" data-filter="folder-case-gunze" onclick="filterSidebar('folder-case-gunze', this)">
+        <i class="ti ti-folder" aria-hidden="true"></i> グンゼ守山工場案件
+      </div>
       <div class="sidebar-item sidebar-item-grandchild" data-filter="folder-nx-kato" onclick="filterSidebar('folder-nx-kato', this)">
         <i class="ti ti-folder" aria-hidden="true"></i> NX商事加東市倉庫案件
       </div>
@@ -344,7 +347,7 @@
         <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-sier', null)">
           <div class="folder-icon"><i class="ti ti-robot" aria-hidden="true"></i></div>
           <div class="folder-name">AGV/AMR導入</div>
-          <div class="folder-count">1件</div>
+          <div class="folder-count">0件</div>
         </div>
         <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-proposal', null)">
           <div class="folder-icon"><i class="ti ti-file-description" aria-hidden="true"></i></div>
@@ -374,7 +377,12 @@
         <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ka', null)">
           <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
           <div class="folder-name">カ行</div>
-          <div class="folder-count">0件</div>
+          <div class="folder-count">1件</div>
+        </div>
+        <div class="folder-card" style="display:none" data-parent="folder-case-ka" onclick="filterSidebar('folder-case-gunze', null)">
+          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+          <div class="folder-name">グンゼ守山工場案件</div>
+          <div class="folder-count">1件</div>
         </div>
         <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-sa', null)">
           <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
@@ -461,15 +469,15 @@
 
       <a class="doc-card" target="_blank"
          href="グンゼ守山工場案件の業務分担.html"
-         data-folder="folder-sier"
+         data-folder="folder-case-gunze"
          data-tags="tag-agv tag-sier tag-mirabot"
          data-text="グンゼ守山工場案件 業務分担 ミラボット SIer ロジエンス AiTEN 三浦工業 役割 商流 契約 RCS AGF 責任分界 グンゼ ロジエンス">
         <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
         <div class="doc-info">
           <div class="doc-title">グンゼ守山工場案件の業務分担</div>
-          <div class="doc-meta">AGV/AMR導入 ／ 更新：2026.06</div>
+          <div class="doc-meta">案件まとめ ／ グンゼ守山工場案件 ／ 更新：2026.06</div>
         </div>
-        <span class="doc-tag">AGV/AMR導入</span>
+        <span class="doc-tag">案件まとめ</span>
       </a>
 
       <a class="doc-card" target="_blank"
@@ -659,6 +667,7 @@
       'folder-nx-kato': ['NX商事加東市倉庫案件', 'NX商事加東市倉庫案件の関連資料'],
       'folder-case-a': ['ア行', '案件まとめ ／ ア行'],
       'folder-case-ka': ['カ行', '案件まとめ ／ カ行'],
+      'folder-case-gunze': ['グンゼ守山工場案件', '案件まとめ ／ グンゼ守山工場案件'],
       'folder-case-sa': ['サ行', '案件まとめ ／ サ行'],
       'folder-case-ta': ['タ行', '案件まとめ ／ タ行'],
       'folder-case-na': ['ナ行', '案件まとめ ／ ナ行'],
@@ -730,4 +739,5 @@
 </script>
 </body>
 </html>
+
 
