@@ -257,6 +257,9 @@
       <div class="sidebar-item" data-filter="folder-apps" onclick="filterSidebar('folder-apps', this)">
         <i class="ti ti-tools" aria-hidden="true"></i> 便利アプリ
       </div>
+      <div class="sidebar-item" data-filter="folder-case" onclick="filterSidebar('folder-case', this)">
+        <i class="ti ti-briefcase" aria-hidden="true"></i> 案件まとめ
+      </div>
     </div>
     <hr class="sidebar-divider">
     <div class="sidebar-section">
@@ -336,6 +339,11 @@
           <div class="folder-icon"><i class="ti ti-tools" aria-hidden="true"></i></div>
           <div class="folder-name">便利アプリ</div>
           <div class="folder-count">3件</div>
+        </div>
+        <div class="folder-card" onclick="filterSidebar('folder-case', null)">
+          <div class="folder-icon"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
+          <div class="folder-name">案件まとめ</div>
+          <div class="folder-count">0件</div>
         </div>
       </div>
     </div>
@@ -489,7 +497,8 @@
       'tag-sier': ['SIer タグ', 'SIer関連の資料'],
       'folder-miura': ['三浦工業', '三浦工業グループ関連資料'],
       'folder-expense': ['経費', '経費・費用関連資料'],
-      'folder-apps': ['便利アプリ', '業務に役立つWebアプリ'],
+      'folder-apps': ['便利アプリ', '業務に役立つWebアプリ']
+      'folder-case': ['案件まとめ', '案件ごとの業務分担・進捗・情報まとめ'],,
     };
     const [title, sub] = labels[filter] || ['すべての資料', ''];
     pageTitle.textContent = title;
