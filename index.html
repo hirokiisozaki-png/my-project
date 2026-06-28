@@ -132,6 +132,8 @@
   }
   .section-head h2 { font-size: 15px; font-weight: 700; color: var(--ink); }
   .folders { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 36px; }
+  /* 子フォルダ（data-parent != "all"）はCSSでデフォルト非表示 */
+  .folder-card:not([data-parent="all"]) { display: none; }
   .folder-card {
     background: var(--white);
     border: 1px solid var(--border);
@@ -599,9 +601,11 @@
 
   searchInput.addEventListener('input', applyFilters);
 
-  // 初期表示：トップページではdata-parent="all"のフォルダのみ表示
-  filterSidebar('all', null);
-  updateStats();
+  // ページ完全読み込み後に初期表示を実行（CSS・DOM確定後）
+  window.addEventListener('load', function() {
+    filterSidebar('all', null);
+    updateStats();
+  });
 </script>
 </body>
 </html>
