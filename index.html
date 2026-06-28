@@ -598,6 +598,9 @@
   }
 
   searchInput.addEventListener('input', applyFilters);
+
+  // 初期表示：トップページではdata-parent="all"のフォルダのみ表示
+  filterSidebar('all', null);
   updateStats();
 </script>
 </body>
