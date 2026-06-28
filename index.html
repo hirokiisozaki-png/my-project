@@ -560,7 +560,8 @@
     allFolderCards.forEach(card => {
       const parent = card.dataset.parent;
       const show = parent === filter;
-      card.style.display = show ? '' : 'none';
+      // CSSの display:none を上書きするため '' ではなく 'block' を明示指定
+      card.style.display = show ? 'block' : 'none';
       if (show) hasChildFolders = true;
     });
 
