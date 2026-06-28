@@ -99,6 +99,10 @@
     padding-left: 28px !important;
     font-size: 12px;
   }
+  .sidebar-item-grandchild {
+    padding-left: 44px !important;
+    font-size: 11px;
+  }
   .sidebar-item:hover { background: var(--surface); color: var(--ink); }
   .sidebar-item.active { background: var(--accent-light); color: var(--accent); font-weight: 600; border-left-color: var(--accent); }
   .sidebar-item i { font-size: 15px; }
@@ -266,7 +270,37 @@
       <div class="sidebar-item" data-filter="folder-case" onclick="filterSidebar('folder-case', this)">
         <i class="ti ti-briefcase" aria-hidden="true"></i> 案件まとめ
       </div>
-      <div class="sidebar-item sidebar-item-child" data-filter="folder-nx-kato" onclick="filterSidebar('folder-nx-kato', this)">
+      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-a" onclick="filterSidebar('folder-case-a', this)">
+        <i class="ti ti-folder" aria-hidden="true"></i> ア行
+      </div>
+      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ka" onclick="filterSidebar('folder-case-ka', this)">
+        <i class="ti ti-folder" aria-hidden="true"></i> カ行
+      </div>
+      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-sa" onclick="filterSidebar('folder-case-sa', this)">
+        <i class="ti ti-folder" aria-hidden="true"></i> サ行
+      </div>
+      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ta" onclick="filterSidebar('folder-case-ta', this)">
+        <i class="ti ti-folder" aria-hidden="true"></i> タ行
+      </div>
+      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-na" onclick="filterSidebar('folder-case-na', this)">
+        <i class="ti ti-folder" aria-hidden="true"></i> ナ行
+      </div>
+      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ha" onclick="filterSidebar('folder-case-ha', this)">
+        <i class="ti ti-folder" aria-hidden="true"></i> ハ行
+      </div>
+      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ma" onclick="filterSidebar('folder-case-ma', this)">
+        <i class="ti ti-folder" aria-hidden="true"></i> マ行
+      </div>
+      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ya" onclick="filterSidebar('folder-case-ya', this)">
+        <i class="ti ti-folder" aria-hidden="true"></i> ヤ行
+      </div>
+      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ra" onclick="filterSidebar('folder-case-ra', this)">
+        <i class="ti ti-folder" aria-hidden="true"></i> ラ行
+      </div>
+      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-wa" onclick="filterSidebar('folder-case-wa', this)">
+        <i class="ti ti-folder" aria-hidden="true"></i> ワ行
+      </div>
+      <div class="sidebar-item sidebar-item-grandchild" data-filter="folder-nx-kato" onclick="filterSidebar('folder-nx-kato', this)">
         <i class="ti ti-folder" aria-hidden="true"></i> NX商事加東市倉庫案件
       </div>
     </div>
@@ -332,9 +366,59 @@
         <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-case', null)">
           <div class="folder-icon"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
           <div class="folder-name">案件まとめ</div>
+          <div class="folder-count">10件</div>
+        </div>
+        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-case-a', null)">
+          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+          <div class="folder-name">ア行</div>
           <div class="folder-count">1件</div>
         </div>
-        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-nx-kato', null)">
+        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-case-ka', null)">
+          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+          <div class="folder-name">カ行</div>
+          <div class="folder-count">0件</div>
+        </div>
+        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-case-sa', null)">
+          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+          <div class="folder-name">サ行</div>
+          <div class="folder-count">0件</div>
+        </div>
+        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-case-ta', null)">
+          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+          <div class="folder-name">タ行</div>
+          <div class="folder-count">0件</div>
+        </div>
+        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-case-na', null)">
+          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+          <div class="folder-name">ナ行</div>
+          <div class="folder-count">0件</div>
+        </div>
+        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-case-ha', null)">
+          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+          <div class="folder-name">ハ行</div>
+          <div class="folder-count">0件</div>
+        </div>
+        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-case-ma', null)">
+          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+          <div class="folder-name">マ行</div>
+          <div class="folder-count">0件</div>
+        </div>
+        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-case-ya', null)">
+          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+          <div class="folder-name">ヤ行</div>
+          <div class="folder-count">0件</div>
+        </div>
+        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-case-ra', null)">
+          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+          <div class="folder-name">ラ行</div>
+          <div class="folder-count">0件</div>
+        </div>
+        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-case-wa', null)">
+          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+          <div class="folder-name">ワ行</div>
+          <div class="folder-count">0件</div>
+        </div>
+        <div class="folder-card" data-parent="folder-case-a" onclick="filterSidebar('folder-nx-kato', null)">
           <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
           <div class="folder-name">NX商事加東市倉庫案件</div>
           <div class="folder-count">3件</div>
@@ -547,6 +631,16 @@
       'folder-expense': ['経費', '経費・費用関連資料'],
       'folder-apps': ['便利アプリ', '業務に役立つWebアプリ'],
       'folder-nx-kato': ['NX商事加東市倉庫案件', 'NX商事加東市倉庫案件の関連資料'],
+      'folder-case-a': ['ア行', '案件まとめ ／ ア行'],
+      'folder-case-ka': ['カ行', '案件まとめ ／ カ行'],
+      'folder-case-sa': ['サ行', '案件まとめ ／ サ行'],
+      'folder-case-ta': ['タ行', '案件まとめ ／ タ行'],
+      'folder-case-na': ['ナ行', '案件まとめ ／ ナ行'],
+      'folder-case-ha': ['ハ行', '案件まとめ ／ ハ行'],
+      'folder-case-ma': ['マ行', '案件まとめ ／ マ行'],
+      'folder-case-ya': ['ヤ行', '案件まとめ ／ ヤ行'],
+      'folder-case-ra': ['ラ行', '案件まとめ ／ ラ行'],
+      'folder-case-wa': ['ワ行', '案件まとめ ／ ワ行'],
     };
     const [title, sub] = labels[filter] || ['すべての資料', ''];
     pageTitle.textContent = title;
