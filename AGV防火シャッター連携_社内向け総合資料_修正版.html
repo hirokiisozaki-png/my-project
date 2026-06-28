@@ -30,6 +30,15 @@ h2 { color: #2E5090; font-size: 11pt; margin-top: 16px; }
 p { margin: 4px 0; line-height: 1.7; }
 img { max-width: 100%; height: auto; display: block; margin: 10px auto; }
 hr { border: none; border-top: 1px solid #ccc; margin: 16px 0; }
+
+/* ── レイアウト修正 ── */
+body { margin-left: auto !important; margin-right: auto !important; }
+table { width: 100% !important; max-width: 100% !important; }
+col { width: auto !important; }
+/* 表題ブロックを中央寄せ */
+div[title="header"] { text-align: center; }
+div[title="header"] p { text-align: center !important; }
+body > p[align="center"] { text-align: center !important; }
 </style>
 </head>
 <body link="#0563c1" vlink="#800000" dir="ltr">
