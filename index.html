@@ -701,7 +701,7 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <script>
-  const docs = document.querySelectorAll('.doc-card, .drive-card');
+  const docs = document.querySelectorAll('.doc-card');
   const emptyState = document.getElementById('empty-state');
   const statTotal = document.getElementById('stat-total');
   const searchInput = document.getElementById('search-input');
@@ -788,9 +788,9 @@
 
   function applyFilters() {
     const q = searchInput.value.trim().toLowerCase();
+
+    // doc-card（通常資料カード）のフィルター
     docs.forEach(doc => {
-      // 階層対応：現在のフォルダと完全一致するカードのみ表示
-      // タグ検索の場合はdoc.dataset.tagsも参照
       const folderMatch = currentFilter === 'all'
         || doc.dataset.folder === currentFilter
         || (currentFilter.startsWith('tag-') && doc.dataset.tags && doc.dataset.tags.includes(currentFilter));
@@ -809,6 +809,15 @@
         titleEl.innerHTML = titleEl.textContent;
       }
     });
+    // drive-card（ドライブリンクカード）のフィルター（doc-cardとは独立して処理）
+    const driveCards = document.querySelectorAll('.drive-card');
+    driveCards.forEach(card => {
+      const folderMatch = card.dataset.folder === currentFilter;
+      const textMatch = !q || (card.dataset.text && card.dataset.text.toLowerCase().includes(q))
+        || card.querySelector('.doc-title').textContent.toLowerCase().includes(q);
+      card.classList.toggle('hidden', !(folderMatch && textMatch));
+    });
+
     updateStats();
   }
 
