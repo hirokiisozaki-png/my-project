@@ -215,6 +215,39 @@
     .stats { flex-wrap: wrap; }
     .search-wrap input { width: 160px; }
   }
+
+  /* ── ドライブリンクカード ── */
+  .drive-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow .15s;
+  }
+  .drive-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,.07); }
+  .drive-card.hidden { display: none; }
+  .drive-card .doc-icon { font-size: 20px; flex-shrink: 0; }
+  .drive-card .doc-info { flex: 1; min-width: 0; }
+  .drive-card .doc-title { font-size: 13.5px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .drive-card .doc-meta { font-size: 11.5px; color: var(--ink-muted); }
+  .drive-open-btn {
+    display: inline-block;
+    background: var(--mirabot, #0f6e56);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .drive-open-btn:hover { opacity: .85; }
 </style>
 </head>
 <body>
@@ -473,6 +506,57 @@
           <div class="doc-meta">案件まとめ ／ グンゼ守山工場案件 ／ 更新：2026.06</div>
         </div>
         <span class="doc-tag">案件まとめ</span>
+      </a>
+
+      <!-- グンゼ守山工場 ドライブリンク -->
+      <a class="drive-card" href="https://drive.google.com/drive/folders/12xmAdI2h9U7sEDyzwG0Twy4eu3FFbMkJ" target="_blank"
+         data-folder="folder-case-gunze" data-tags="tag-agv tag-mirabot" data-text="グンゼ守山工場 議事録 打合せ">
+        <div class="doc-icon"><i class="ti ti-notes" aria-hidden="true"></i></div>
+        <div class="doc-info">
+          <div class="doc-title">01_議事録</div>
+          <div class="doc-meta">案件まとめ ／ グンゼ守山工場案件 ／ Googleドライブ</div>
+        </div>
+        <span class="drive-open-btn">Driveを開く</span>
+      </a>
+
+      <a class="drive-card" href="https://drive.google.com/drive/folders/1vK20c1yndIhU-MwuJzHRr1U-Wj7fYMoN" target="_blank"
+         data-folder="folder-case-gunze" data-tags="tag-agv tag-mirabot" data-text="グンゼ守山工場 現地調査 写真 現調">
+        <div class="doc-icon"><i class="ti ti-camera" aria-hidden="true"></i></div>
+        <div class="doc-info">
+          <div class="doc-title">02_現地調査（写真）</div>
+          <div class="doc-meta">案件まとめ ／ グンゼ守山工場案件 ／ Googleドライブ</div>
+        </div>
+        <span class="drive-open-btn">Driveを開く</span>
+      </a>
+
+      <a class="drive-card" href="https://drive.google.com/drive/folders/1FYVPJ7h7vnZgd1VXgXF1JzEmPu4oCLKq" target="_blank"
+         data-folder="folder-case-gunze" data-tags="tag-agv tag-mirabot" data-text="グンゼ守山工場 提案資料 シミュレーション">
+        <div class="doc-icon"><i class="ti ti-presentation" aria-hidden="true"></i></div>
+        <div class="doc-info">
+          <div class="doc-title">03_提案資料</div>
+          <div class="doc-meta">案件まとめ ／ グンゼ守山工場案件 ／ Googleドライブ</div>
+        </div>
+        <span class="drive-open-btn">Driveを開く</span>
+      </a>
+
+      <a class="drive-card" href="https://drive.google.com/drive/folders/15JfjoAIcHznm9OgJpBl_bOfxi2DEKNtH" target="_blank"
+         data-folder="folder-case-gunze" data-tags="tag-agv tag-mirabot" data-text="グンゼ守山工場 その他">
+        <div class="doc-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+        <div class="doc-info">
+          <div class="doc-title">04_その他</div>
+          <div class="doc-meta">案件まとめ ／ グンゼ守山工場案件 ／ Googleドライブ</div>
+        </div>
+        <span class="drive-open-btn">Driveを開く</span>
+      </a>
+
+      <a class="drive-card" href="https://drive.google.com/drive/folders/1_qNgHT8e1l2FT73YOKoWBOT3jL5i8zwp" target="_blank"
+         data-folder="folder-case-gunze" data-tags="tag-agv tag-mirabot" data-text="グンゼ守山工場 見積書">
+        <div class="doc-icon"><i class="ti ti-receipt" aria-hidden="true"></i></div>
+        <div class="doc-info">
+          <div class="doc-title">05_見積書</div>
+          <div class="doc-meta">案件まとめ ／ グンゼ守山工場案件 ／ Googleドライブ</div>
+        </div>
+        <span class="drive-open-btn">Driveを開く</span>
       </a>
 
       <a class="doc-card" target="_blank"
