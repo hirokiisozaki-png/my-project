@@ -3,300 +3,500 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AGV防火シャッター連携 社内向け総合資料（修正版）</title>
+<title>AGV導入における防火シャッター連携 総合版</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: "Hiragino Sans", "Meiryo", sans-serif; font-size: 14px; color: #222; background: #f8f9fa; }
-  .page-wrap { max-width: 960px; margin: 0 auto; padding: 32px 24px 60px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "Meiryo", "Hiragino Sans", sans-serif; font-size: 10.5pt; color: #222; background: #fff; }
+.page { max-width: 750px; margin: 0 auto; padding: 28px 36px 48px; }
 
-  .doc-header { background: #1b3c1b; color: #fff; border-radius: 8px; padding: 28px 32px 22px; margin-bottom: 28px; }
-  .doc-header .label { font-size: 11px; letter-spacing: 0.1em; opacity: 0.7; margin-bottom: 4px; }
-  .doc-header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
-  .doc-header .subtitle { font-size: 13px; opacity: 0.85; margin-top: 6px; }
-  .doc-header .ver { font-size: 11px; opacity: 0.6; margin-top: 8px; }
-  .doc-header .meta-table { margin-top: 16px; border-collapse: collapse; width: 100%; }
-  .doc-header .meta-table td { padding: 5px 12px; font-size: 13px; border: 1px solid rgba(255,255,255,0.2); }
-  .doc-header .meta-table td:first-child { background: rgba(255,255,255,0.1); font-weight: 600; width: 120px; }
+.doc-header-line { font-size: 9pt; color: #444; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-bottom: 24px; }
 
-  /* 目次 */
-  .toc { background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); padding: 20px 28px; margin-bottom: 20px; }
-  .toc-title { font-weight: 700; font-size: 14px; margin-bottom: 12px; color: #1b3c1b; }
-  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; font-size: 13px; }
-  .toc-grid span { color: #555; line-height: 1.6; }
+.title-block { text-align: center; margin-bottom: 20px; }
+.title-block h1 { font-size: 22pt; font-weight: 700; color: #222; margin-bottom: 4px; }
+.title-block .sub1 { font-size: 11pt; color: #444; margin-bottom: 2px; }
+.title-block .sub2 { font-size: 9.5pt; color: #666; font-style: italic; }
 
-  .section { background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); padding: 24px 28px; margin-bottom: 20px; }
-  .section-title { font-size: 16px; font-weight: 700; color: #1b3c1b; border-left: 4px solid #1b3c1b; padding-left: 12px; margin-bottom: 16px; }
-  .section-sub { font-size: 14px; font-weight: 700; color: #333; margin: 18px 0 10px; border-bottom: 1px solid #e0e8e0; padding-bottom: 6px; }
-  .part-label { display: inline-block; background: #1b3c1b; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 3px; margin-bottom: 10px; letter-spacing: 0.08em; }
+/* テーブル全般 */
+table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 10pt; }
+td, th { border: 1px solid #bbb; padding: 7px 10px; vertical-align: top; }
 
-  .notice { border-radius: 6px; padding: 14px 18px; margin: 14px 0; font-size: 13px; line-height: 1.7; }
-  .notice.warning { background: #fff8e1; border-left: 4px solid #f9a825; }
-  .notice.info    { background: #e8f4fd; border-left: 4px solid #1976d2; }
-  .notice.danger  { background: #fce4ec; border-left: 4px solid #c62828; }
-  .notice strong  { font-weight: 700; }
+/* ヘッダー行：濃い紺 */
+.tbl-head th { background: #2E5080; color: #fff; font-weight: 700; text-align: center; }
+.tbl-head td:first-child { background: #2E5080; color: #fff; font-weight: 700; text-align: center; }
 
-  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
-  th { background: #1b3c1b; color: #fff; padding: 9px 12px; text-align: left; font-weight: 600; }
-  td { padding: 9px 12px; border: 1px solid #dde2e8; vertical-align: top; line-height: 1.65; }
-  tr:nth-child(even) td { background: #f5faf5; }
-  td strong { color: #1b3c1b; }
+/* メタテーブル */
+.tbl-meta td:first-child { background: #2E5080; color: #fff; font-weight: 700; text-align: center; width: 100px; }
 
-  ul, ol { margin: 10px 0 10px 22px; }
-  li { margin-bottom: 6px; line-height: 1.75; font-size: 13px; }
+/* 構成テーブル */
+.tbl-kousei td { background: #EAF2FA; vertical-align: top; width: 50%; }
+.tbl-kousei td strong { color: #2E5080; }
 
-  .rating { color: #f9a825; font-size: 15px; }
+/* STEPテーブル */
+.tbl-step .col-step { background: #2E5080; color: #fff; font-weight: 700; text-align: center; width: 80px; }
+.tbl-step .col-action { background: #E8EFF8; font-weight: 700; width: 140px; }
 
-  .badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 10px; }
-  .badge-a { background: #e3f2fd; color: #1565c0; }
-  .badge-b { background: #f3e5f5; color: #6a1b9a; }
-  .badge-c { background: #e8f5e9; color: #2e7d32; }
+/* 部タイトルバナー */
+.part-banner { background: #2E5080; color: #fff; font-size: 13pt; font-weight: 700; text-align: center; padding: 9px; margin: 28px 0 20px; }
 
-  .doc-footer { text-align: right; color: #999; font-size: 11px; margin-top: 32px; padding-top: 12px; border-top: 1px solid #e0e0e0; }
+/* 見出し */
+h2 { font-size: 13pt; font-weight: 700; color: #222; margin: 24px 0 8px; }
+h3 { font-size: 11pt; font-weight: 700; color: #2E5080; margin: 16px 0 6px; }
+
+p { margin: 6px 0; line-height: 1.7; }
+
+/* 箇条書き */
+ul.bullet { list-style: none; padding: 0; margin: 6px 0; }
+ul.bullet li { padding: 2px 0 2px 1.2em; text-indent: -1.2em; line-height: 1.65; }
+ul.bullet li::before { content: "● "; }
+
+/* ボックス */
+.box-warn { background: #FFF8DC; border: 1px solid #ccc; padding: 10px 14px; margin: 12px 0; font-size: 10pt; line-height: 1.7; }
+.box-warn .lbl { font-weight: 700; }
+.box-point { background: #FFF8DC; border: 1px solid #ccc; padding: 10px 14px; margin: 12px 0; font-size: 10pt; line-height: 1.7; }
+.box-point .lbl { font-weight: 700; }
+
+/* 推奨度 */
+.stars { color: #f0a500; }
+
+hr.section { border: none; border-top: 1px solid #ccc; margin: 22px 0; }
+.footer { text-align: right; font-size: 9pt; color: #666; margin-top: 40px; padding-top: 8px; border-top: 1px solid #ccc; }
+
+/* 図（フローチャート代替）のスタイル */
+.flow-box { border: 1px dashed #999; padding: 12px 16px; margin: 12px 0; background: #fafafa; font-size: 9.5pt; line-height: 1.8; }
+.flow-box .flow-title { font-weight: 700; text-align: center; margin-bottom: 8px; }
+.flow-inner { border: 1px solid #999; padding: 8px 12px; margin: 6px 0; display: inline-block; background: #fff; font-size: 9pt; }
+.flow-label-box { border: 1px solid #2E5080; background: #EAF2FA; padding: 4px 8px; display: inline-block; font-size: 9pt; }
+.flow-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; flex-wrap: wrap; }
+.flow-arrow { font-size: 12pt; }
+.flow-note { font-size: 8.5pt; color: #666; margin-top: 8px; }
+.flow-warn-box { border: 1px solid #999; background: #fff8dc; padding: 4px 10px; display: inline-block; font-size: 9pt; }
+
+/* 比較表ヘッダー */
+.tbl-merit th { background: #2E5080; color: #fff; font-weight: 700; text-align: center; width: 50%; }
 </style>
 </head>
 <body>
-<div class="page-wrap">
+<div class="page">
 
-  <!-- ヘッダー -->
-  <div class="doc-header">
-    <div class="label">社内検討資料</div>
-    <h1>AGV導入における防火シャッター連携</h1>
-    <div class="subtitle">法令・申請・実務対応　＋　コスパ改善戦略</div>
-    <div class="ver">社内向け　総合検討資料　Ver.1.0</div>
-    <table class="meta-table">
-      <tr><td>導入設備</td><td>AGV（自律走行型搬送ロボット）</td></tr>
-      <tr><td>設置場所</td><td>既設倉庫（賃貸物件）</td></tr>
-      <tr><td>連携対象</td><td>防火シャッター 3枚（PLC制御による連動を想定）</td></tr>
-      <tr><td>物件形態</td><td>賃貸（貸主・借主の関係あり）</td></tr>
-    </table>
+<div class="doc-header-line">社内検討資料　｜　AGV導入における防火シャッター連携　総合版</div>
+
+<div class="title-block">
+  <h1>AGV導入における防火シャッター連携</h1>
+  <div class="sub1">法令・申請・実務対応　＋　コスパ改善戦略</div>
+  <div class="sub2">社内向け　総合検討資料　Ver.1.0</div>
+</div>
+
+<table class="tbl-meta">
+  <tr><td>項目</td><td style="background:#2E5080;color:#fff;font-weight:700;text-align:center;width:80px;">内容</td></tr>
+</table>
+<table>
+  <tr><td style="width:120px;">導入設備</td><td>AGV（自律走行型搜送ロボット）</td></tr>
+  <tr><td>設置場所</td><td>既設倉庫（賃貸物件）</td></tr>
+  <tr><td>連携対象</td><td>防火シャッター 3枚（PLC制御による連動を想定）</td></tr>
+  <tr><td>物件形態</td><td>賃貸（貸主・借主の関係あり）</td></tr>
+</table>
+
+<br>
+<p style="text-align:center;font-weight:700;margin-bottom:6px;">本資料の構成</p>
+<table class="tbl-kousei">
+  <tr>
+    <td>
+      <strong>第１部　法令・申請・実務対応</strong><br>
+      1. 消防法上の届出・手続き<br>
+      2. 建築基準法上の確認事項<br>
+      3. PLC連携の技術的整理<br>
+      4. 賃貸物件特有の課題と対応<br>
+      5. 関係者と役割分担
+    </td>
+    <td>
+      <strong>第２部　コスパ改善戦略（図解）</strong><br>
+      6. 既存PLC方式の課題（図解）<br>
+      7. 基本的な考え方<br>
+      8. 案A：自火報移報出力方式<br>
+      9. 案B：独立センサー方式<br>
+      10. 案C：光電センサー × MIRABOT LINK連携方式<br>
+      11-12. 比較サマリー＋アクション
+    </td>
+  </tr>
+</table>
+
+<!-- ===== 第1部 ===== -->
+<div class="part-banner">第１部　法令・申請・実務対応</div>
+
+<h2>1．消防法上の届出・手続き</h2>
+
+<h3>1-1．必要な届出一覧</h3>
+<p>防火シャッターは消防法上の「防火設備」（または特定防火設備）に該当するため、PLC連携による制御変更には以下の手続きが必要となる。</p>
+
+<table>
+  <tr>
+    <th style="background:#2E5080;color:#fff;width:160px;">手続き種別</th>
+    <th style="background:#2E5080;color:#fff;width:130px;">根拠法令</th>
+    <th style="background:#2E5080;color:#fff;">内容</th>
+  </tr>
+  <tr><td>防火対象物工事等計画届出書</td><td>各市町村火災予防条例</td><td>工事着手7日前までに管轄消防署へ届出（条例に基づく）</td></tr>
+  <tr><td>消防用設備等設置届出書</td><td>消防法第17条の3の2</td><td>工事完了後4日以内に届出・その後消防検査</td></tr>
+  <tr><td>消防計画の変更届</td><td>消防法第8条</td><td>防火管理者経由で変更が必要な場合あり</td></tr>
+  <tr><td>工事整備対象設備等着工届出書</td><td>消防法第17条の14</td><td>工事着手10日前までに甲種消防設備士が届出（消防設備の新設・増設工事時）</td></tr>
+</table>
+
+<h3>1-2．届出義務者と申請先</h3>
+<ul class="bullet">
+  <li>届出義務者は防火対象物の管理権原者＝原則として貸主（オーナー）</li>
+  <li>実務上は施工業者（消防設備士・電気工事会社・SIer）が書類を代行作成し、貸主名義で提出するケースが多い</li>
+  <li>申請先：建物所在地を管轄する消防署の予防係</li>
+</ul>
+
+<div class="box-point">
+  <span class="lbl">△ ポイント　</span>まず消防署（予防係）へ事前相談することが最短ルート。図面と概要を持参すれば、必要手続きを一度で整理できる。貸主を同席させると承認取得も同時に進めやすい。
+</div>
+
+<hr class="section">
+
+<h2>2．建築基準法上の確認事項</h2>
+<p>防火シャッターの制御系を変更する際は、消防法に加え建築基準法の観点からも確認が必要である。</p>
+<ul class="bullet">
+  <li>特定建築物では防火設備の定期検査報告義務あり（建築基準法第12条）</li>
+  <li>連動制御盤の改造は「既存の検査済み内容からの逸脱」とみなされる可能性がある</li>
+  <li>建築士または検査機関への事前確認を強く推奨する</li>
+</ul>
+
+<hr class="section">
+
+<h2>3．PLC連携の技術的整理</h2>
+
+<h3>3-1．制御フローの概念</h3>
+<p>通常の防火シャッター：　煙感知器 → 連動制御盤 → シャッター閉鎖（本来機能・変更しない）</p>
+<p>AGV連携時の追加制御（従来構想）：　連動制御盤 → PLC（追加工事）→ MIRABOT LINK → CarriRo停止</p>
+
+<h3>3-2．重要な制約事項</h3>
+<ul class="bullet">
+  <li>防火シャッターは「閉じることが本来機能」であり、任意開放の制御追加は法令上のグレーゾーン</li>
+  <li>連動制御盤メーカー（文化シヤッター・三和シャッター等）への改造可否確認が必須</li>
+  <li>盤を改造するとメーカー保証・型式認定が失効するリスクがある</li>
+</ul>
+
+<h3>3-3．方式別比較</h3>
+<table>
+  <tr>
+    <th style="background:#2E5080;color:#fff;">方式</th>
+    <th style="background:#2E5080;color:#fff;">概要</th>
+    <th style="background:#2E5080;color:#fff;">消防法リスク</th>
+    <th style="background:#2E5080;color:#fff;">備考</th>
+  </tr>
+  <tr><td>ドライ接点入力方式</td><td>既設連動盤の開放端子にPLCから接点信号を入力</td><td>比較的低い</td><td>盤本体の改造なし。推奨方式</td></tr>
+  <tr><td>連動盤改造方式</td><td>盤内部に制御回路を追加</td><td>高い</td><td>型式認定失効のリスクあり</td></tr>
+  <tr><td>AGV停止待機方式</td><td>シャッター手前でAGVを停止し人がシャッター操作</td><td>なし</td><td>最も安全。工事不要だが運用負荷あり</td></tr>
+</table>
+
+<hr class="section">
+
+<h2>4．賃貸物件特有の課題と対応方针</h2>
+
+<h3>4-1．なぜ貸主の同意が必要か</h3>
+<ul class="bullet">
+  <li>防火シャッターは建物の消防設備の一部であり、変更は原状回復義務・保険にも影響</li>
+  <li>工事には貸主の書面による承諾が法的・実務的に必要</li>
+  <li>貸主名義での消防届出が原則であるため、協力なしでは手続きが進まない</li>
+</ul>
+
+<h3>4-2．推奨アプローチ（ステップ別）</h3>
+<table class="tbl-step">
+  <tr>
+    <th style="background:#2E5080;color:#fff;text-align:center;width:70px;">Step</th>
+    <th style="background:#2E5080;color:#fff;text-align:center;width:150px;">アクション</th>
+    <th style="background:#2E5080;color:#fff;text-align:center;">内容・ポイント</th>
+  </tr>
+  <tr><td class="col-step">Step 1</td><td class="col-action">貸主への事前相談</td><td>目的・工事概要・原状回復方針を文書で提示。書面承諾を目指す。</td></tr>
+  <tr><td class="col-step">Step 2</td><td class="col-action">消防署への事前相談（無料）</td><td>管轄消防署の予防係に現状図面を持参。貸主同席が理想。</td></tr>
+  <tr><td class="col-step">Step 3</td><td class="col-action">シャッターメーカー技術確認</td><td>型番・連動制御盤仕様確認。PLC接続可否・推奨方式の確認。</td></tr>
+  <tr><td class="col-step">Step 4</td><td class="col-action">施工計画策定・関係者調整</td><td>電気工事会社・消防設備士と連携。各届出を並行進行。</td></tr>
+  <tr><td class="col-step">Step 5</td><td class="col-action">工事・届出・消防検査</td><td>消防設備士が工事実施。完了後に届出提出・消防検査受検。</td></tr>
+</table>
+
+<h3>4-3．貸主を動かすための材料</h3>
+<ul class="bullet">
+  <li>AGV導入によるオペレーション改善効果をROI等で定量的に提示（貸主にも間接的なメリット）</li>
+  <li>工事後の原状回復保証を契約書に明記</li>
+  <li>費用負担の明確化（借主負担 or 設備改善として貸主負担交渉）</li>
+</ul>
+
+<hr class="section">
+
+<h2>5．関係者と役割分担</h2>
+<table>
+  <tr>
+    <th style="background:#2E5080;color:#fff;width:160px;">関係者</th>
+    <th style="background:#2E5080;color:#fff;">役割・対応内容</th>
+  </tr>
+  <tr><td>借主（AGV導入側）</td><td>貸主への承認依頼、費用負担、AGVシステム手配</td></tr>
+  <tr><td>貸主（オーナー）</td><td>消防届出の名義人、工事承認、消防計画変更承認</td></tr>
+  <tr><td>消防設備士（甲種4類）</td><td>連動制御盤工事、消防届出書類の作成・提出代行</td></tr>
+  <tr><td>電気工事士</td><td>PLC設置・配線工事</td></tr>
+  <tr><td>シャッターメーカー</td><td>型番・仕様確認、改造可否・推奨方式の判断</td></tr>
+  <tr><td>消防署（予防係）</td><td>届出受理、完了検査</td></tr>
+  <tr><td>SIer（自社）</td><td>全体統括、AGV制御設計、各者間の調整</td></tr>
+</table>
+
+<!-- ===== 第2部 ===== -->
+<div class="part-banner">第２部　コスパ改善戦略（メーカー視点・図解）</div>
+
+<h2>6．課題認識：既存PLC連動方式の問題点</h2>
+<p>既存のPLC連動方式では、メーカーである弊社がすべての申請・工事対応を引き受けることになり、コストパフォーマンスが著しく悪化する。貸主・借主が自ら動けるような仕組みの設計が必要である。</p>
+
+<!-- フロー図 -->
+<div class="flow-box">
+  <div class="flow-title">【既存PLC連動方式】課題の整理</div>
+  <div class="flow-row">
+    <div class="flow-inner">煙感知器<br><small>火災検知</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-inner">連動制御盤<br><small>消防設備の心臓部</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-inner">防火シャッター<br><small>閉鎖（本来機能）</small></div>
   </div>
+  <div class="flow-row" style="margin-left:120px;">
+    <span class="flow-arrow">↓</span>
+  </div>
+  <div class="flow-row" style="margin-left:80px;">
+    <div class="flow-label-box"><strong>PLC（追加工事）</strong><br><small>消防設備士工事が必要</small></div>
+    <span class="flow-arrow">- - →</span>
+    <div class="flow-inner">MIRABOT LINK<br><small>上位システム</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-inner">CarriRo<br><small>停止指示</small></div>
+  </div>
+  <div class="flow-row" style="margin-left:80px; margin-top:6px;">
+    <div class="flow-warn-box">△ 課題①<br>消防法申請・甲種4類工事が必要</div>
+    &nbsp;&nbsp;
+    <div class="flow-warn-box">△ 課題②<br>貸主承認・型式認定失効リスク</div>
+  </div>
+</div>
 
-  <!-- 目次 -->
-  <div class="toc">
-    <div class="toc-title">📋 本資料の構成</div>
-    <div class="toc-grid">
-      <span>【第１部】法令・申請・実務対応</span>
-      <span>【第２部】コスパ改善戦略（図解）</span>
-      <span>1. 消防法上の届出・手続き</span>
-      <span>6. 既存PLC方式の課題</span>
-      <span>2. 建築基準法上の確認事項</span>
-      <span>7. 基本的な考え方</span>
-      <span>3. PLC連携の技術的整理</span>
-      <span>8. 案A：自火報移報出力方式</span>
-      <span>4. 賃貸物件特有の課題と対応</span>
-      <span>9. 案B：独立センサー方式</span>
-      <span>5. 関係者と役割分担</span>
-      <span>10. 案C：光電センサー × MIRABOT LINK</span>
+<div class="box-warn">
+  <span class="lbl">△ ポイント　</span>消防法上の申請義務者は「貸主（オーナー）」であり、弊社が直接申請することはできない。工事も消防設備士（甲種4類）の資格が必要。この構造から拝け出すことが本検討の目的である。
+</div>
+
+<hr class="section">
+
+<h2>7．基本的な考え方</h2>
+<p>「防火シャッターから弊社ソフトウェアに信号を送り、AGVを停止させる」という方向性は正しい。ただし「信号をどこから取るか」によって申請要否が変わる点が重要な論点である。どの接続方法を選ぶかで、消防法上のリスク・工事負担・貸主承認の要否がすべて変わる。以下の3案を検討する。</p>
+
+<hr class="section">
+
+<h2>8．案Ａ：自火報 移報出力方式（推奨度 <span class="stars">★★★★☆</span>）</h2>
+<p>既設の自動火災報知設備（自火報）受信機が持つ「移報出力端子」を活用し、弊社IoTゲートウェイへ接点信号を送る方式。</p>
+
+<!-- 案A フロー -->
+<div class="flow-box">
+  <div class="flow-title">【案A】自火報 移報出力方式<br><small>既設の自動火災報知設備の「移報出力端子」を活用</small></div>
+  <div class="flow-row">
+    <div style="border:1px solid #999;padding:6px 10px;background:#f5f5f5;font-size:9pt;">既設設備（手を加えない）</div>
+  </div>
+  <div class="flow-row" style="margin-top:6px;">
+    <div class="flow-inner">煙感知器<br><small>火災検知</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-label-box"><strong>自火報受信機</strong><br>移報出力端子あり<br><small>（配線工事士不可）</small></div>
+    <span class="flow-arrow">接点信号</span>
+    <div class="flow-inner">IoTゲートウェイ<br><small>信号をNW変換する中継機器<br>（PLCとは別物）</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-inner">MIRABOT LINK<br><small>上位システム<br>位置判定・追跡</small></div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-inner">CarriRo<br><small>停止</small></div>
+  </div>
+  <div class="flow-note">
+    ☑ ポイント<br>
+    ・防火シャッター・連動制御盤に一切触れない → 消防法上の改造工事に該当しない<br>
+    ・工事は「移報端子への配線追加のみ」→ 届出不要のケースも多い（消防署に事前確認推奨）<br>
+    ・IoTゲートウェイはPLCとは別物。自火報の接点信号をMIRABOT LINKへ転送する中継機器<br>
+    ・MIRABOT LINKがCarriRoの位置を判定し停止・退避を指示
+  </div>
+</div>
+
+<table class="tbl-merit">
+  <tr><th>メリット</th><th>注意点</th></tr>
+  <tr>
+    <td>
+      <ul class="bullet">
+        <li>防火シャッター・連動制御盤に触れない</li>
+        <li>移報端子への配線追加のみ → 届出不要ケース多い</li>
+        <li>貸主説明がしやすい（改造なし・配線1本）</li>
+      </ul>
+    </td>
+    <td>
+      <ul class="bullet">
+        <li>消防設備士による工事は必要（配線追加のため）</li>
+        <li>管轄消防署への事前確認を推奨</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+<p>誰が動くべきか：借主が消防設備士に依頼するだけ。貸主への説明は「設備改造なし」で通りやすい。</p>
+
+<hr class="section">
+
+<h2>9．案Ｂ：独立センサー方式（推奦度 <span class="stars">★★★★★</span>）</h2>
+<p>弊社が産業用の煙・熱センサーをパッケージとして提供し、消防設備には一切接続しない独立したシステムとして完結させる方式。センサーの検知信号はMIRABOT LINKが受け取り、CarriRoの位置を判定した上で停止を指示する。</p>
+
+<!-- 案B フロー -->
+<div class="flow-box">
+  <div class="flow-title">【案B】独立センサー方式（申請ゼロ）<br><small>消防設備に触れない。弊社製品として完結する独立システム</small></div>
+  <div style="border:1px dashed #2E5080;padding:10px;margin:8px 0;">
+    <div style="font-size:8.5pt;color:#2E5080;margin-bottom:6px;">弊社提供パッケージ（消防設備接続なし・申請不要）</div>
+    <div class="flow-row">
+      <div class="flow-label-box"><strong>産業用センサー</strong><br>煙・熱（消防設備ではない）<br><small>一般電気工事士で設置可</small></div>
+      <span class="flow-arrow">検知信号</span>
+      <div class="flow-inner">MIRABOT LINK<br><small>上位システム<br>CarriRo位置情報を判定・停止指示</small></div>
+      <span class="flow-arrow">停止指示</span>
+      <div class="flow-inner">CarriRo<br><small>緊急停止</small></div>
+    </div>
+    <div class="flow-note">
+      ☑ ポイント<br>
+      ・消防設備への接続ゼロ → 消防法上の申請・資格工事が一切不要<br>
+      ・借主の設備として完結 → 貸主の工事承認も不要。MIRABOT LINKがCarriRoの位置を判定し安全停止を指示
     </div>
   </div>
+</div>
 
-  <!-- ===== 第1部 ===== -->
-  <div class="section">
-    <div class="part-label">第１部　法令・申請・実務対応</div>
-    <div class="section-title">1．消防法上の届出・手続き</div>
+<table class="tbl-merit">
+  <tr><th>メリット</th><th>注意点</th></tr>
+  <tr>
+    <td>
+      <ul class="bullet">
+        <li>消防設備への接続ゼロ → 申請・資格工事が不要</li>
+        <li>借主の設備として完全に完結</li>
+        <li>貸主の工事承認も不要</li>
+        <li>MIRABOT LINKがCarriRoに停止指示。「AGV安全停止システム」として製品化・訴求が可能</li>
+      </ul>
+    </td>
+    <td>
+      <ul class="bullet">
+        <li>「火災連動」ではなく「AGV安全停止システム」の位置づけ</li>
+        <li>センサー精度・誤作動リスクを弊社で管理する必要あり</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-    <div class="section-sub">1-1．必要な届出一覧</div>
-    <p style="font-size:13px; line-height:1.75; margin-bottom:10px;">防火シャッターは消防法上の「防火設備」（または特定防火設備）に該当するため、PLC連携による制御変更には以下の手続きが必要となります。</p>
-    <table>
-      <tr><th>手続き種別</th><th>根拠法令</th><th>内容</th></tr>
-      <tr><td><strong>防火対象物工事等計画届出書</strong></td><td>各市町村火災予防条例</td><td>工事着手7日前までに管轄消防署へ届出（条例に基づく）</td></tr>
-      <tr><td><strong>消防用設備等設置届出書</strong></td><td>消防法第17条の3の2</td><td>工事完了後4日以内に届出・その後消防検査</td></tr>
-      <tr><td><strong>消防計画の変更届</strong></td><td>消防法第8条</td><td>防火管理者経由で変更が必要な場合あり</td></tr>
-      <tr><td><strong>工事整備対象設備等着工届出書</strong></td><td>消防法第17条の14</td><td>工事着手10日前までに甲種消防設備士が届出（消防設備の新設・増設工事時）</td></tr>
-    </table>
+<hr class="section">
 
-    <div class="section-sub">1-2．届出義務者と申請先</div>
-    <ul>
-      <li>届出義務者は防火対象物の管理権原者＝原則として貸主（オーナー）</li>
-      <li>実務上は施工業者（消防設備士・電気工事会社・SIer）が書類を代行作成し、貸主名義で提出するケースが多い</li>
-      <li>申請先：建物所在地を管轄する消防署の予防係</li>
-    </ul>
-    <div class="notice info">
-      <strong>ポイント：</strong>まず消防署（予防係）へ事前相談することが最短ルート。図面と概要を持参すれば、必要手続きを一度で整理できます。貸主を同席させると承認取得も同時に進めやすくなります。
+<h2>10．案Ｃ：光電センサー × MIRABOT LINK連携方式（推奨度 <span class="stars">★★★★★</span>）</h2>
+<p>シャッター上部に光電センサーを設置し降下初動を検知。MIRABOT LINK（上位システム）がCarriRoの位置情報を判定し、シャッター手前ランドマーク以前なら即時停止、通過中・通過後なら通過後ランドマークまで前進して安全退避させる方式。シャッターの開閉制御は一切行わない。</p>
+
+<!-- 案C フロー -->
+<div class="flow-box">
+  <div class="flow-title">【案C】光電センサー × MIRABOT LINK連携方式<br><small>シャッター上部設置の光電センサーが降下初動を検知。MIRABOTLINKがCarriRoの位置を判定し停止・退避を指示。</small></div>
+  <div style="border:1px dashed #2E5080;padding:10px;margin:8px 0;">
+    <div style="font-size:8.5pt;color:#2E5080;margin-bottom:6px;">弊社提供・自社工事手配（消防設備接続なし・申請不要・貸主承認不要）</div>
+    <div class="flow-row">
+      <div class="flow-label-box"><strong>光電センサー</strong><br>シャッター上部設置<br>降下初動を検知</div>
+      <span class="flow-arrow">検知信号</span>
+      <div class="flow-inner">MIRABOT LINK<br><small>上位システム<br>CarriRo位置情報を判定</small></div>
+      <span class="flow-arrow">位置判定</span>
+      <div>
+        <div style="border:1px solid #999;padding:4px 8px;font-size:9pt;margin-bottom:4px;">CarriRo位置<br>手前LM以前？</div>
+        <div class="flow-row">
+          <div style="font-size:9pt;">手前LM以前</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-inner" style="background:#fff3cd;">即時停止指示</div>
+        </div>
+        <div class="flow-row">
+          <div style="font-size:9pt;">通過中・後</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-inner" style="background:#d4edda;">通過後LMまで前進→停止</div>
+        </div>
+      </div>
+    </div>
+    <div class="flow-note">
+      ランドマーク配置：　シャッター手前1〜2m（LM-A）　＆　シャッター通過後1〜2m（LM-B）　×　3箇所（シャッター3枚分）<br>
+      LM-A以前で検知 → 停止　／　LM-A〜LM-B間で検知 → LM-Bまで前進して停止　／　LM-B通過後 → 影響なし<br><br>
+      ☑ ポイント<br>
+      ・シャッター上部設置のためCarriRo・積載物がビームに干渉しない構造 → 誤検知なし<br>
+      ・シャッターの開閉制御は一切しない。火災報知器にも消防設備にも触れない → 申請不要・貸主承認不要・横展開可能
     </div>
   </div>
+</div>
 
-  <div class="section">
-    <div class="section-title">2．建築基準法上の確認事項</div>
-    <p style="font-size:13px; line-height:1.75; margin-bottom:10px;">防火シャッターの制御系を変更する際は、消防法に加え建築基準法の観点からも確認が必要です。</p>
-    <ul>
-      <li>特定建築物では防火設備の定期検査報告義務あり（建築基準法第12条）</li>
-      <li>連動制御盤の改造は「既存の検査済み内容からの逸脱」とみなされる可能性がある</li>
-      <li>建築士または検査機関への事前確認を強く推奨する</li>
-    </ul>
-  </div>
+<table class="tbl-merit">
+  <tr><th>メリット</th><th>注意点</th></tr>
+  <tr>
+    <td>
+      <ul class="bullet">
+        <li>シャッター上部設置のためCarriRo・積載物がビームに干渉しない構造 → 誤検知なし</li>
+        <li>シャッターの開閉制御なし。火災報知器・消防設備に一切触れない → 申請不要・貸主承認不要</li>
+        <li>MIRABOT LINKによるCarriRo位置判定で安全かつ正確な制御が可能</li>
+        <li>自社経由で工事手配可能。横展開性が高くMIRABOT LINK×CarriRoの標準機能として装備化が可能</li>
+      </ul>
+    </td>
+    <td>
+      <ul class="bullet">
+        <li>ランドマーク設置位置の設計が必要（シャッター前後1〜2m、3箇所分）</li>
+        <li>MIRABOT LINKとの連携ロジック実装・シャッター仕様ごとのセンサー取付確認が必要</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 
-  <div class="section">
-    <div class="section-title">3．PLC連携の技術的整理</div>
+<hr class="section">
 
-    <div class="section-sub">3-1．制御フローの概念</div>
-    <table>
-      <tr><th>通常</th><td>煙感知器 → 連動制御盤 → シャッター閉鎖（本来機能・変更しない）</td></tr>
-      <tr><th>AGV連携時（従来構想）</th><td>連動制御盤 → PLC（追加工事）→ MIRABOT LINK → CarriRo停止</td></tr>
-    </table>
+<h2>11．方式別比較サマリー</h2>
+<p style="text-align:center;margin-bottom:8px;">方式別比較サマリー</p>
+<table>
+  <tr>
+    <th style="background:#2E5080;color:#fff;">方式</th>
+    <th style="background:#2E5080;color:#fff;">消防法申請</th>
+    <th style="background:#2E5080;color:#fff;">貸主承認</th>
+    <th style="background:#2E5080;color:#fff;">横展開性</th>
+    <th style="background:#2E5080;color:#fff;">コスパ</th>
+    <th style="background:#2E5080;color:#fff;">推奨</th>
+  </tr>
+  <tr>
+    <td>A：自火報移報方式<br><small>（技術的には確実）</small></td>
+    <td>不要なケース多い</td>
+    <td>原則必要<br><small>（建物ごとに異なる）</small></td>
+    <td>低い<br>自火報仕様が建物依存</td>
+    <td>高い</td>
+    <td><span class="stars">★★★☆☆</span></td>
+  </tr>
+  <tr>
+    <td>B：独立センサー方式<br><small>（部分案・参考案）</small></td>
+    <td>不要</td>
+    <td>不要</td>
+    <td>中程度<br>設置場所・調整必要都度確認</td>
+    <td>要検討</td>
+    <td><span class="stars">★★★☆☆</span></td>
+  </tr>
+  <tr style="background:#e8f5e9;">
+    <td>C：光電センサー方式<br>MIRABOT LINK×CarriRo連携</td>
+    <td>不要</td>
+    <td>不要</td>
+    <td>高い<br>弊社標準機能化が可能</td>
+    <td>最良</td>
+    <td><strong>推奨 <span class="stars">★★★★★</span></strong></td>
+  </tr>
+</table>
+<p><small>※案Aはリードタイム・横展開性の観点から今回は採用しない。案Bは現場条件次第の参考案として位置づけ。</small></p>
 
-    <div class="section-sub">3-2．重要な制約事項</div>
-    <ul>
-      <li>防火シャッターは「閉じることが本来機能」であり、任意開放の制御追加は法令上のグレーゾーン</li>
-      <li>連動制御盤メーカー（文化シヤッター・三和シャッター等）への改造可否確認が必須</li>
-      <li>盤を改造するとメーカー保証・型式認定が失効するリスクがある</li>
-    </ul>
+<hr class="section">
 
-    <div class="section-sub">3-3．方式別比較</div>
-    <table>
-      <tr><th>方式</th><th>概要</th><th>消防法リスク</th><th>備考</th></tr>
-      <tr><td><strong>ドライ接点入力方式</strong></td><td>既設連動盤の開放端子にPLCから接点信号を入力</td><td>比較的低い</td><td>盤本体の改造なし。推奨方式</td></tr>
-      <tr><td><strong>連動盤改造方式</strong></td><td>盤内部に制御回路を追加</td><td>高い</td><td>型式認定失効のリスクあり</td></tr>
-      <tr><td><strong>AGV停止待機方式</strong></td><td>シャッター手前でAGVを停止し人がシャッター操作</td><td>なし</td><td>最も安全。工事不要だが運用負荷あり</td></tr>
-    </table>
-  </div>
+<h2>12．今後のアクション（統合版）</h2>
+<table>
+  <tr>
+    <th style="background:#2E5080;color:#fff;">アクション</th>
+    <th style="background:#2E5080;color:#fff;">担当</th>
+    <th style="background:#2E5080;color:#fff;">目標時期</th>
+    <th style="background:#2E5080;color:#fff;">備考</th>
+  </tr>
+  <tr><td>貸主への事前相談・協力依頼</td><td>営業担当・借主</td><td>早急に着手</td><td>書面承諾を目標</td></tr>
+  <tr><td>シャッターメーカー・型番確認</td><td>SE（自社）</td><td>早急に着手</td><td>連動盤仕様の把握</td></tr>
+  <tr><td>消防署（予防係）への事前相談</td><td>消防設備士・SE</td><td>貸主承認取得後</td><td>図面を持参</td></tr>
+  <tr><td>PLC連携方式の最終決定</td><td>SE・消防設備士</td><td>消防署相談後</td><td>案A〜 C検討</td></tr>
+  <tr><td>案B/C 製品化検討開始</td><td>開発・SE</td><td>並行して着手</td><td>差別化訴求に直結</td></tr>
+</table>
 
-  <div class="section">
-    <div class="section-title">4．賃貸物件特有の課題と対応方針</div>
+<div class="box-point">
+  <span class="lbl">△ ポイント　</span>案Aは技術的に最も確実だが、申請・承認のリードタイムと横展開性の観点から今回は採用しない。案C（光電センサー上部設置 × MIRABOT LINK × CarriRoランドマーク制御）が申請不要・貸主承認不要・横展開可能の観点で最も現実的かつコスパが高い。案Bは現場条件次第の参考案として位置づける。
+</div>
 
-    <div class="section-sub">4-1．なぜ貸主の同意が必要か</div>
-    <ul>
-      <li>防火シャッターは建物の消防設備の一部であり、変更は原状回復義務・保険にも影響</li>
-      <li>工事には貸主の書面による承諾が法的・実務的に必要</li>
-      <li>貸主名義での消防届出が原則であるため、協力なしでは手続きが進まない</li>
-    </ul>
-
-    <div class="section-sub">4-2．推奨アプローチ（ステップ別）</div>
-    <table>
-      <tr><th style="width:80px;">Step</th><th style="width:180px;">アクション</th><th>内容・ポイント</th></tr>
-      <tr><td><strong>Step 1</strong></td><td>貸主への事前相談</td><td>目的・工事概要・原状回復方針を文書で提示。書面承諾を目指す</td></tr>
-      <tr><td><strong>Step 2</strong></td><td>消防署への事前相談（無料）</td><td>管轄消防署の予防係に現状図面を持参。貸主同席が理想</td></tr>
-      <tr><td><strong>Step 3</strong></td><td>シャッターメーカー技術確認</td><td>型番・連動制御盤仕様確認。PLC接続可否・推奨方式の確認</td></tr>
-      <tr><td><strong>Step 4</strong></td><td>施工計画策定・関係者調整</td><td>電気工事会社・消防設備士と連携。各届出を並行進行</td></tr>
-      <tr><td><strong>Step 5</strong></td><td>工事・届出・消防検査</td><td>消防設備士が工事実施。完了後に届出提出・消防検査受検</td></tr>
-    </table>
-
-    <div class="section-sub">4-3．貸主を動かすための材料</div>
-    <ul>
-      <li>AGV導入によるオペレーション改善効果をROI等で定量的に提示（貸主にも間接的なメリット）</li>
-      <li>工事後の原状回復保証を契約書に明記</li>
-      <li>費用負担の明確化（借主負担 or 設備改善として貸主負担交渉）</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <div class="section-title">5．関係者と役割分担</div>
-    <table>
-      <tr><th>関係者</th><th>役割・対応内容</th></tr>
-      <tr><td><strong>借主（AGV導入側）</strong></td><td>貸主への承認依頼、費用負担、AGVシステム手配</td></tr>
-      <tr><td><strong>貸主（オーナー）</strong></td><td>消防届出の名義人、工事承認、消防計画変更承認</td></tr>
-      <tr><td><strong>消防設備士（甲種4類）</strong></td><td>連動制御盤工事、消防届出書類の作成・提出代行</td></tr>
-      <tr><td><strong>電気工事士</strong></td><td>PLC設置・配線工事</td></tr>
-      <tr><td><strong>シャッターメーカー</strong></td><td>型番・仕様確認、改造可否・推奨方式の判断</td></tr>
-      <tr><td><strong>消防署（予防係）</strong></td><td>届出受理、完了検査</td></tr>
-      <tr><td><strong>SIer（自社）</strong></td><td>全体統括、AGV制御設計、各者間の調整</td></tr>
-    </table>
-  </div>
-
-  <!-- ===== 第2部 ===== -->
-  <div class="section">
-    <div class="part-label">第２部　コスパ改善戦略（メーカー視点・図解）</div>
-    <div class="section-title">6．課題認識：既存PLC連動方式の問題点</div>
-    <p style="font-size:13px; line-height:1.75; margin-bottom:10px;">
-      既存のPLC連動方式では、メーカーである弊社がすべての申請・工事対応を引き受けることになり、コストパフォーマンスが著しく悪化します。貸主・借主が自ら動けるような仕組みの設計が必要です。
-    </p>
-    <div class="notice warning">
-      <strong>ポイント：</strong>消防法上の申請義務者は「貸主（オーナー）」であり、弊社が直接申請することはできません。工事も消防設備士（甲種4類）の資格が必要です。この構造から抜け出すことが本検討の目的です。
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">7．基本的な考え方</div>
-    <p style="font-size:13px; line-height:1.8;">
-      「防火シャッターから弊社ソフトウェアに信号を送り、AGVを停止させる」という方向性は正しい。ただし<strong>「信号をどこから取るか」</strong>によって申請要否が変わる点が重要な論点です。<br>
-      どの接続方法を選ぶかで、消防法上のリスク・工事負担・貸主承認の要否がすべて変わります。以下の3案を検討します。
-    </p>
-  </div>
-
-  <div class="section">
-    <div class="section-title">8．<span class="badge badge-a">案 A</span>　自火報 移報出力方式　<span class="rating">★★★★☆</span></div>
-    <p style="font-size:13px; line-height:1.75; margin-bottom:12px;">
-      既設の自動火災報知設備（自火報）受信機が持つ「移報出力端子」を活用し、弊社IoTゲートウェイへ接点信号を送る方式。
-    </p>
-    <table>
-      <tr><th>メリット</th><th>注意点</th></tr>
-      <tr>
-        <td>
-          ・防火シャッター・連動制御盤に触れない<br>
-          ・移報端子への配線追加のみ → 届出不要ケース多い<br>
-          ・貸主説明がしやすい（改造なし・配線1本）
-        </td>
-        <td>
-          ・消防設備士による工事は必要（配線追加のため）<br>
-          ・管轄消防署への事前確認を推奨
-        </td>
-      </tr>
-    </table>
-    <p style="font-size:12.5px; color:#555; margin-top:10px; line-height:1.7;"><strong>誰が動くべきか：</strong>借主が消防設備士に依頼するだけ。貸主への説明は「設備改造なし」で通りやすい。</p>
-  </div>
-
-  <div class="section">
-    <div class="section-title">9．<span class="badge badge-b">案 B</span>　独立センサー方式　<span class="rating">★★★★★</span></div>
-    <p style="font-size:13px; line-height:1.75; margin-bottom:12px;">
-      弊社が産業用の煙・熱センサーをパッケージとして提供し、消防設備には一切接続しない独立したシステムとして完結させる方式。センサーの検知信号はMIRABOT LINKが受け取り、CarriRoの位置を判定した上で停止を指示します。
-    </p>
-    <table>
-      <tr><th>メリット</th><th>注意点</th></tr>
-      <tr>
-        <td>
-          ・消防設備への接続ゼロ → 申請・資格工事が不要<br>
-          ・借主の設備として完全に完結<br>
-          ・貸主の工事承認も不要<br>
-          ・「AGV安全停止システム」として製品化・訴求が可能
-        </td>
-        <td>
-          ・「火災連動」ではなく「AGV安全停止システム」の位置づけ<br>
-          ・センサー精度・誤作動リスクを弊社で管理する必要あり
-        </td>
-      </tr>
-    </table>
-  </div>
-
-  <div class="section">
-    <div class="section-title">10．<span class="badge badge-c">案 C</span>　光電センサー × MIRABOT LINK連携方式　<span class="rating">★★★★★</span></div>
-    <p style="font-size:13px; line-height:1.75; margin-bottom:12px;">
-      シャッター上部に光電センサーを設置し降下初動を検知。MIRABOT LINK（上位システム）がCarriRoの位置情報を判定し、シャッター手前ランドマーク以前なら即時停止、通過中・通過後なら通過後ランドマークまで前進して安全退避させる方式。シャッターの開閉制御は一切行いません。
-    </p>
-    <table>
-      <tr><th>メリット</th><th>注意点</th></tr>
-      <tr>
-        <td>
-          ・シャッター上部設置のためCarriRo・積載物がビームに干渉しない → 誤検知なし<br>
-          ・シャッターの開閉制御なし。火災報知器・消防設備に一切触れない → 申請不要・貸主承認不要<br>
-          ・MIRABOT LINKによるCarriRo位置判定で安全かつ正確な制御が可能<br>
-          ・自社経由で工事手配可能。横展開性が高くMIRABOT LINK×CarriRoの標準機能として装備化が可能
-        </td>
-        <td>
-          ・ランドマーク設置位置の設計が必要（シャッター前後1〜2m、3箇所分）<br>
-          ・MIRABOT LINKとの連携ロジック実装・シャッター仕様ごとのセンサー取付確認が必要
-        </td>
-      </tr>
-    </table>
-  </div>
-
-  <div class="section">
-    <div class="section-title">11-12．今後のアクション（統合版）</div>
-    <div class="notice danger" style="margin-bottom:14px;">
-      <strong>ポイント：</strong>案Aは技術的に最も確実だが、申請・承認のリードタイムと横展開性の観点から今回は採用しない。<br>
-      案C（光電センサー上部設置 × MIRABOT LINK × CarriRoランドマーク制御）が申請不要・貸主承認不要・横展開可能の観点で最も現実的かつコスパが高い。<br>
-      案Bは現場条件次第の参考案として位置づける。
-    </div>
-    <table>
-      <tr><th>アクション</th><th>担当</th><th>目標時期</th><th>備考</th></tr>
-      <tr><td>貸主への事前相談・協力依頼</td><td>営業担当・借主</td><td>早急に着手</td><td>書面承諾を目標</td></tr>
-      <tr><td>シャッターメーカー・型番確認</td><td>SE（自社）</td><td>早急に着手</td><td>連動盤仕様の把握</td></tr>
-      <tr><td>消防署（予防係）への事前相談</td><td>消防設備士・SE</td><td>貸主承認取得後</td><td>図面を持参</td></tr>
-      <tr><td>PLC連携方式の最終決定</td><td>SE・消防設備士</td><td>消防署相談後</td><td>案A〜C検討</td></tr>
-      <tr><td>案B/C 製品化検討開始</td><td>開発・SE</td><td>並行して着手</td><td>差別化訴求に直結</td></tr>
-    </table>
-  </div>
-
-  <div class="doc-footer">社内ミーティング用　機密資料　／　ミラボット株式会社</div>
+<div class="footer">社内ミーティング用　機密資料　1 / 2</div>
 </div>
 </body>
 </html>
