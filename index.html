@@ -248,6 +248,9 @@
       <div class="sidebar-item" data-filter="folder-training" onclick="filterSidebar('folder-training', this)">
         <i class="ti ti-folder" aria-hidden="true"></i> 研修・教育資料
       </div>
+      <div class="sidebar-item" data-filter="folder-apps" onclick="filterSidebar('folder-apps', this)">
+        <i class="ti ti-tools" aria-hidden="true"></i> 便利アプリ
+      </div>
     </div>
     <hr class="sidebar-divider">
     <div class="sidebar-section">
@@ -277,7 +280,7 @@
         <div class="stat-label">総資料数</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num">4</div>
+        <div class="stat-num">5</div>
         <div class="stat-label">フォルダ数</div>
       </div>
       <div class="stat-card">
@@ -311,6 +314,11 @@
           <div class="folder-icon"><i class="ti ti-school" aria-hidden="true"></i></div>
           <div class="folder-name">研修・教育資料</div>
           <div class="folder-count">0件</div>
+        </div>
+        <div class="folder-card" onclick="filterSidebar('folder-apps', null)">
+          <div class="folder-icon"><i class="ti ti-tools" aria-hidden="true"></i></div>
+          <div class="folder-name">便利アプリ</div>
+          <div class="folder-count">1件</div>
         </div>
       </div>
     </div>
@@ -346,6 +354,21 @@
           <div class="doc-meta">AGV/AMR導入 ／ 更新：2026.06</div>
         </div>
         <span class="doc-tag">AGV/AMR導入</span>
+      </a>
+
+
+      <a class="doc-card"
+         href="https://hirokiisozaki-png.github.io/roi-calc-tool/roi_calc_app.html"
+         target="_blank"
+         data-folder="folder-apps"
+         data-tags="tag-apps"
+         data-text="ROI 簡易計算ツール 導入費用 人件費 ROI 計算 AMR AGV 投資回収 便利アプリ">
+        <div class="doc-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+        <div class="doc-info">
+          <div class="doc-title">ROI 簡易計算ツール</div>
+          <div class="doc-meta">便利アプリ ／ 更新：2026.06 ／ 導入費用・人件費を入力してROIを即時計算</div>
+        </div>
+        <span class="doc-tag purple">便利アプリ</span>
       </a>
 
     </div>
@@ -402,6 +425,7 @@
       'tag-agv': ['AGV/AMR タグ', 'AGV/AMR関連の資料'],
       'tag-mirabot': ['ミラボット タグ', 'ミラボット関連の資料'],
       'tag-sier': ['SIer タグ', 'SIer関連の資料'],
+      'folder-apps': ['便利アプリ', '業務に役立つWebアプリ'],
     };
     const [title, sub] = labels[filter] || ['すべての資料', ''];
     pageTitle.textContent = title;
