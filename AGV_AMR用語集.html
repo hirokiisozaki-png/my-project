@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGV/AMR・物流システム 用語集 | ミラボット</title>
+<style>
+  :root {
+    --accent: #1a56db;
+    --accent-light: #eff6ff;
+    --ink: #1e293b;
+    --ink-muted: #64748b;
+    --border: #e2e8f0;
+    --bg: #f8fafc;
+    --white: #ffffff;
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --amber: #b45309;
+    --amber-light: #fef3c7;
+    --teal: #0f766e;
+    --teal-light: #ccfbf1;
+    --purple: #6d28d9;
+    --purple-light: #ede9fe;
+    --red: #b91c1c;
+    --red-light: #fee2e2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  /* ── ヘッダー ── */
+  .page-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    padding: 32px 40px 28px;
+    color: #fff;
+  }
+  .page-header .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+    text-decoration: none;
+    margin-bottom: 16px;
+  }
+  .page-header .back-link:hover { color: #fff; }
+  .page-header h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+  .page-header .subtitle { font-size: 13px; color: #94a3b8; }
+  .page-header .badges { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(255,255,255,0.12);
+    color: #e2e8f0;
+  }
+
+  /* ── 目次 ── */
+  .toc-wrap {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  }
+  .toc-label { font-size: 11px; font-weight: 700; color: var(--ink-muted); margin-bottom: 8px; letter-spacing: .08em; }
+  .toc-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .toc-link {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-light);
+    text-decoration: none;
+    border: 1px solid #bfdbfe;
+    transition: background .15s, color .15s;
+  }
+  .toc-link:hover { background: var(--accent); color: #fff; }
+
+  /* ── メインコンテンツ ── */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  /* ── セクション ── */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .section-en {
+    font-size: 12px;
+    color: var(--ink-muted);
+    font-weight: 500;
+    margin-left: 4px;
+  }
+
+  /* ── 用語ブロック ── */
+  .term-block {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .term-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .term-icon {
+    font-size: 22px;
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .term-name { font-size: 18px; font-weight: 800; }
+  .term-full { font-size: 12px; color: var(--ink-muted); margin-top: 1px; }
+  .term-tag {
+    margin-left: auto;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .term-body { padding: 18px 20px; }
+
+  /* 一言まとめ */
+  .one-liner {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+  }
+
+  /* 詳細説明 */
+  .detail { font-size: 13.5px; color: #374151; margin-bottom: 14px; }
+  .detail p { margin-bottom: 8px; }
+
+  /* リスト */
+  .check-list { list-style: none; padding: 0; }
+  .check-list li {
+    font-size: 13px;
+    padding: 4px 0 4px 22px;
+    position: relative;
+    color: #374151;
+  }
+  .check-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  /* コードブロック（フロー図） */
+  .flow-box {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 2;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+  .flow-box .fl { color: #67e8f9; font-weight: 700; }
+  .flow-box .arrow { color: #4ade80; }
+  .flow-box .note { color: #94a3b8; }
+
+  /* 比較テーブル */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .compare-table th {
+    background: var(--accent);
+    color: #fff;
+    padding: 9px 14px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  .compare-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    background: var(--white);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f9fafb; }
+  .good { color: var(--green); font-weight: 700; }
+  .bad  { color: var(--red);   font-weight: 700; }
+
+  /* ── 一覧表セクション ── */
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .summary-table th {
+    background: #1e293b;
+    color: #fff;
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+  .summary-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    vertical-align: top;
+  }
+  .summary-table tr:hover td { background: var(--accent-light); }
+  .summary-table td:first-child { font-weight: 800; color: var(--accent); white-space: nowrap; }
+  .summary-table td:nth-child(2) { font-size: 12px; color: var(--ink-muted); }
+
+  /* ── カラータグ ── */
+  .tag-blue   { background: #dbeafe; color: #1d4ed8; }
+  .tag-teal   { background: var(--teal-light); color: var(--teal); }
+  .tag-amber  { background: var(--amber-light); color: var(--amber); }
+  .tag-purple { background: var(--purple-light); color: var(--purple); }
+  .tag-red    { background: var(--red-light); color: var(--red); }
+  .tag-green  { background: var(--green-light); color: var(--green); }
+
+  .icon-bg-blue   { background: #dbeafe; }
+  .icon-bg-teal   { background: var(--teal-light); }
+  .icon-bg-amber  { background: var(--amber-light); }
+  .icon-bg-purple { background: var(--purple-light); }
+  .icon-bg-green  { background: var(--green-light); }
+
+  /* ── 区切り線ヒント ── */
+  .hint-box {
+    background: #fefce8;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #713f12;
+    margin: 12px 0;
+  }
+  .hint-box strong { color: #92400e; }
+
+  /* ── フッター ── */
+  .page-footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-muted);
+    padding: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 640px) {
+    .page-header { padding: 24px 20px; }
+    .toc-wrap { padding: 14px 20px; }
+    .content { padding: 24px 16px 60px; }
+    .term-head { flex-wrap: wrap; }
+    .term-tag { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<div class="page-header">
+  <a class="back-link" href="index.html">← ポータルに戻る</a>
+  <h1>📖 AGV/AMR・物流システム 用語集</h1>
+  <p class="subtitle">ミラボット社内ナレッジ｜搬送機器・物流システム・通信・業務用語まとめ</p>
+  <div class="badges">
+    <span class="badge">搬送機器</span>
+    <span class="badge">物流システム</span>
+    <span class="badge">通信・技術</span>
+    <span class="badge">業務</span>
+    <span class="badge">更新：2026.06</span>
+  </div>
+</div>
+
+<!-- 目次 -->
+<div class="toc-wrap">
+  <div class="toc-label">目次 CONTENTS</div>
+  <div class="toc-list">
+    <a class="toc-link" href="#sec-carrier">搬送機器</a>
+    <a class="toc-link" href="#sec-system">物流システム</a>
+    <a class="toc-link" href="#sec-layer">システム階層</a>
+    <a class="toc-link" href="#sec-tech">通信・技術</a>
+    <a class="toc-link" href="#sec-job">業務・役割</a>
+    <a class="toc-link" href="#sec-list">用語一覧表</a>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ===== 搬送機器 ===== -->
+  <div class="section" id="sec-carrier">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div>
+        <div class="section-title">搬送機器 <span class="section-en">Carrier Equipment</span></div>
+      </div>
+    </div>
+
+    <!-- AGV -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-blue">🚗</div>
+        <div>
+          <div class="term-name">AGV</div>
+          <div class="term-full">Automated Guided Vehicle｜無人搬送車</div>
+        </div>
+        <span class="term-tag tag-blue">搬送機器</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">決められたルートに沿って自動で走るフォークリフトや台車のような搬送車両</div>
+        <div class="detail">
+          <p>倉庫や工場内で荷物を自動で運ぶ車両。磁気テープ・QRコード・誘導線などの"決められたルート"を走行する。</p>
+        </div>
+        <ul class="check-list">
+          <li>人が運転しなくても自動走行</li>
+          <li>障害物があると停止する安全機能あり</li>
+          <li>一定のルートを繰り返す作業に向いている</li>
+          <li>AMRと比べてシンプルな構造でコストが低め</li>
+        </ul>
+        <div class="hint-box"><strong>用途：</strong>倉庫での棚入れ・棚出し、工場での部品運搬、作業者への部材供給、完成品の搬送</div>
+      </div>
+    </div>
+
+    <!-- AMR -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-teal">🤖</div>
+        <div>
+          <div class="term-name">AMR</div>
+          <div class="term-full">Autonomous Mobile Robot｜自律走行搬送ロボット</div>
+        </div>
+        <span class="term-tag tag-teal">搬送機器</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">周囲の環境を自分で認識し、目的地まで最適なルートを自律的に走行できるロボット</div>
+        <div class="detail">
+          <p>SLAMで地図を作成しながら自分の位置を認識。障害物を避けてルートを再計算しながら走行する。ルートの敷設（磁気テープ等）が不要なため、AGVよりも導入・運用が柔軟。</p>
+        </div>
+        <table class="compare-table">
+          <tr><th>項目</th><th>AGV</th><th>AMR</th></tr>
+          <tr><td>走行方式</td><td>決められたルートのみ</td><td>自律的にルート選択</td></tr>
+          <tr><td>変更への対応</td><td>ルート変更に弱い</td><td>レイアウト変更に柔軟</td></tr>
+          <tr><td>技術</td><td>比較的シンプル</td><td>センサー・AIで高度</td></tr>
+          <tr><td>コスト</td><td>安め</td><td>高め</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- AGF -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-amber">🏗️</div>
+        <div>
+          <div class="term-name">AGF</div>
+          <div class="term-full">Automated Guided Forklift｜自動運転フォークリフト</div>
+        </div>
+        <span class="term-tag tag-amber">搬送機器</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">自動で走って荷物の上げ下ろしもできるフォークリフト（AGVのフォークリフト版）</div>
+        <div class="detail">
+          <p>AGVが「台車を引く」のに対し、AGFはフォークリフト機能（リフトアップ）を持ち、パレットの持ち上げ・棚入れ・棚出しまで自動で行う。</p>
+        </div>
+        <ul class="check-list">
+          <li>無人で走行・作業</li>
+          <li>パレットの持ち上げ・棚入れ・棚出しが自動</li>
+          <li>センサーで位置を認識して安全に運転</li>
+          <li>既存のフォークリフト作業を自動化できる</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 物流システム ===== -->
+  <div class="section" id="sec-system">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div>
+        <div class="section-title">物流システム <span class="section-en">Logistics Systems</span></div>
+      </div>
+    </div>
+
+    <!-- WMS -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-purple">📦</div>
+        <div>
+          <div class="term-name">WMS</div>
+          <div class="term-full">Warehouse Management System｜倉庫管理システム</div>
+        </div>
+        <span class="term-tag tag-purple">物流システム</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">倉庫の在庫がどこにあって、何が入ってきて、何が出ていったかを正確・効率的に管理するシステム</div>
+        <div class="detail">
+          <p>物流システム階層の最上位に位置し、「何を・どこから・どこへ運ぶか」を判断する。WES・WCS・RCSへ作業指示を出す"計画担当"。</p>
+        </div>
+        <ul class="check-list">
+          <li>在庫の場所・数量をリアルタイムで把握</li>
+          <li>入荷・出荷作業の指示や管理</li>
+          <li>ピッキング（商品の取り出し）の最適化</li>
+          <li>誤発送や在庫ミスの削減</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- WES -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-teal">⚡</div>
+        <div>
+          <div class="term-name">WES</div>
+          <div class="term-full">Warehouse Execution System｜倉庫実行システム</div>
+        </div>
+        <span class="term-tag tag-teal">物流システム</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">ロボットや機器に「今どの仕事をどう進めるか」指示を出す現場の司令塔</div>
+        <div class="detail">
+          <p>WMSが"在庫管理"するのに対し、WESは現場の作業を最適に動かす司令塔。作業者やAGV・AMRに対してリアルタイムで作業指示を行う。</p>
+        </div>
+        <ul class="check-list">
+          <li>作業の優先順位づけ</li>
+          <li>AGV・AMR・ソーターなど機器との連携</li>
+          <li>作業負荷のバランス調整</li>
+          <li>ボトルネックのリアルタイム解消</li>
+          <li>ピッキングや仕分けの最適ルート計算</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- WCS -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-amber">🔧</div>
+        <div>
+          <div class="term-name">WCS</div>
+          <div class="term-full">Warehouse Control System｜倉庫制御システム</div>
+        </div>
+        <span class="term-tag tag-amber">物流システム</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">倉庫の機械（コンベア・ソーター等）をリアルタイムに動かす「装置のコントローラー」</div>
+        <div class="detail">
+          <p>WESからの作業命令を設備ごとの具体的な動きに変換する。RCSに搬送タスクを送り、機器を直接制御する"機械の操作係"。</p>
+        </div>
+        <ul class="check-list">
+          <li>コンベアを動かす／停止させる</li>
+          <li>ソーターで荷物を振り分ける</li>
+          <li>自動倉庫（AS/RS）に棚入れ・棚出しを指示</li>
+          <li>AGV・AMRの動作ルートを制御</li>
+          <li>機器の稼働状況を監視</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RCS -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-blue">🎮</div>
+        <div>
+          <div class="term-name">RCS</div>
+          <div class="term-full">Robot Control System｜ロボット制御システム</div>
+        </div>
+        <span class="term-tag tag-blue">物流システム</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">倉庫内のAGV/AMRを統合的に群制御するシステム。「ロボット版のWCS」。</div>
+        <div class="detail">
+          <p>WCSからの搬送タスクをAGVに具体的なルートとして配信する。複数台のAGV/AMRを効率よく動かすフリートマネジメント（群制御）を担当。</p>
+        </div>
+        <ul class="check-list">
+          <li>ロボットの位置管理</li>
+          <li>ルートの最適化・経路計算</li>
+          <li>交通制御（渋滞・衝突回避）</li>
+          <li>タスクの割り当て</li>
+          <li>バッテリー管理・稼働状況の監視</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== システム階層 ===== -->
+  <div class="section" id="sec-layer">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div>
+        <div class="section-title">システム階層構造 <span class="section-en">System Layer</span></div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-purple">🗂️</div>
+        <div>
+          <div class="term-name">WMS → WES → WCS → RCS → AGV の流れ</div>
+          <div class="term-full">物流システムの指示階層</div>
+        </div>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">上位から順に指示が降りてきて、AGV/AMRが実際に動く</div>
+        <div class="flow-box">
+<span class="fl">WMS</span>　<span class="note">── 倉庫管理システム（在庫・計画担当）</span>
+<span class="arrow">  ↓ 作業指示</span>
+<span class="fl">WES</span>　<span class="note">── 倉庫実行システム（最適化・現場司令塔）</span>
+<span class="arrow">  ↓ 設備制御指示</span>
+<span class="fl">WCS</span>　<span class="note">── 倉庫制御システム（コンベア・ソーター制御）</span>
+<span class="arrow">  ↓ 搬送タスク配信</span>
+<span class="fl">RCS</span>　<span class="note">── ロボット制御システム（群制御・位置管理）</span>
+<span class="arrow">  ↓ 走行命令</span>
+<span class="fl">AGV / AMR / AGF</span>　<span class="note">── 自動搬送機器（実際に荷物を運ぶ）</span>
+        </div>
+        <table class="compare-table">
+          <tr><th>レイヤー</th><th>役割</th><th>例えるなら</th></tr>
+          <tr><td><strong>WMS</strong></td><td>在庫・入出荷情報の管理</td><td>計画担当</td></tr>
+          <tr><td><strong>WES</strong></td><td>作業の最適化・現場への指示</td><td>現場の司令塔</td></tr>
+          <tr><td><strong>WCS</strong></td><td>コンベア等の機械設備を直接制御</td><td>機械の操作係</td></tr>
+          <tr><td><strong>RCS</strong></td><td>AGV/AMRの群制御</td><td>ロボット専属の操作係</td></tr>
+          <tr><td><strong>AGV/AMR</strong></td><td>実際に荷物を搬送</td><td>実行部隊</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 通信・技術 ===== -->
+  <div class="section" id="sec-tech">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div>
+        <div class="section-title">通信・技術用語 <span class="section-en">Technology</span></div>
+      </div>
+    </div>
+
+    <!-- SLAM -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-teal">🗺️</div>
+        <div>
+          <div class="term-name">SLAM</div>
+          <div class="term-full">Simultaneous Localization and Mapping｜自己位置推定と地図作成の同時実行</div>
+        </div>
+        <span class="term-tag tag-teal">技術</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">ロボットが「今自分がどこにいるか」を把握しながら「周囲の地図」を同時に作る技術。ロボットの目と脳みそ。</div>
+        <div class="detail">
+          <p>初めて入る暗い部屋で懐中電灯を持ちながら間取りを把握し、自分の位置を特定していく——その作業をセンサーでリアルタイムに行うのがSLAM。磁気テープ等のルート敷設が不要になる核心技術。</p>
+        </div>
+        <table class="compare-table">
+          <tr><th>種類</th><th>LiDAR SLAM（レーザー）</th><th>Visual SLAM（カメラ）</th></tr>
+          <tr><td>暗闇</td><td class="good">◎ 全く問題なし</td><td class="bad">× 苦手</td></tr>
+          <tr><td>ガラス・鏡</td><td class="bad">× 透過・乱反射で苦手</td><td class="good">〇 認識できる</td></tr>
+          <tr><td>精度</td><td class="good">◎ 数センチ単位</td><td>〇 やや低め</td></tr>
+          <tr><td>コスト</td><td class="bad">高価</td><td class="good">比較的安価</td></tr>
+          <tr><td>弱点</td><td>景色・色は識別不可</td><td>光の変化・同一景色に弱い</td></tr>
+        </table>
+        <div class="hint-box"><strong>営業メリット：</strong>床への磁気テープ工事が不要→導入ハードルが大幅に低下。障害物があっても自動で迂回して走行できる。</div>
+      </div>
+    </div>
+
+    <!-- VDA 5050 -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-blue">🔌</div>
+        <div>
+          <div class="term-name">VDA 5050</div>
+          <div class="term-full">AGV/AMR 標準通信プロトコル（ドイツ規格）</div>
+        </div>
+        <span class="term-tag tag-blue">国際標準</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">メーカーに依存せず、AGV/AMRを標準化された方法でつなぐための共通通信ルール</div>
+        <div class="detail">
+          <p>ドイツ自動車工業会（VDA）とVDMAが共同制定。従来はメーカーごとに通信仕様がバラバラで「A社のAGVはB社のRCSで使えない」問題があった。VDA 5050はその解決策。</p>
+        </div>
+        <ul class="check-list">
+          <li>異なるメーカーのAGV/AMRを同じRCSで統合管理できる</li>
+          <li>API仕様の個別開発が不要→導入・開発コスト削減</li>
+          <li>JSONベースのメッセージング＋MQTTで送受信</li>
+          <li>欧州では多くの現場に導入済み</li>
+        </ul>
+        <div class="hint-box"><strong>対象通信：</strong>RCS（フリートマネジメントシステム）↔ AGV/AMR本体間の標準規格</div>
+      </div>
+    </div>
+
+    <!-- PLC -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-amber">🖥️</div>
+        <div>
+          <div class="term-name">PLC</div>
+          <div class="term-full">Programmable Logic Controller｜プログラマブルロジックコントローラ</div>
+        </div>
+        <span class="term-tag tag-amber">技術</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">機械や設備を制御するための専用コンピュータ。制御盤の中にある「頭脳（司令塔）」。</div>
+        <div class="detail">
+          <p>センサー入力を受け取り、プログラム通りに判断し、モーターやバルブへ出力する。制御盤＝家、PLC＝家の中の頭脳。</p>
+        </div>
+        <ul class="check-list">
+          <li>シャッター開閉・EV扉インターロックなど安全に直結する制御</li>
+          <li>ミリ秒単位の高速・確実なリアルタイム制御</li>
+          <li>ネットワーク断が起きても影響が小さい</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- API連携 -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-teal">🔗</div>
+        <div>
+          <div class="term-name">API連携</div>
+          <div class="term-full">Application Programming Interface</div>
+        </div>
+        <span class="term-tag tag-teal">技術</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">別々のシステムやアプリ同士が自動で情報のやり取りをする仕組み。「システム同士の共通の窓口」。</div>
+        <div class="detail">
+          <p>設備を直接動かすPLCと異なり、APIは「情報をやり取りする仕組み」。状態取得・予約・呼び出しなど判断材料となる情報のやり取りに使う。</p>
+        </div>
+        <table class="compare-table">
+          <tr><th>項目</th><th>PLC制御</th><th>API連携</th></tr>
+          <tr><td>通信</td><td>接点・フィールドバス</td><td>Ethernet/IP</td></tr>
+          <tr><td>情報量</td><td>少ない（ON/OFF中心）</td><td>多い（詳細ステータス）</td></tr>
+          <tr><td>拡張性</td><td>低め</td><td>高い</td></tr>
+          <tr><td>IT連携</td><td>苦手</td><td>得意</td></tr>
+          <tr><td>向いている制御</td><td>安全・リアルタイム</td><td>情報・柔軟・拡張</td></tr>
+        </table>
+        <div class="hint-box"><strong>実務の最適解：ハイブリッド構成</strong><br>安全・動作の最終制御→PLC　／　状態管理・判断・指示→API<br>「人の安全はPLCで担保し、ロボットの判断や設備間の連携はAPIで行う。役割を分けて安全性と柔軟性を両立。」</div>
+      </div>
+    </div>
+
+    <!-- イーサネット -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-green">🌐</div>
+        <div>
+          <div class="term-name">イーサネット</div>
+          <div class="term-full">Ethernet｜有線ネットワーク規格</div>
+        </div>
+        <span class="term-tag tag-green">技術</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">有線でネットワーク機器をつなぐ世界共通のルール。Wi-Fiより遅延が少なく安定。工場・倉庫でよく使われる。</div>
+        <ul class="check-list">
+          <li>LANケーブルで機器を接続する有線通信</li>
+          <li>Wi-Fiより遅延が少なく通信が安定</li>
+          <li>会社のオフィス・工場の現場で広く使用</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- インターフェース -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-blue">🔀</div>
+        <div>
+          <div class="term-name">インターフェース</div>
+          <div class="term-full">Interface｜機器間接続装置・ソフトウェア</div>
+        </div>
+        <span class="term-tag tag-blue">技術</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">異なる機器・装置のあいだを接続して、交信や制御を可能にする装置やソフトウェア</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 業務・役割 ===== -->
+  <div class="section" id="sec-job">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div>
+        <div class="section-title">業務・役割用語 <span class="section-en">Job Roles</span></div>
+      </div>
+    </div>
+
+    <!-- CE -->
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon icon-bg-green">👷</div>
+        <div>
+          <div class="term-name">コミッショニングエンジニア（CE）</div>
+          <div class="term-full">Commissioning Engineer｜AGV/AMR導入現場の設計・施工担当エンジニア</div>
+        </div>
+        <span class="term-tag tag-green">業務</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">AGV/AMR導入における「設計・段取り・施工・調整」の現場実務担当者</div>
+        <div class="detail">
+          <p>デスクワーク系（設計・段取り・司令塔）と現場作業系（施工・職人）の2つの役割を持つ。</p>
+        </div>
+        <table class="compare-table">
+          <tr><th>種別</th><th>作業内容</th></tr>
+          <tr><td><strong>デスク系</strong></td><td>現地調査（現調）・走行ルート設計・SIerや設備メーカーとのシステム打ち合わせ</td></tr>
+          <tr><td><strong>現場系</strong></td><td>機体セットアップ・ティーチング（マッピング）・現場テスト・トラブルシューティング・操作説明</td></tr>
+        </table>
+        <div class="hint-box"><strong>ティーチング（マッピング）とは：</strong>ロボットを手動で動かして現場の地図を覚え込ませ、数センチ単位で走行できるよう設定する作業。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 用語一覧表 ===== -->
+  <div class="section" id="sec-list">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div>
+        <div class="section-title">用語一覧表 <span class="section-en">Quick Reference</span></div>
+      </div>
+    </div>
+
+    <table class="summary-table">
+      <tr>
+        <th>用語</th>
+        <th>正式名称</th>
+        <th>一言で言うと</th>
+      </tr>
+      <tr><td>AGV</td><td>Automated Guided Vehicle</td><td>決められたルートを走る無人搬送車</td></tr>
+      <tr><td>AMR</td><td>Autonomous Mobile Robot</td><td>自律的にルートを選んで走るロボット</td></tr>
+      <tr><td>AGF</td><td>Automated Guided Forklift</td><td>自動で荷物の上げ下ろしができるフォークリフト</td></tr>
+      <tr><td>WMS</td><td>Warehouse Management System</td><td>倉庫の在庫管理・計画担当システム</td></tr>
+      <tr><td>WES</td><td>Warehouse Execution System</td><td>現場作業の最適化・指示を出す司令塔</td></tr>
+      <tr><td>WCS</td><td>Warehouse Control System</td><td>コンベア等の機械を直接制御するシステム</td></tr>
+      <tr><td>RCS</td><td>Robot Control System</td><td>AGV/AMRを群制御するロボット専用システム</td></tr>
+      <tr><td>SLAM</td><td>Simultaneous Localization and Mapping</td><td>自己位置推定と地図作成を同時に行う技術</td></tr>
+      <tr><td>VDA 5050</td><td>VDA/VDMA 標準通信プロトコル</td><td>AGV/AMRとRCSをつなぐ国際標準通信ルール</td></tr>
+      <tr><td>PLC</td><td>Programmable Logic Controller</td><td>設備を動かす専用コンピュータ（頭脳）</td></tr>
+      <tr><td>API連携</td><td>Application Programming Interface</td><td>システム同士が自動で情報をやり取りする仕組み</td></tr>
+      <tr><td>イーサネット</td><td>Ethernet</td><td>有線ネットワーク接続の世界共通規格</td></tr>
+      <tr><td>CE</td><td>Commissioning Engineer</td><td>AGV/AMR導入の設計・施工担当エンジニア</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  ミラボット株式会社｜社内資料ポータル｜更新：2026年6月
+</div>
+
+</body>
+</html>
