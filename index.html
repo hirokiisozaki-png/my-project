@@ -132,11 +132,6 @@
   }
   .section-head h2 { font-size: 15px; font-weight: 700; color: var(--ink); }
   .folders { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 36px; }
-  .folder-card-sub {
-    margin-left: 24px;
-    border-left: 3px solid var(--primary, #4f7cff);
-    opacity: 0.9;
-  }
   .folder-card {
     background: var(--white);
     border: 1px solid var(--border);
@@ -312,59 +307,52 @@
         <h2>フォルダ</h2>
       </div>
       <div class="folders">
-        <div class="folder-card" onclick="filterSidebar('folder-sier', null)">
+        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-sier', null)">
           <div class="folder-icon"><i class="ti ti-robot" aria-hidden="true"></i></div>
           <div class="folder-name">AGV/AMR導入</div>
           <div class="folder-count">2件</div>
         </div>
-        <div class="folder-card" onclick="filterSidebar('folder-proposal', null)">
+        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-proposal', null)">
           <div class="folder-icon"><i class="ti ti-file-description" aria-hidden="true"></i></div>
           <div class="folder-name">提案・営業資料</div>
           <div class="folder-count">0件</div>
         </div>
-        <div class="folder-card" onclick="filterSidebar('folder-product', null)">
+        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-product', null)">
           <div class="folder-icon"><i class="ti ti-cpu" aria-hidden="true"></i></div>
           <div class="folder-name">製品・技術資料</div>
           <div class="folder-count">0件</div>
         </div>
-        <div class="folder-card" onclick="filterSidebar('folder-training', null)">
+        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-training', null)">
           <div class="folder-icon"><i class="ti ti-school" aria-hidden="true"></i></div>
           <div class="folder-name">研修・教育資料</div>
           <div class="folder-count">0件</div>
         </div>
-        <div class="folder-card" onclick="filterSidebar('folder-case', null)">
+        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-case', null)">
           <div class="folder-icon"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
           <div class="folder-name">案件まとめ</div>
           <div class="folder-count">1件</div>
         </div>
-        <div class="folder-card folder-card-sub" id="subfolder-nx-kato" onclick="filterSidebar('folder-nx-kato', null)" style="display:none;">
+        <div class="folder-card" data-parent="folder-case" onclick="filterSidebar('folder-nx-kato', null)">
           <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
           <div class="folder-name">NX商事加東市倉庫案件</div>
           <div class="folder-count">3件</div>
         </div>
-        <div class="folder-card" onclick="filterSidebar('folder-miura', null)">
+        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-miura', null)">
           <div class="folder-icon"><i class="ti ti-building-factory-2" aria-hidden="true"></i></div>
           <div class="folder-name">三浦工業</div>
           <div class="folder-count">1件</div>
         </div>
-        <div class="folder-card" onclick="filterSidebar('folder-expense', null)">
+        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-expense', null)">
           <div class="folder-icon"><i class="ti ti-receipt" aria-hidden="true"></i></div>
           <div class="folder-name">経費</div>
           <div class="folder-count">0件</div>
         </div>
-        <div class="folder-card" onclick="filterSidebar('folder-apps', null)">
+        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-apps', null)">
           <div class="folder-icon"><i class="ti ti-tools" aria-hidden="true"></i></div>
           <div class="folder-name">便利アプリ</div>
           <div class="folder-count">3件</div>
         </div>
-        <div class="folder-card" onclick="filterSidebar('folder-case', null)">
-          <div class="folder-icon"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
-          <div class="folder-name">案件まとめ</div>
-          <div class="folder-count">1件</div>
-        </div>
-        <div class="folder-card folder-card-sub" id="subfolder-nx-kato" onclick="filterSidebar('folder-nx-kato', null)" style="display:none;">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">NX商事加東市倉庫案件</div>
+        <div class="folder-name">NX商事加東市倉庫案件</div>
           <div class="folder-count">3件</div>
         </div>
       </div>
@@ -567,11 +555,25 @@
     docSectionTitle.textContent = '資料一覧';
 
     // フォルダセクション表示制御
-    folderSection.style.display = (filter === 'all' || filter === 'folder-case') ? 'block' : 'none';
+    // 表示するfolder-cardを「現在のフォルダの直下の子」だけに絞る
+    const allFolderCards = document.querySelectorAll('.folder-card');
+    let hasChildFolders = false;
+    allFolderCards.forEach(card => {
+      const parent = card.dataset.parent;
+      const show = parent === filter;
+      card.style.display = show ? '' : 'none';
+      if (show) hasChildFolders = true;
+    });
 
-    // サブフォルダ表示制御
-    const subNxKato = document.getElementById('subfolder-nx-kato');
-    if (subNxKato) subNxKato.style.display = filter === 'folder-case' ? 'flex' : 'none';
+    // 子フォルダがある場合のみフォルダセクションを表示
+    // allの場合は常に表示（ルートフォルダ一覧）
+    if (filter === 'all') {
+      folderSection.style.display = 'block';
+    } else if (hasChildFolders) {
+      folderSection.style.display = 'block';
+    } else {
+      folderSection.style.display = 'none';
+    }
 
     applyFilters();
   }
