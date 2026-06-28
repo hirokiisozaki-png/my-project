@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物流自動化・SI関連 用語まとめ</title>
+    <style>
+        body {
+            font-family: "Yu Gothic", "Hiragino Sans", sans-serif;
+            line-height: 1.8;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f7fa;
+            color: #333;
+        }
+        h1 {
+            color: #005bac;
+            border-bottom: 3px solid #005bac;
+            padding-bottom: 10px;
+        }
+        h2 {
+            background: #005bac;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .card {
+            background: white;
+            padding: 18px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        th {
+            background: #005bac;
+            color: white;
+        }
+        code {
+            background: #eee;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>物流自動化・SI関連 用語まとめ</h1>
+
+<div class="card">
+<h2>① SIとは？</h2>
+
+<p><strong>システムや設備を連携させ、一つの仕組みとして動かすこと。</strong></p>
+
+<p>例</p>
+
+<pre>
+WMS
+ ↓
+AGF
+ ↓
+PLC
+ ↓
+シャッター・コンベア
+</pre>
+
+<p>これらを連携させることが「SI（システムインテグレーション）」です。</p>
+
+</div>
+
+<div class="card">
+<h2>② SIerとは？</h2>
+
+<p><strong>SIを行う会社。</strong></p>
+
+<p>例えるなら…</p>
+
+<ul>
+<li>建設業界：工務店・ゼネコン</li>
+<li>物流自動化：SIer</li>
+</ul>
+
+<p>各メーカーやシステム会社をまとめ、全体を完成させる役割です。</p>
+
+</div>
+
+<div class="card">
+<h2>③ WMSとは？</h2>
+
+<p><strong>倉庫の司令塔。</strong></p>
+
+<p>管理する内容</p>
+
+<ul>
+<li>在庫管理</li>
+<li>保管場所管理</li>
+<li>出荷指示</li>
+<li>搬送指示</li>
+</ul>
+
+<p>「何を・どこから・どこへ運ぶか」を判断します。</p>
+
+</div>
+
+<div class="card">
+<h2>④ PLCとは？</h2>
+
+<p><strong>設備を動かす頭脳。</strong></p>
+
+<p>制御する設備例</p>
+
+<ul>
+<li>コンベア</li>
+<li>シャッター</li>
+<li>エレベーター</li>
+<li>ロボット</li>
+</ul>
+
+<p>例</p>
+
+<pre>
+AGF到着
+ ↓
+PLC
+ ↓
+シャッターを開ける
+</pre>
+
+</div>
+
+<div class="card">
+<h2>⑤ APIとは？</h2>
+
+<p><strong>システム同士が会話するための窓口・ルール。</strong></p>
+
+<p>イメージ</p>
+
+<pre>
+WMS
+ ↓ API
+AGF管理システム
+ ↓ API
+AGF
+</pre>
+
+<p>APIは設備を動かすものではなく、「情報をやり取りする仕組み」です。</p>
+
+</div>
+
+<div class="card">
+<h2>システム構成イメージ</h2>
+
+<pre>
+ERP
+ │
+ ▼
+WMS（倉庫の司令塔）
+ │
+ ▼
+WCS（設備への指示）
+ │
+ ├──AGF
+ ├──コンベア
+ ├──自動倉庫
+ └──PLC
+      │
+      ├──シャッター
+      ├──モーター
+      └──各種センサー
+</pre>
+
+</div>
+
+<div class="card">
+<h2>物流自動化でよく使う用語一覧</h2>
+
+<table>
+<tr>
+<th>用語</th>
+<th>簡単な説明</th>
+</tr>
+
+<tr>
+<td>SI</td>
+<td>設備やシステムを連携させること</td>
+</tr>
+
+<tr>
+<td>SIer</td>
+<td>SIを行う会社</td>
+</tr>
+
+<tr>
+<td>ERP</td>
+<td>会社全体を管理するシステム</td>
+</tr>
+
+<tr>
+<td>WMS</td>
+<td>倉庫の司令塔</td>
+</tr>
+
+<tr>
+<td>WCS</td>
+<td>設備への指示役</td>
+</tr>
+
+<tr>
+<td>MES</td>
+<td>工場の現場監督</td>
+</tr>
+
+<tr>
+<td>PLC</td>
+<td>設備を動かす頭脳</td>
+</tr>
+
+<tr>
+<td>API</td>
+<td>システム同士の会話の窓口</td>
+</tr>
+
+<tr>
+<td>HMI</td>
+<td>設備の操作画面</td>
+</tr>
+
+<tr>
+<td>SCADA</td>
+<td>設備全体の監視システム</td>
+</tr>
+
+<tr>
+<td>AGF</td>
+<td>自動運転フォークリフト</td>
+</tr>
+
+<tr>
+<td>AGV</td>
+<td>決められたルートを走る搬送車</td>
+</tr>
+
+<tr>
+<td>AMR</td>
+<td>自律走行する搬送ロボット</td>
+</tr>
+
+<tr>
+<td>AS/RS</td>
+<td>自動倉庫</td>
+</tr>
+
+<tr>
+<td>RFID</td>
+<td>ICタグによる自動認識</td>
+</tr>
+
+<tr>
+<td>I/O</td>
+<td>設備への入力・出力信号</td>
+</tr>
+
+<tr>
+<td>FAT</td>
+<td>工場での出荷前テスト</td>
+</tr>
+
+<tr>
+<td>SAT</td>
+<td>現地での最終動作確認</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="card">
+<h2>営業で覚えておくべき重要用語 TOP10</h2>
+
+<ol>
+<li>SI</li>
+<li>SIer</li>
+<li>WMS</li>
+<li>WCS</li>
+<li>PLC</li>
+<li>API</li>
+<li>AGF</li>
+<li>AMR</li>
+<li>AGV</li>
+<li>FAT / SAT</li>
+</ol>
+
+</div>
+
+<div class="card">
+<h2>一言で覚えるまとめ</h2>
+
+<table>
+<tr>
+<th>用語</th>
+<th>一言で言うと</th>
+</tr>
+
+<tr>
+<td>SI</td>
+<td>システムをつなぐこと</td>
+</tr>
+
+<tr>
+<td>SIer</td>
+<td>システムのまとめ役</td>
+</tr>
+
+<tr>
+<td>WMS</td>
+<td>倉庫の司令塔</td>
+</tr>
+
+<tr>
+<td>WCS</td>
+<td>設備への指示役</td>
+</tr>
+
+<tr>
+<td>PLC</td>
+<td>設備を動かす頭脳</td>
+</tr>
+
+<tr>
+<td>API</td>
+<td>システム同士の会話</td>
+</tr>
+
+<tr>
+<td>AGF</td>
+<td>運ぶ人（フォークリフト）</td>
+</tr>
+
+<tr>
+<td>ERP</td>
+<td>会社全体の管理者</td>
+</tr>
+
+</table>
+
+</div>
+
+</body>
+</html>
