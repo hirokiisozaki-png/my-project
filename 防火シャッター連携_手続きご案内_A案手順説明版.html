@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>防火シャッター連携 手続きご案内（A案手順説明版）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Hiragino Sans", "Meiryo", sans-serif; font-size: 14px; color: #222; background: #f8f9fa; }
+  .page-wrap { max-width: 900px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  .doc-header { background: #4a235a; color: #fff; border-radius: 8px; padding: 28px 32px 22px; margin-bottom: 28px; }
+  .doc-header .company { font-size: 12px; opacity: 0.75; margin-bottom: 6px; letter-spacing: 0.05em; }
+  .doc-header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .doc-header .subtitle { font-size: 13px; opacity: 0.85; margin-top: 6px; }
+
+  .section { background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); padding: 24px 28px; margin-bottom: 20px; }
+  .section-title { font-size: 16px; font-weight: 700; color: #4a235a; border-left: 4px solid #4a235a; padding-left: 12px; margin-bottom: 16px; }
+
+  .notice { border-radius: 6px; padding: 14px 18px; margin: 14px 0; font-size: 13px; line-height: 1.7; }
+  .notice.warning { background: #fff8e1; border-left: 4px solid #f9a825; }
+  .notice strong { font-weight: 700; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  th { background: #4a235a; color: #fff; padding: 9px 12px; text-align: left; font-weight: 600; }
+  td { padding: 9px 12px; border: 1px solid #dde2e8; vertical-align: top; line-height: 1.65; }
+  tr:nth-child(even) td { background: #f9f5fb; }
+  td strong { color: #4a235a; }
+
+  .step-badge { display: inline-block; background: #4a235a; color: #fff; font-weight: 700; font-size: 12px; padding: 2px 8px; border-radius: 4px; margin-bottom: 4px; }
+
+  ul { margin: 10px 0 10px 20px; }
+  li { margin-bottom: 6px; line-height: 1.7; font-size: 13px; }
+
+  .doc-footer { text-align: right; color: #999; font-size: 11px; margin-top: 32px; padding-top: 12px; border-top: 1px solid #e0e0e0; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="doc-header">
+    <div class="company">ミラボット株式会社　｜　防火シャッター連携　手続きのご案内</div>
+    <h1>防火シャッター連携に必要な手続き</h1>
+    <div class="subtitle">A案（自火報連動方式）手順説明版</div>
+  </div>
+
+  <!-- はじめに -->
+  <div class="section">
+    <div class="section-title">はじめに</div>
+    <p style="line-height:1.8; font-size:13.5px;">
+      AGV（CarriRo）の導入にあたり、動線上の防火シャッターとの連携を実現するためには、消防法・建築基準法・賃貸借契約上のさまざまな手続きが必要となります。
+    </p>
+    <div class="notice warning" style="margin-top:14px;">
+      <strong>重要：</strong>各STEPはすべて順番に完了する必要があります。特にSTEP 1（貸主承認）が得られない場合、以降の手続きを進めることができません。また各Stepには相手方との調整が伴うため、完了までの期間は状況により異なります。
+    </div>
+  </div>
+
+  <!-- 必要な手続き -->
+  <div class="section">
+    <div class="section-title">必要な手続き（STEP 1〜4）</div>
+    <table>
+      <tr><th style="width:100px;">Step</th><th style="width:200px;">アクション</th><th>内容・留意点</th></tr>
+      <tr>
+        <td><div class="step-badge">STEP 1</div></td>
+        <td><strong>貸主への事前承認取得</strong></td>
+        <td>
+          ・工事概要・目的・原状回復方針を文書で作成<br>
+          ・貸主との打ち合わせ設定・説明<br>
+          ・書面による承諾書の取得<br>
+          <strong>▶ 貸主が承諾しない場合、ここで手続き終了となる</strong>
+        </td>
+      </tr>
+      <tr>
+        <td><div class="step-badge">STEP 2</div></td>
+        <td><strong>シャッターメーカー技術確認</strong></td>
+        <td>
+          ・設置シャッターの型番・メーカー調査<br>
+          ・連動制御盤の仕様・移報出力端子の有無を確認<br>
+          ・メーカーへ改造可否・推奨方式を問い合わせ<br>
+          <strong>▶ 端子がない場合は別途工事が必要になる</strong>
+        </td>
+      </tr>
+      <tr>
+        <td><div class="step-badge">STEP 3</div></td>
+        <td><strong>消防署（予防係）事前相談</strong></td>
+        <td>
+          ・現状図面の準備（貸主同席が理想）<br>
+          ・管轄消防署へ訪問・相談<br>
+          ・必要届出の種類・書類の確認<br>
+          <strong>▶ 管轄によって解釈が異なるため複数回になる可能性あり</strong>
+        </td>
+      </tr>
+      <tr>
+        <td><div class="step-badge">STEP 4</div></td>
+        <td><strong>各届出の提出・工事・消防検査</strong></td>
+        <td>
+          ・防火対象物工事等計画届出書（工事着手7日前まで）<br>
+          ・工事整備対象設備等着工届出書（工事着手10日前まで）<br>
+          ・消防用設備等設置届出書（工事完了後4日以内）<br>
+          ・消防設備士（甲種4類）による有資格者工事<br>
+          ・消防署による完了検査受検<br>
+          <strong>▶ 指摘事項があれば是正・再検査が必要となる</strong>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 留意事項 -->
+  <div class="section">
+    <div class="section-title">留意事項</div>
+    <ul>
+      <li>STEP 1の貸主承認は、防火シャッターが建物の消防設備の一部であることから、賃貸借契約上も必須の手続きとなります。</li>
+      <li>消防署への届出義務者は原則として「工事を依頼した者（借主・発注者）」となります。ただし手続きには貸主の協力・同席が必要なケースもあるため、貸主との連携が不可欠です。</li>
+      <li>STEP 4の工事は消防設備士（甲種4類）の資格が必要な有資格者工事となります。</li>
+      <li>各STEPの所要期間は相手方の状況により変動するため、余裕を持ったスケジュールの確保が必要です。なお今回の工事（自火報移報端子への配線追加）が届出対象に該当するかは管轄消防署により判断が異なるため、着手前に消防署へ事前確認されることを推奨します。</li>
+    </ul>
+  </div>
+
+  <div class="doc-footer">Confidential　／　ミラボット株式会社</div>
+</div>
+</body>
+</html>
