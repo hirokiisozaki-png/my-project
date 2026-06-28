@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>防火シャッター連携 ご提案資料（A案→C案誘導版）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Hiragino Sans", "Meiryo", sans-serif; font-size: 14px; color: #222; background: #f8f9fa; }
+  .page-wrap { max-width: 900px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  /* ヘッダー */
+  .doc-header { background: #1a3a5c; color: #fff; border-radius: 8px; padding: 28px 32px 22px; margin-bottom: 28px; }
+  .doc-header .company { font-size: 12px; opacity: 0.75; margin-bottom: 6px; letter-spacing: 0.05em; }
+  .doc-header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .doc-header .subtitle { font-size: 13px; opacity: 0.85; margin-top: 6px; }
+  .doc-header .meta-table { margin-top: 18px; border-collapse: collapse; width: 100%; }
+  .doc-header .meta-table td { padding: 5px 12px; font-size: 13px; border: 1px solid rgba(255,255,255,0.25); }
+  .doc-header .meta-table td:first-child { background: rgba(255,255,255,0.12); font-weight: 600; width: 110px; }
+
+  /* セクション */
+  .section { background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); padding: 24px 28px; margin-bottom: 20px; }
+  .section-title { font-size: 16px; font-weight: 700; color: #1a3a5c; border-left: 4px solid #1a3a5c; padding-left: 12px; margin-bottom: 16px; }
+
+  /* 通知ボックス */
+  .notice { border-radius: 6px; padding: 14px 18px; margin: 14px 0; font-size: 13px; line-height: 1.7; }
+  .notice.warning { background: #fff8e1; border-left: 4px solid #f9a825; }
+  .notice.info  { background: #e8f4fd; border-left: 4px solid #1976d2; }
+  .notice.success { background: #e8f5e9; border-left: 4px solid #2e7d32; }
+  .notice strong { font-weight: 700; }
+
+  /* テーブル */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  th { background: #1a3a5c; color: #fff; padding: 9px 12px; text-align: left; font-weight: 600; }
+  td { padding: 9px 12px; border: 1px solid #dde2e8; vertical-align: top; line-height: 1.65; }
+  tr:nth-child(even) td { background: #f5f7fa; }
+  td strong { color: #1a3a5c; }
+
+  /* 比較テーブル */
+  .compare-table th:first-child { width: 50%; }
+  .compare-table td { text-align: left; }
+  .compare-table .col-old { background: #fff3e0 !important; }
+  .compare-table .col-new { background: #e8f5e9 !important; }
+
+  /* アクションテーブル */
+  .action-table td:first-child { font-weight: 600; color: #1a3a5c; width: 220px; }
+  .action-table td:nth-child(2) { width: 120px; }
+
+  /* フッター */
+  .doc-footer { text-align: right; color: #999; font-size: 11px; margin-top: 32px; padding-top: 12px; border-top: 1px solid #e0e0e0; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ヘッダー -->
+  <div class="doc-header">
+    <div class="company">ミラボット株式会社　｜　防火シャッター連携　ご提案</div>
+    <h1>AGV導入における防火シャッター連携</h1>
+    <div class="subtitle">連携方式の検討と弊社推奨アプローチのご提案</div>
+    <table class="meta-table">
+      <tr><td>導入設備</td><td>AGV（CarriRo）自律走行型搬送ロボット</td></tr>
+      <tr><td>設置場所</td><td>賃貸倉庫</td></tr>
+      <tr><td>連携対象</td><td>防火シャッター 3枚</td></tr>
+    </table>
+  </div>
+
+  <!-- 1. 課題 -->
+  <div class="section">
+    <div class="section-title">1．防火シャッター連携における課題</div>
+    <p style="line-height:1.8; font-size:13.5px;">
+      AGVが倉庫内を自律走行するにあたり、動線上に防火シャッターが存在する場合、火災発生時のAGVの安全停止・退避が必要となります。<br>
+      防火シャッターとAGVを連携させる方法は複数あり、それぞれ法令上の手続きや工事の規模が大きく異なります。本資料では代表的な方式と、弊社推奨の方式をご説明いたします。
+    </p>
+  </div>
+
+  <!-- 2. 正規手順 -->
+  <div class="section">
+    <div class="section-title">2．正規手順での対応（参考：自火報連動方式）</div>
+    <p style="font-size:13px; line-height:1.75; margin-bottom:14px;">
+      消防設備と接続して連携を実現する方式（以下「正規手順」）は技術的に確実な方法です。ただし実施にあたっては以下のSTEP 1〜4をすべて完了する必要があります。
+    </p>
+
+    <div class="notice warning">
+      <strong>重要：</strong>各STEPは順番に進める必要があり、STEP 1で貸主の承諾が得られない場合はその後の手続きが一切進みません。また相手方（貸主・消防署・シャッターメーカー）の都合に依存するため、完了までのリードタイムを弊社でコントロールすることができません。
+    </div>
+
+    <table>
+      <tr><th style="width:100px;">Step</th><th style="width:200px;">アクション</th><th>内容・留意点</th></tr>
+      <tr>
+        <td><strong>STEP 1</strong></td>
+        <td><strong>貸主への事前承認取得</strong></td>
+        <td>工事概要・目的・原状回復方針を文書で作成<br>貸主との打ち合わせ設定・説明<br>書面による承諾書の取得<br><strong>▶ 貸主が承諾しない場合、ここで手続き終了となる</strong></td>
+      </tr>
+      <tr>
+        <td><strong>STEP 2</strong></td>
+        <td><strong>シャッターメーカー技術確認</strong></td>
+        <td>設置シャッターの型番・メーカー調査<br>連動制御盤の仕様・移報出力端子の有無を確認<br>メーカーへ改造可否・推奨方式を問い合わせ<br><strong>▶ 端子がない場合は別途工事が必要になる</strong></td>
+      </tr>
+      <tr>
+        <td><strong>STEP 3</strong></td>
+        <td><strong>消防署（予防係）事前相談</strong></td>
+        <td>現状図面の準備（貸主同席が理想）<br>管轄消防署へ訪問・相談<br>必要届出の種類・書類の確認<br><strong>▶ 管轄によって解釈が異なるため複数回になる可能性あり</strong></td>
+      </tr>
+      <tr>
+        <td><strong>STEP 4</strong></td>
+        <td><strong>各届出の提出・工事・消防検査</strong></td>
+        <td>防火対象物工事等計画届出書（工事着手7日前まで）<br>工事整備対象設備等着工届出書（工事着手10日前まで）<br>消防用設備等設置届出書（工事完了後4日以内）<br>消防設備士（甲種4類）による有資格者工事<br>消防署による完了検査受検<br><strong>▶ 指摘事項があれば是正・再検査が必要となる</strong></td>
+      </tr>
+    </table>
+
+    <h3 style="font-size:14px; font-weight:700; margin: 18px 0 10px; color:#555;">正規手順における現実的な課題</h3>
+    <table>
+      <tr><th>課題</th><th>内容</th><th>影響</th></tr>
+      <tr><td><strong>リードタイム</strong></td><td>STEP 1〜4完了まで最低2〜3ヶ月</td><td>導入スケジュールへの影響大</td></tr>
+      <tr><td><strong>貸主依存リスク</strong></td><td>貸主が承認しない場合は実施不可</td><td>プロジェクト中断リスク</td></tr>
+      <tr><td><strong>工事費用</strong></td><td>消防設備士工事・消防署対応が発生</td><td>コスト増加</td></tr>
+      <tr><td><strong>横展開困難</strong></td><td>物件ごとに同じ手順が必要</td><td>複数拠点展開への障壁</td></tr>
+    </table>
+  </div>
+
+  <!-- 3. 弊社推奨 -->
+  <div class="section">
+    <div class="section-title">3．弊社推奨アプローチ：光電センサー × MIRABOT LINK連携方式</div>
+    <p style="font-size:13px; line-height:1.75; margin-bottom:14px;">
+      上記の課題を踏まえ、弊社では消防設備・建物設備に一切触れない独自の方式をご提案いたします。申請・届出・貸主承認のいずれも不要で、迅速かつ低コストに実現できます。
+    </p>
+
+    <table class="compare-table">
+      <tr><th>正規手順（参考）</th><th>弊社推奨方式</th></tr>
+      <tr>
+        <td class="col-old">消防法届出：<strong>必要</strong><br>貸主承認：<strong>必要</strong><br>消防設備士工事：<strong>必要</strong><br>リードタイム：<strong>2〜3ヶ月以上</strong><br>横展開：<strong>物件ごとに手続きが必要</strong></td>
+        <td class="col-new">消防法届出：<strong style="color:#2e7d32;">不要</strong><br>貸主承認：<strong style="color:#2e7d32;">不要</strong><br>消防設備士工事：<strong style="color:#2e7d32;">不要</strong><br>リードタイム：<strong style="color:#2e7d32;">短期間で着手可能</strong><br>横展開：<strong style="color:#2e7d32;">物件を選ばず展開可能</strong></td>
+      </tr>
+    </table>
+
+    <h3 style="font-size:14px; font-weight:700; margin: 18px 0 10px; color:#555;">弊社推奨方式の仕組み</h3>
+    <table>
+      <tr><th style="width:240px;">要素</th><th>内容</th></tr>
+      <tr><td><strong>光電センサー（シャッター上部設置）</strong></td><td>シャッター降下の初動（スラットが数cm下りた瞬間）を検知。シャッター上部設置のためCarriRoや積載物がビームに干渉しない構造</td></tr>
+      <tr><td><strong>MIRABOT LINK（上位システム）</strong></td><td>センサー検知信号を受信しCarriRoの位置情報をリアルタイム判定</td></tr>
+      <tr><td><strong>CarriRo位置判定ロジック</strong></td><td>シャッター手前ランドマーク以前→即時停止 / 通過中・通過後→通過後ランドマークまで前進して安全退避</td></tr>
+      <tr><td><strong>ランドマーク配置</strong></td><td>シャッター前後1〜2m（3箇所分）に設置。既存のCarriRo誘導機能を活用</td></tr>
+    </table>
+
+    <div class="notice success" style="margin-top:16px;">
+      <strong>弊社推奨：</strong>シャッターの開閉制御は一切行いません。火災報知器・消防設備・建物設備のいずれにも触れないため、消防法届出・建築基準法確認・貸主承認がすべて不要です。自社経由で工事手配が可能で、複数拠点への横展開も容易に実現できます。
+    </div>
+  </div>
+
+  <!-- 4. 次のステップ -->
+  <div class="section">
+    <div class="section-title">4．次のステップ</div>
+    <table class="action-table">
+      <tr><th>アクション</th><th>担当</th><th>目標時期</th></tr>
+      <tr><td>弊社推奨方式の採用可否ご確認</td><td>お客様</td><td>早急に</td></tr>
+      <tr><td>シャッター仕様・設置環境の現地確認</td><td>弊社</td><td>採用決定後</td></tr>
+      <tr><td>ランドマーク設置位置の設計</td><td>弊社</td><td>現地確認後</td></tr>
+      <tr><td>光電センサー取付工事・MIRABOT LINK設定</td><td>弊社（工事会社経由）</td><td>設計完了後</td></tr>
+      <tr><td>動作確認・テスト走行</td><td>弊社・お客様</td><td>工事完了後</td></tr>
+    </table>
+
+    <div class="notice info" style="margin-top:14px;">
+      <strong>ご質問：</strong>ご不明な点・ご要望がございましたら、お気軽にご連絡ください。
+    </div>
+  </div>
+
+  <div class="doc-footer">Confidential　／　ミラボット株式会社</div>
+</div>
+</body>
+</html>
