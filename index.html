@@ -789,7 +789,11 @@
   function applyFilters() {
     const q = searchInput.value.trim().toLowerCase();
     docs.forEach(doc => {
-      const folderMatch = currentFilter === 'all' || doc.dataset.folder === currentFilter || doc.dataset.tags.includes(currentFilter);
+      // 階層対応：現在のフォルダと完全一致するカードのみ表示
+      // タグ検索の場合はdoc.dataset.tagsも参照
+      const folderMatch = currentFilter === 'all'
+        || doc.dataset.folder === currentFilter
+        || (currentFilter.startsWith('tag-') && doc.dataset.tags && doc.dataset.tags.includes(currentFilter));
       const textMatch = !q || doc.dataset.text.toLowerCase().includes(q) || doc.querySelector('.doc-title').textContent.toLowerCase().includes(q);
       doc.classList.toggle('hidden', !(folderMatch && textMatch));
 
