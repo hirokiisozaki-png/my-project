@@ -6,759 +6,271 @@
 <title>AGV/AMR ヒアリング回答ビューア</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.34.0/iconfont/tabler-icons.min.css">
 <style>
-  :root {
-    --bg: #f0f4f8;
-    --surface: #ffffff;
-    --surface2: #f8fafc;
-    --border: #e2e8f0;
-    --text: #1e293b;
-    --text-sub: #64748b;
-    --text-light: #94a3b8;
-    --accent: #0f5fa8;
-    --accent-light: #dbeafe;
-    --green: #16a34a;
-    --green-light: #dcfce7;
-    --amber: #d97706;
-    --amber-light: #fef3c7;
-    --red: #dc2626;
-    --red-light: #fee2e2;
-    --purple: #7c3aed;
-    --purple-light: #ede9fe;
-    --radius: 10px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Hiragino Sans', 'Yu Gothic UI', 'Meiryo UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
-
-  /* Header */
-  .header {
-    background: var(--accent);
-    color: white;
-    padding: 18px 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 2px 8px rgba(15,95,168,0.3);
-  }
-  .header h1 { font-size: 17px; font-weight: 700; letter-spacing: 0.02em; }
-  .header .subtitle { font-size: 12px; opacity: 0.75; margin-top: 2px; }
-  .header-icon { font-size: 24px; }
-
-  /* Stats bar */
-  .stats-bar {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 24px;
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .stat-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
-  .stat-num { font-size: 20px; font-weight: 700; color: var(--accent); }
-  .stat-label { color: var(--text-sub); font-size: 11px; }
-  .stat-divider { width: 1px; height: 32px; background: var(--border); }
-
-  /* Controls */
-  .controls {
-    padding: 16px 24px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .filter-group { display: flex; align-items: center; gap: 6px; }
-  .filter-label { font-size: 12px; color: var(--text-sub); font-weight: 600; white-space: nowrap; }
-  select, input[type="text"] {
-    height: 34px;
-    padding: 0 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 13px;
-    background: var(--surface);
-    color: var(--text);
-    outline: none;
-    cursor: pointer;
-  }
-  select:focus, input:focus { border-color: var(--accent); }
-  input[type="text"] { width: 200px; }
-  .btn-reset {
-    height: 34px;
-    padding: 0 14px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 12px;
-    color: var(--text-sub);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .btn-reset:hover { background: var(--bg); }
-  .result-count {
-    margin-left: auto;
-    font-size: 12px;
-    color: var(--text-sub);
-    background: var(--bg);
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-  }
-
-  /* View toggle */
-  .view-toggle {
-    display: flex;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-  .view-btn {
-    padding: 5px 12px;
-    font-size: 13px;
-    border: none;
-    background: transparent;
-    color: var(--text-sub);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .view-btn.active { background: var(--accent); color: white; }
-
-  /* Branch group view */
-  .branch-section { padding: 0 24px 20px; }
-  .branch-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius) var(--radius) 0 0;
-    border-bottom: 2px solid var(--accent);
-    margin-top: 16px;
-    cursor: pointer;
-    user-select: none;
-  }
-  .branch-header:hover { background: var(--surface2); }
-  .branch-name { font-size: 15px; font-weight: 700; color: var(--accent); }
-  .branch-count {
-    font-size: 12px;
-    background: var(--accent-light);
-    color: var(--accent);
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-weight: 600;
-  }
-  .branch-reps { font-size: 12px; color: var(--text-sub); margin-left: auto; }
-  .branch-toggle { color: var(--text-sub); font-size: 16px; transition: transform 0.2s; }
-  .branch-toggle.collapsed { transform: rotate(-90deg); }
-
-  /* Cards grid */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 0;
-    border: 1px solid var(--border);
-    border-top: none;
-    border-radius: 0 0 var(--radius) var(--radius);
-    overflow: hidden;
-  }
-  .case-card {
-    background: var(--surface);
-    padding: 16px;
-    border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: background 0.15s;
-    position: relative;
-  }
-  .case-card:hover { background: #f0f7ff; }
-  .case-card:last-child { border-right: none; }
-
-  .card-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    gap: 8px;
-  }
-  .customer-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.3;
-    flex: 1;
-  }
-  .status-badge {
-    font-size: 10px;
-    font-weight: 700;
-    padding: 3px 7px;
-    border-radius: 4px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .status-A { background: var(--green-light); color: var(--green); }
-  .status-B { background: var(--accent-light); color: var(--accent); }
-  .status-C { background: var(--amber-light); color: var(--amber); }
-  .status-D { background: #f3e8ff; color: var(--purple); }
-
-  .card-meta {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 10px;
-  }
-  .meta-chip {
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    color: var(--text-sub);
-  }
-  .meta-chip i { font-size: 12px; }
-
-  .card-specs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4px 12px;
-    padding: 10px;
-    background: var(--surface2);
-    border-radius: 6px;
-    margin-bottom: 10px;
-  }
-  .spec-row { display: flex; flex-direction: column; }
-  .spec-label { font-size: 10px; color: var(--text-light); }
-  .spec-val { font-size: 12px; font-weight: 600; color: var(--text); }
-
-  .card-purpose {
-    font-size: 11px;
-    color: var(--text-sub);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-  .purpose-tag {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 10px;
-  }
-
-  .card-note {
-    margin-top: 8px;
-    font-size: 11px;
-    color: var(--text-sub);
-    background: #fffbeb;
-    border-left: 3px solid var(--amber);
-    padding: 6px 8px;
-    border-radius: 0 4px 4px 0;
-    line-height: 1.5;
-  }
-
-  .card-footer {
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .budget-badge {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--green);
-    background: var(--green-light);
-    padding: 3px 8px;
-    border-radius: 4px;
-  }
-  .date-label { font-size: 11px; color: var(--text-light); }
-
-  /* List view */
-  .list-view { padding: 0 24px 20px; }
-  .list-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: var(--surface);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    font-size: 12px;
-  }
-  .list-table th {
-    background: var(--accent);
-    color: white;
-    padding: 10px 12px;
-    text-align: left;
-    font-weight: 600;
-    white-space: nowrap;
-    font-size: 11px;
-  }
-  .list-table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-    cursor: pointer;
-  }
-  .list-table tr:hover td { background: #f0f7ff; }
-  .list-table tr:last-child td { border-bottom: none; }
-
-  /* Modal */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 100;
-    padding: 24px;
-    overflow-y: auto;
-  }
-  .modal-overlay.active { display: flex; align-items: flex-start; justify-content: center; }
-  .modal {
-    background: var(--surface);
-    border-radius: 12px;
-    max-width: 680px;
-    width: 100%;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    overflow: hidden;
-  }
-  .modal-header {
-    background: var(--accent);
-    color: white;
-    padding: 20px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-  .modal-title { font-size: 17px; font-weight: 700; line-height: 1.3; }
-  .modal-subtitle { font-size: 13px; opacity: 0.8; margin-top: 4px; }
-  .modal-close {
-    background: rgba(255,255,255,0.2);
-    border: none;
-    color: white;
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 18px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .modal-close:hover { background: rgba(255,255,255,0.35); }
-  .modal-body { padding: 24px; }
-  .modal-section { margin-bottom: 20px; }
-  .modal-section-title {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-sub);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 10px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid var(--border);
-  }
-  .modal-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-  .modal-field { display: flex; flex-direction: column; gap: 2px; }
-  .modal-field-label { font-size: 10px; color: var(--text-light); }
-  .modal-field-val { font-size: 13px; font-weight: 600; color: var(--text); }
-  .modal-note {
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    border-left: 4px solid var(--amber);
-    padding: 12px 14px;
-    border-radius: 6px;
-    font-size: 13px;
-    color: var(--text);
-    line-height: 1.7;
-  }
-  .modal-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .modal-tag {
-    background: var(--accent-light);
-    color: var(--accent);
-    font-size: 12px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 4px;
-  }
-
-  /* Empty state */
-  .empty-state {
-    text-align: center;
-    padding: 60px 24px;
-    color: var(--text-sub);
-  }
-  .empty-state i { font-size: 40px; opacity: 0.3; }
-  .empty-state p { margin-top: 12px; font-size: 14px; }
-
-  /* Hidden */
-  .hidden { display: none !important; }
+:root{
+  --bg:#f0f4f8;--surface:#fff;--surface2:#f8fafc;--border:#e2e8f0;
+  --text:#1e293b;--text-sub:#64748b;--text-light:#94a3b8;
+  --accent:#0f5fa8;--accent-light:#dbeafe;
+  --green:#16a34a;--green-light:#dcfce7;
+  --amber:#d97706;--amber-light:#fef3c7;
+  --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Hiragino Sans","Yu Gothic UI","Meiryo UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.header{background:var(--accent);color:white;padding:16px 24px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(15,95,168,.3);}
+.header h1{font-size:17px;font-weight:700;}
+.header .sub{font-size:11px;opacity:.75;margin-top:2px;}
+.header-icon{font-size:24px;}
+.updated{font-size:11px;opacity:.6;margin-left:auto;}
+.stats-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;}
+.stat-item{display:flex;align-items:center;gap:8px;}
+.stat-num{font-size:22px;font-weight:700;color:var(--accent);}
+.stat-label{font-size:11px;color:var(--text-sub);}
+.stat-div{width:1px;height:32px;background:var(--border);}
+.status-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;}
+.status-A{background:#dcfce7;color:#16a34a;}
+.status-B{background:#dbeafe;color:#0f5fa8;}
+.status-C{background:#fef3c7;color:#d97706;}
+.controls{padding:14px 24px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.filter-group{display:flex;align-items:center;gap:6px;}
+.filter-label{font-size:12px;color:var(--text-sub);font-weight:600;white-space:nowrap;}
+select,input[type=text]{height:34px;padding:0 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;background:var(--surface);color:var(--text);outline:none;}
+select:focus,input:focus{border-color:var(--accent);}
+input[type=text]{width:190px;}
+.btn{height:34px;padding:0 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--text-sub);cursor:pointer;display:flex;align-items:center;gap:4px;}
+.btn:hover{background:var(--bg);}
+.result-count{margin-left:auto;font-size:12px;color:var(--text-sub);background:var(--bg);padding:4px 10px;border-radius:20px;border:1px solid var(--border);}
+.view-toggle{display:flex;background:var(--bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+.view-btn{padding:5px 12px;font-size:12px;border:none;background:transparent;color:var(--text-sub);cursor:pointer;display:flex;align-items:center;gap:4px;}
+.view-btn.active{background:var(--accent);color:white;}
+.branch-section{padding:0 24px 16px;}
+.branch-header{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;border-bottom:2px solid var(--accent);margin-top:14px;cursor:pointer;user-select:none;}
+.branch-header:hover{background:var(--surface2);}
+.branch-name{font-size:15px;font-weight:700;color:var(--accent);}
+.branch-count{font-size:12px;background:var(--accent-light);color:var(--accent);padding:2px 8px;border-radius:10px;font-weight:600;}
+.branch-reps{font-size:12px;color:var(--text-sub);margin-left:auto;}
+.chevron{color:var(--text-sub);font-size:16px;transition:transform .2s;}
+.chevron.col{transform:rotate(-90deg);}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);overflow:hidden;}
+.case-card{background:var(--surface);padding:14px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;}
+.case-card:hover{background:#f0f7ff;}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;gap:8px;}
+.customer-name{font-size:14px;font-weight:700;line-height:1.3;flex:1;}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;font-size:11px;color:var(--text-sub);}
+.card-meta i{font-size:12px;}
+.card-specs{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;padding:8px;background:var(--surface2);border-radius:6px;margin-bottom:8px;}
+.spec-row{display:flex;flex-direction:column;}
+.spec-label{font-size:10px;color:var(--text-light);}
+.spec-val{font-size:12px;font-weight:600;}
+.card-purpose{display:flex;flex-wrap:wrap;gap:3px;}
+.purpose-tag{background:var(--bg);border:1px solid var(--border);padding:2px 6px;border-radius:3px;font-size:10px;}
+.card-note{margin-top:8px;font-size:11px;color:var(--text-sub);background:#fffbeb;border-left:3px solid var(--amber);padding:6px 8px;border-radius:0 4px 4px 0;line-height:1.5;}
+.card-footer{margin-top:8px;display:flex;justify-content:space-between;align-items:center;}
+.budget-badge{font-size:12px;font-weight:700;color:var(--green);background:var(--green-light);padding:3px 8px;border-radius:4px;}
+.date-label{font-size:11px;color:var(--text-light);}
+.list-view{padding:0 24px 20px;}
+.list-table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);font-size:12px;}
+.list-table th{background:var(--accent);color:white;padding:10px 12px;text-align:left;font-weight:600;white-space:nowrap;font-size:11px;}
+.list-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle;cursor:pointer;}
+.list-table tr:hover td{background:#f0f7ff;}
+.list-table tr:last-child td{border-bottom:none;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;padding:24px;overflow-y:auto;}
+.modal-overlay.active{display:flex;align-items:flex-start;justify-content:center;}
+.modal{background:var(--surface);border-radius:12px;max-width:660px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2);overflow:hidden;}
+.modal-header{background:var(--accent);color:white;padding:18px 24px;display:flex;justify-content:space-between;align-items:flex-start;}
+.modal-title{font-size:16px;font-weight:700;line-height:1.3;}
+.modal-sub{font-size:12px;opacity:.8;margin-top:3px;}
+.modal-close{background:rgba(255,255,255,.2);border:none;color:white;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.modal-close:hover{background:rgba(255,255,255,.35);}
+.modal-body{padding:20px;}
+.modal-sec{margin-bottom:16px;}
+.modal-sec-title{font-size:10px;font-weight:700;color:var(--text-sub);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.modal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.modal-field{display:flex;flex-direction:column;gap:2px;}
+.modal-field-label{font-size:10px;color:var(--text-light);}
+.modal-field-val{font-size:13px;font-weight:600;}
+.modal-note{background:#fffbeb;border:1px solid #fde68a;border-left:4px solid var(--amber);padding:10px 12px;border-radius:6px;font-size:13px;line-height:1.7;}
+.modal-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.modal-tag{background:var(--accent-light);color:var(--accent);font-size:12px;font-weight:600;padding:3px 8px;border-radius:4px;}
+.empty{text-align:center;padding:50px;color:var(--text-sub);}
+.hidden{display:none!important;}
 </style>
 </head>
 <body>
-
 <div class="header">
   <i class="ti ti-robot header-icon"></i>
-  <div>
-    <h1>AGV/AMR ヒアリング回答ビューア</h1>
-    <div class="subtitle">近畿エリア — 三浦工業グループ ミラボット株式会社</div>
-  </div>
+  <div><h1>AGV/AMR ヒアリング回答ビューア</h1>
+  <div class="sub">近畿エリア — 三浦工業グループ ミラボット株式会社</div></div>
+  <div class="updated">最終更新：2026/6/29 13:03:28</div>
 </div>
-
-<div class="stats-bar" id="statsBar">
-  <!-- 動的に生成 -->
-</div>
-
+<div class="stats-bar" id="statsBar"></div>
 <div class="controls">
-  <div class="filter-group">
-    <span class="filter-label"><i class="ti ti-building"></i> 支店</span>
-    <select id="filterBranch">
-      <option value="">すべての支店</option>
-    </select>
-  </div>
-  <div class="filter-group">
-    <span class="filter-label"><i class="ti ti-user"></i> 担当者</span>
-    <select id="filterRep">
-      <option value="">すべての担当者</option>
-    </select>
-  </div>
-  <div class="filter-group">
-    <span class="filter-label"><i class="ti ti-flag"></i> ステータス</span>
-    <select id="filterStatus">
-      <option value="">すべてのステータス</option>
+  <div class="filter-group"><span class="filter-label">支店</span>
+    <select id="fBranch"><option value="">すべての支店</option></select></div>
+  <div class="filter-group"><span class="filter-label">担当者</span>
+    <select id="fRep"><option value="">すべての担当者</option></select></div>
+  <div class="filter-group"><span class="filter-label">ステータス</span>
+    <select id="fStatus"><option value="">すべて</option>
       <option value="A">A：脈あり</option>
       <option value="B">B：情報収集・比較検討</option>
       <option value="C">C：潜在的ニーズ</option>
-    </select>
-  </div>
-  <div class="filter-group">
-    <span class="filter-label"><i class="ti ti-search"></i></span>
-    <input type="text" id="searchInput" placeholder="顧客名・担当者名で検索">
-  </div>
-  <button class="btn-reset" onclick="resetFilters()">
-    <i class="ti ti-refresh"></i> リセット
-  </button>
+    </select></div>
+  <div class="filter-group"><input type="text" id="fSearch" placeholder="顧客名・担当者名で検索"></div>
+  <button class="btn" onclick="reset()"><i class="ti ti-refresh"></i> リセット</button>
   <div class="view-toggle">
-    <button class="view-btn active" id="btnCard" onclick="setView('card')">
-      <i class="ti ti-layout-grid"></i> カード
-    </button>
-    <button class="view-btn" id="btnList" onclick="setView('list')">
-      <i class="ti ti-list"></i> 一覧
-    </button>
+    <button class="view-btn active" id="btnCard" onclick="setView('card')"><i class="ti ti-layout-grid"></i> カード</button>
+    <button class="view-btn" id="btnList" onclick="setView('list')"><i class="ti ti-list"></i> 一覧</button>
   </div>
-  <span class="result-count" id="resultCount"></span>
+  <span class="result-count" id="cnt"></span>
 </div>
-
-<div id="cardView"><!-- カードビュー --></div>
-<div id="listView" class="hidden list-view"><!-- リストビュー --></div>
-
-<!-- Modal -->
+<div id="cardView"></div>
+<div id="listView" class="hidden list-view"></div>
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-  <div class="modal" id="modal">
+  <div class="modal">
     <div class="modal-header">
-      <div>
-        <div class="modal-title" id="modalTitle"></div>
-        <div class="modal-subtitle" id="modalSubtitle"></div>
-      </div>
-      <button class="modal-close" onclick="closeModal()">×</button>
+      <div><div class="modal-title" id="mTitle"></div><div class="modal-sub" id="mSub"></div></div>
+      <button class="modal-close" onclick="closeModal()">x</button>
     </div>
-    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-body" id="mBody"></div>
   </div>
 </div>
-
 <script>
-const DATA = [
-  {date:"2026/05/26",branch:"彦根支店",rep:"真鍋佑輔",customer:"サカタインクス㈱滋賀工場",status:"B：情報収集・比較検討フェーズ",env:"屋外搬送（建屋間）",width:"1.5m以上",floor:"良好",temp:"混在",cargo:"パレット/カゴ車/専用台車/その他",weight:"1500kg",hours:"10h/日",slope:"なし",purpose:"人手不足の解消,作業負荷の軽減,安全性の向上",timing:"未定（情報収集中）",budget:"検討中",note:"重量最低1000kg必要。屋根なし屋外走行多い。多数メーカー比較中。工場内自動倉庫も検討。"},
-  {date:"2026/05/27",branch:"北摂支店",rep:"水野",customer:"シキボウリネン㈱岩出第一工場",status:"B：情報収集・比較検討フェーズ",env:"屋内のみ",width:"1.5m以上",floor:"良好",temp:"0〜40℃",cargo:"パレット/専用台車",weight:"50kg",hours:"9h",slope:"なし",purpose:"人手不足の解消",timing:"数年後",budget:"未決定",note:""},
-  {date:"2026/06/02",branch:"明石支店",rep:"尾崎 一弘",customer:"ぼんち㈱",status:"B：情報収集・比較検討フェーズ",env:"屋内のみ",width:"1.5m以下（変更不可）",floor:"悪路",temp:"0〜40℃",cargo:"パレット",weight:"1t",hours:"5h",slope:"なし",purpose:"人手不足の解消",timing:"未定（情報収集中）",budget:"100万",note:""},
-  {date:"2026/06/03",branch:"明石支店",rep:"中村",customer:"㈱マルヤナギ小倉屋大門工場",status:"B：情報収集・比較検討フェーズ",env:"屋内のみ",width:"1.5m以上",floor:"悪路",temp:"0〜40℃",cargo:"パレット",weight:"400kgまで",hours:"8h",slope:"あり",purpose:"人手不足の解消,作業負荷の軽減",timing:"未定（情報収集中）",budget:"未定",note:""},
-  {date:"2026/06/03",branch:"明石支店",rep:"中村",customer:"㈱共進牧場 浄谷工場",status:"B：情報収集・比較検討フェーズ",env:"半屋外を含む",width:"1.5m以上",floor:"良好",temp:"混在",cargo:"パレット",weight:"不明",hours:"10h",slope:"あり",purpose:"作業負荷の軽減",timing:"未定（情報収集中）",budget:"未定",note:"現時点では検討していないとのこと"},
-  {date:"2026/06/04",branch:"明石支店",rep:"浅井淳也",customer:"六甲バター㈱神戸工場",status:"C：潜在的ニーズ・将来課題フェーズ",env:"屋内のみ",width:"1.5m以下（変更不可）",floor:"良好",temp:"0〜40℃",cargo:"パレット/カゴ車",weight:"300kg未満",hours:"6h",slope:"なし",purpose:"人手不足の解消,作業負荷の軽減",timing:"未定（情報収集中）",budget:"500万円程度",note:"工場内にリフト型が多数稼働中"},
-  {date:"2026/06/04",branch:"神戸支店",rep:"浦瀬",customer:"シオノギファーマー 伊丹工場",status:"B：情報収集・比較検討フェーズ",env:"屋内のみ",width:"1.5m以上",floor:"良好",temp:"0〜40℃",cargo:"カゴ車・台車",weight:"未定",hours:"未定",slope:"なし",purpose:"作業負荷の軽減",timing:"未定（情報収集中）",budget:"未定",note:"パンフレット持参・説明済み（大阪MI岸本氏同席）。ショールーム来訪に前向き。工場多数あり広がりが期待できる案件。"},
-  {date:"2026/06/08",branch:"明石支店",rep:"浅井",customer:"ライオン㈱明石工場",status:"C：潜在的ニーズ・将来課題フェーズ",env:"屋内のみ",width:"1.5m以下（広げ可）",floor:"良好",temp:"0〜40℃",cargo:"パレット",weight:"150kg",hours:"午前中4h",slope:"なし",purpose:"作業負荷の軽減",timing:"未定（情報収集中）",budget:"100万円程度なら検討",note:""},
-  {date:"2026/06/10",branch:"神戸支店",rep:"浦瀬",customer:"昭永ケミカル",status:"C：潜在的ニーズ・将来課題フェーズ",env:"屋外搬送（建屋間）",width:"1.5m以上",floor:"どちらでもない",temp:"0〜40℃",cargo:"パレット",weight:"300kg",hours:"8h",slope:"なし",purpose:"作業負荷の軽減,安全性の向上",timing:"未定（情報収集中）",budget:"未定",note:"危険物（溶剤）扱いで防爆仕様が必須条件。一斗缶・専用ステンレス容器搬送。"},
-  {date:"2026/06/10",branch:"明石支店",rep:"沖塩有美",customer:"㈱マルヤナギ小倉屋 大門工場",status:"C：潜在的ニーズ・将来課題フェーズ",env:"屋内のみ",width:"1.5m以上",floor:"良好",temp:"0〜40℃",cargo:"パレット",weight:"500kg",hours:"24h",slope:"あり",purpose:"人手不足の解消,作業負荷の軽減",timing:"数年後",budget:"未定",note:""},
-  {date:"2026/06/11",branch:"明石支店",rep:"竹田新之助",customer:"キング醸造㈱",status:"C：潜在的ニーズ・将来課題フェーズ",env:"屋内のみ",width:"1.5m以下（広げ可）",floor:"良好",temp:"0〜40℃",cargo:"パレット/カゴ車",weight:"300kg",hours:"3〜5h",slope:"なし",purpose:"作業負荷の軽減",timing:"未定（情報収集中）",budget:"500万円",note:""},
-  {date:"2026/06/16",branch:"和歌山支店",rep:"林丈博",customer:"橘電装㈱吉原工場",status:"C：潜在的ニーズ・将来課題フェーズ",env:"半屋外を含む",width:"1.5m以下（広げ可）",floor:"どちらでもない",temp:"0〜40℃",cargo:"パレット/カゴ車/専用台車",weight:"100kg",hours:"8h",slope:"あり",purpose:"人手不足の解消,作業負荷の軽減,コスト削減,安全性の向上",timing:"未定（情報収集中）",budget:"未定",note:"情報収集として面談継続可"},
-  {date:"2026/06/17",branch:"明石支店",rep:"竹田新之助",customer:"キング醸造㈱令和工場",status:"C：潜在的ニーズ・将来課題フェーズ",env:"屋内のみ",width:"1.5m以上",floor:"良好",temp:"混在",cargo:"パレット",weight:"500kg",hours:"8h",slope:"あり",purpose:"人手不足の解消,作業負荷の軽減",timing:"未定（情報収集中）",budget:"500万円",note:""},
-  {date:"2026/06/24",branch:"明石支店",rep:"越智",customer:"㈱ADEKA",status:"B：情報収集・比較検討フェーズ",env:"屋内のみ",width:"1.5m以下（変更不可）",floor:"良好",temp:"0〜40℃",cargo:"専用台車",weight:"100kg",hours:"2h程度",slope:"なし",purpose:"人手不足の解消,作業負荷の軽減,コスト削減,安全性の向上",timing:"数年後",budget:"未定",note:""},
-  {date:"2026/06/25",branch:"明石支店",rep:"沖塩有美",customer:"㈱共進牧場 浄谷工場",status:"B：情報収集・比較検討フェーズ",env:"屋内のみ",width:"1.5m以下（広げ可）",floor:"良好",temp:"0〜40℃",cargo:"専用台車",weight:"100kg程度",hours:"8h以内",slope:"なし",purpose:"作業負荷の軽減",timing:"未定（情報収集中）",budget:"未定",note:""},
-  {date:"2026/06/29",branch:"姫路支店",rep:"中越",customer:"日本丸天醤油㈱",status:"C：潜在的ニーズ・将来課題フェーズ",env:"屋外搬送（建屋間）",width:"1.5m以上",floor:"悪路",temp:"0〜40℃",cargo:"パレット/専用台車",weight:"100kg",hours:"12h/日",slope:"なし",purpose:"人手不足の解消,作業負荷の軽減",timing:"未定（情報収集中）",budget:"未定",note:"屋外アスファルト走行が多い。良い提案があれば検討したい。"},
-  {date:"2026/06/29",branch:"明石支店",rep:"笹田",customer:"ライオン㈱",status:"B：情報収集・比較検討フェーズ",env:"屋外搬送（建屋間）",width:"1.5m以下（変更不可）",floor:"良好",temp:"0〜40℃",cargo:"パレット",weight:"1000kg",hours:"4h",slope:"なし",purpose:"人手不足の解消,作業負荷の軽減",timing:"未定（情報収集中）",budget:"未定",note:"ステーション設置スペース不足で以前断念した経緯あり"},
-];
-
-let currentView = 'card';
-let filtered = [...DATA];
-
-function getStatusClass(status) {
-  if (status.startsWith('A')) return 'status-A';
-  if (status.startsWith('B')) return 'status-B';
-  if (status.startsWith('C')) return 'status-C';
-  return 'status-D';
-}
-function getStatusShort(status) {
-  if (status.startsWith('A')) return 'A：脈あり';
-  if (status.startsWith('B')) return 'B：比較検討';
-  if (status.startsWith('C')) return 'C：潜在ニーズ';
-  return status;
-}
-
-function buildStats() {
-  const branches = [...new Set(DATA.map(d => d.branch))];
-  const reps = [...new Set(DATA.map(d => d.rep))];
-  const statusCounts = {A:0,B:0,C:0};
-  DATA.forEach(d => {
-    if (d.status.startsWith('A')) statusCounts.A++;
-    else if (d.status.startsWith('B')) statusCounts.B++;
-    else if (d.status.startsWith('C')) statusCounts.C++;
+var DATA=[{"date":"2026/06/29","branch":"姫路支店","rep":"中越","customer":"日本丸天醤油株式会社","status":"C：潜在的ニーズ・将来課題フェーズ","env":"屋外搬送（建屋間搬送メイン）","width":"1.5m以上（十分・可能）","floor":"悪路（粉塵・鉄粉・砂・油が多い）","temp":"0〜40℃の範囲内","cargo":"パレット, 専用台車など","weight":"１００ｋｇ","hours":"１２時間/日","slope":"なし（フラット）","purpose":"人手不足の解消, 作業負荷の軽減","timing":"未定（情報収集中）","budget":"未定","note":"屋外アスファルトの走行が多い。良い提案があれば検討したい。"},{"date":"2026/06/29","branch":"明石支店","rep":"笹田","customer":"ライオン株式会社","status":"B：情報収集・比較検討フェーズ","env":"屋外搬送（建屋間搬送メイン）","width":"1.5m以下（通路幅の変更不可）","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"パレット","weight":"1000","hours":"4h","slope":"なし（フラット）","purpose":"人手不足の解消, 作業負荷の軽減","timing":"未定（情報収集中）","budget":"未定","note":"スペースの問題、ステーションの設置が必要で断念した経緯がある"},{"date":"2026/06/25","branch":"明石支店","rep":"沖塩有美","customer":"株式会社共進牧場　浄谷工場様","status":"B：情報収集・比較検討フェーズ","env":"屋内のみ","width":"1.5m以下だが場合によっては広げることは可能","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"専用台車など","weight":"100kg程度","hours":"8時間以内","slope":"なし（フラット）","purpose":"作業負荷の軽減","timing":"未定（情報収集中）","budget":"未定","note":"作業負荷の軽減"},{"date":"2026/06/24","branch":"明石支店","rep":"越智","customer":"株式会社ADEKA","status":"B：情報収集・比較検討フェーズ","env":"屋内のみ","width":"1.5m以下（通路幅の変更不可）","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"専用台車など","weight":"100kg","hours":"2時間程度","slope":"なし（フラット）","purpose":"人手不足の解消, 作業負荷の軽減, コスト削減, 安全性の向上","timing":"数年後","budget":"未定","note":"人手不足の解消, 作業負荷の軽減, コスト削減, 安全性の向上"},{"date":"2026/06/17","branch":"明石支店","rep":"竹田新之助","customer":"キング醸造株式会社令和工場","status":"C：潜在的ニーズ・将来課題フェーズ","env":"屋内のみ","width":"1.5m以上（十分・可能）","floor":"良好（コンクリート・塗装等）","temp":"混在している","cargo":"パレット","weight":"500kg","hours":"8h","slope":"あり（スロープ・エレベーター等）","purpose":"人手不足の解消, 作業負荷の軽減","timing":"未定（情報収集中）","budget":"500万円","note":"人手不足の解消, 作業負荷の軽減"},{"date":"2026/06/16","branch":"和歌山支店","rep":"林丈博","customer":"橘電装株式会社吉原工場","status":"C：潜在的ニーズ・将来課題フェーズ","env":"半屋外を含む","width":"1.5m以下だが場合によっては広げることは可能","floor":"どちらでもない（多少の汚れやホコリあり）","temp":"0〜40℃の範囲内","cargo":"パレット, カゴ車・台車, 専用台車など","weight":"100","hours":"8h","slope":"あり（スロープ・エレベーター等）","purpose":"人手不足の解消, 作業負荷の軽減, コスト削減, 安全性の向上","timing":"未定（情報収集中）","budget":"未定","note":"情報収集として面談は可能です"},{"date":"2026/06/11","branch":"明石支店","rep":"竹田新之助","customer":"キング醸造株式会社","status":"C：潜在的ニーズ・将来課題フェーズ","env":"屋内のみ","width":"1.5m以下だが場合によっては広げることは可能","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"パレット, カゴ車・台車","weight":"300","hours":"3〜5時間","slope":"なし（フラット）","purpose":"作業負荷の軽減","timing":"未定（情報収集中）","budget":"500万円","note":"作業負荷の軽減"},{"date":"2026/06/10","branch":"神戸支店","rep":"浦瀬","customer":"昭永ケミカル","status":"C：潜在的ニーズ・将来課題フェーズ","env":"屋外搬送（建屋間搬送メイン）","width":"1.5m以上（十分・可能）","floor":"どちらでもない（多少の汚れやホコリあり）","temp":"0〜40℃の範囲内","cargo":"パレット","weight":"300kg","hours":"8h","slope":"なし（フラット）","purpose":"作業負荷の軽減, 安全性の向上","timing":"未定（情報収集中）","budget":"未定","note":"リフトで建屋間について溶剤の入った一斗缶、専用ステンレス容器を運んでいる。\n一番の課題としては危険物を扱っており、防爆仕様であることが求められる点。"},{"date":"2026/06/10","branch":"明石支店","rep":"沖塩有美","customer":"株式会社マルヤナギ小倉屋 大門工場","status":"C：潜在的ニーズ・将来課題フェーズ","env":"屋内のみ","width":"1.5m以上（十分・可能）","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"パレット","weight":"500kg","hours":"24時間","slope":"あり（スロープ・エレベーター等）","purpose":"人手不足の解消, 作業負荷の軽減","timing":"数年後","budget":"未定","note":"人手不足の解消, 作業負荷の軽減"},{"date":"2026/06/08","branch":"明石支店","rep":"浅井","customer":"ライオン株式会社明石工場","status":"C：潜在的ニーズ・将来課題フェーズ","env":"屋内のみ","width":"1.5m以下だが場合によっては広げることは可能","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"パレット","weight":"150kg","hours":"午前中4時間ぐらい。","slope":"なし（フラット）","purpose":"作業負荷の軽減","timing":"未定（情報収集中）","budget":"100万ぐらいなら検討","note":"作業負荷の軽減"},{"date":"2026/06/04","branch":"明石支店","rep":"浅井淳也","customer":"六甲バター株式会社神戸工場","status":"C：潜在的ニーズ・将来課題フェーズ","env":"屋内のみ","width":"1.5m以下（通路幅の変更不可）","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"パレット, カゴ車・台車","weight":"300キロ未満","hours":"6時間","slope":"なし（フラット）","purpose":"人手不足の解消, 作業負荷の軽減","timing":"未定（情報収集中）","budget":"500万ぐらい","note":"工場内にはリフト型はけっこう入っているようです。"},{"date":"2026/06/04","branch":"神戸支店","rep":"浦瀬","customer":"シオノギファーマー 伊丹工場","status":"B：情報収集・比較検討フェーズ","env":"屋内のみ","width":"1.5m以上（十分・可能）","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"カゴ車・台車","weight":"未定","hours":"未定","slope":"なし（フラット）","purpose":"作業負荷の軽減","timing":"未定（情報収集中）","budget":"未定","note":"本日、パンフレットを持っていき、説明を行いました。(大阪MI岸本さん同席)神戸支店のショールームの話に興味を持っていただいています。ぜひ来てほしいとお伝えしたら、良い反応でした。工場がたくさんありますので、うまくいけば広がるお客様です。アンケート内容は未定ばかりですが、可能性はあると思います。案内を続けていきます。"},{"date":"2026/06/03","branch":"明石支店","rep":"中村","customer":"株式会社マルヤナギ小倉屋大門工場","status":"B：情報収集・比較検討フェーズ","env":"屋内のみ","width":"1.5m以上（十分・可能）","floor":"悪路（粉塵・鉄粉・砂・油が多い）","temp":"0〜40℃の範囲内","cargo":"パレット","weight":"400kgまで","hours":"8h","slope":"あり（スロープ・エレベーター等）","purpose":"人手不足の解消, 作業負荷の軽減","timing":"未定（情報収集中）","budget":"未定","note":"人手不足の解消, 作業負荷の軽減"},{"date":"2026/06/03","branch":"明石支店","rep":"中村","customer":"株式会社共進牧場　浄谷工場","status":"B：情報収集・比較検討フェーズ","env":"半屋外を含む","width":"1.5m以上（十分・可能）","floor":"良好（コンクリート・塗装等）","temp":"混在している","cargo":"パレット","weight":"不明","hours":"10h","slope":"あり（スロープ・エレベーター等）","purpose":"作業負荷の軽減","timing":"未定（情報収集中）","budget":"未定","note":"現時点で検討はしていないとのこと。"},{"date":"2026/06/02","branch":"明石支店","rep":"尾崎　一弘","customer":"ぼんち","status":"B：情報収集・比較検討フェーズ","env":"屋内のみ","width":"1.5m以下（通路幅の変更不可）","floor":"悪路（粉塵・鉄粉・砂・油が多い）","temp":"0〜40℃の範囲内","cargo":"パレット","weight":"1t","hours":"5h","slope":"なし（フラット）","purpose":"人手不足の解消","timing":"未定（情報収集中）","budget":"100万","note":"人手不足の解消"},{"date":"2026/05/27","branch":"北摂支店","rep":"水野","customer":"シキボウリネン株式会社岩出第一工場","status":"B：情報収集・比較検討フェーズ","env":"屋内のみ","width":"1.5m以上（十分・可能）","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"パレット, 専用台車など","weight":"50","hours":"9h","slope":"なし（フラット）","purpose":"人手不足の解消","timing":"数年後","budget":"未決定","note":"人手不足の解消"},{"date":"2026/05/26","branch":"彦根支店","rep":"真鍋佑輔","customer":"サカタインクス株式会社滋賀工場","status":"B：情報収集・比較検討フェーズ","env":"屋外搬送（建屋間搬送メイン）","width":"1.5m以上（十分・可能）","floor":"良好（コンクリート・塗装等）","temp":"混在している","cargo":"パレット, カゴ車・台車, 専用台車など, その他","weight":"1500","hours":"1日10時間","slope":"なし（フラット）","purpose":"人手不足の解消, 作業負荷の軽減, 安全性の向上","timing":"未定（情報収集中）","budget":"現在検討中の為不明","note":"現在AGV検討中 多数メーカー確認頂いている\n原料ドラム缶輸送がメインのため、重量が最低1000kgは必要で探しているが他のメーカーでは対応機種が無い状況 (検討中重量 1500±500kg)\n倉庫間の輸送などで屋外(屋根無し)を走ることが多い\n工場内自動倉庫も検討中\n5/26 カタログ2部手渡し"},{"date":"2026/05/08","branch":"不明","rep":"高橋","customer":"高橋商事","status":"A：脈あり（トスアップ、同行希望）","env":"屋内のみ","width":"1.5m以下だが場合によっては広げることは可能","floor":"悪路（粉塵・鉄粉・砂・油が多い）","temp":"0〜40℃の範囲内","cargo":"パレット","weight":"４００ｋｇ","hours":"４ｈ","slope":"なし（フラット）","purpose":"人手不足の解消, 作業負荷の軽減, コスト削減","timing":"半年以内","budget":"１０００万円","note":"人手不足の解消, 作業負荷の軽減, コスト削減"},{"date":"2026/05/08","branch":"不明","rep":"山田","customer":"電機産業","status":"","env":"屋内のみ","width":"1.5m以下（通路幅の変更不可）","floor":"","temp":"","cargo":"","weight":"","hours":"","slope":"","purpose":"","timing":"","budget":"","note":""},{"date":"2026/05/08","branch":"不明","rep":"田中","customer":"たなか工業","status":"","env":"屋内のみ","width":"1.5m以上（十分・可能）","floor":"悪路（粉塵・鉄粉・砂・油が多い）","temp":"","cargo":"","weight":"","hours":"","slope":"","purpose":"","timing":"","budget":"","note":""},{"date":"2026/05/08","branch":"神戸拠点","rep":"あああ","customer":"ｈｈｈ","status":"","env":"屋内のみ","width":"1.5m以下（通路幅の変更不可）","floor":"","temp":"","cargo":"","weight":"","hours":"","slope":"","purpose":"","timing":"","budget":"","note":""},{"date":"2026/05/08","branch":"春日井拠点","rep":"森本","customer":"モリモト工業","status":"C：情報提供のみ","env":"屋内のみ","width":"1.5m以上（十分・可能）","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"パレット","weight":"1,000kg","hours":"半日","slope":"なし（フラット）","purpose":"コスト削減","timing":"1年以内","budget":"300万円","note":"コスト削減"},{"date":"2026/05/07","branch":"さいたま(埼玉)拠点","rep":"山田","customer":"TOA","status":"B：継続フォロー（再訪予定）","env":"屋内のみ","width":"1.5m以上（十分・可能）","floor":"良好（コンクリート・塗装等）","temp":"混在している","cargo":"専用台車など","weight":"500kg","hours":"6hx2直","slope":"なし（フラット）","purpose":"人手不足の解消, 作業負荷の軽減, コスト削減","timing":"半年以内","budget":"1,000万円","note":"人手不足の解消, 作業負荷の軽減, コスト削減"},{"date":"2026/05/07","branch":"下関拠点","rep":"たかはし","customer":"ダイハツ工業","status":"","env":"屋内のみ","width":"1.5m以下（通路幅の変更不可）","floor":"","temp":"","cargo":"","weight":"","hours":"","slope":"","purpose":"","timing":"","budget":"","note":""},{"date":"2026/05/07","branch":"仙台拠点","rep":"川村","customer":"山田電機産業","status":"A：脈あり（トスアップ、同行希望）","env":"屋内のみ","width":"1.5m以下だが場合によっては広げることは可能","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"カゴ車・台車","weight":"150kg","hours":"8h","slope":"なし（フラット）","purpose":"人手不足の解消, 安全性の向上","timing":"1年以内","budget":"300万円","note":"人手不足の解消, 安全性の向上"},{"date":"2026/04/27","branch":"山形拠点","rep":"ｓｓ","customer":"ｇｇｇ","status":"","env":"屋内のみ","width":"1.5m以下（通路幅の変更不可）","floor":"","temp":"","cargo":"","weight":"","hours":"","slope":"","purpose":"","timing":"","budget":"","note":""},{"date":"2026/04/26","branch":"山口拠点","rep":"Adgh","customer":"Jjjb","status":"","env":"屋内のみ","width":"1.5m以下（通路幅の変更不可）","floor":"","temp":"","cargo":"","weight":"","hours":"","slope":"","purpose":"","timing":"","budget":"","note":""},{"date":"2026/04/26","branch":"彦根拠点","rep":"uuuu","customer":"ggggg","status":"","env":"屋内のみ","width":"1.5m以下だが場合によっては広げることは可能","floor":"どちらでもない（多少の汚れやホコリあり）","temp":"氷点下または40℃超","cargo":"","weight":"","hours":"","slope":"氷点下または40℃超","purpose":"","timing":"","budget":"","note":""},{"date":"2026/04/24","branch":"松本拠点","rep":"ｊｊｊｊ","customer":"ううう","status":"","env":"屋内のみ（フラット）","width":"1.5m以上（十分・可能）","floor":"悪路（粉塵・鉄粉・砂・油が多い）","temp":"氷点下または40℃超","cargo":"","weight":"氷点下または40℃超","hours":"","slope":"","purpose":"氷点下または40℃超","timing":"","budget":"","note":""},{"date":"2026/04/24","branch":"八戸拠点","rep":"1234","customer":"qqqq","status":"","env":"屋内のみ（フラット）","width":"1.5m以下（狭い）","floor":"良好（コンクリート・塗装等）","temp":"氷点下または40℃超","cargo":"","weight":"","hours":"","slope":"氷点下または40℃超","purpose":"","timing":"","budget":"","note":""},{"date":"2026/04/24","branch":"横浜拠点","rep":"tanaka","customer":"(株)○○","status":"B：継続フォロー（再訪予定）","env":"屋内のみ（フラット）","width":"1.5m以上（十分・可能）","floor":"良好（コンクリート・塗装等）","temp":"0〜40℃の範囲内","cargo":"パレット（1t以下）","weight":"人手不足の解消, 作業負荷の軽減","hours":"1年以内","slope":"B：継続フォロー（再訪予定）","purpose":"人手不足の解消, 作業負荷の軽減","timing":"1年以内","budget":"","note":"関心度高い"}];
+var view="card",filtered=DATA.slice();
+function sc(s){if(!s)return"";if(s.indexOf("A")===0)return"status-A";if(s.indexOf("B")===0)return"status-B";if(s.indexOf("C")===0)return"status-C";return"";}
+function ss(s){if(!s)return"";if(s.indexOf("A")===0)return"A：脈あり";if(s.indexOf("B")===0)return"B：比較検討";if(s.indexOf("C")===0)return"C：潜在ニーズ";return s;}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function init(){
+  var branches=[],reps=[],seen1={},seen2={};
+  DATA.forEach(function(d){
+    if(!seen1[d.branch]){seen1[d.branch]=1;branches.push(d.branch);}
+    if(!seen2[d.rep]){seen2[d.rep]=1;reps.push(d.rep);}
   });
-
-  document.getElementById('statsBar').innerHTML = `
-    <div class="stat-item">
-      <div>
-        <div class="stat-num">${DATA.length}</div>
-        <div class="stat-label">総件数</div>
-      </div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <div>
-        <div class="stat-num">${branches.length}</div>
-        <div class="stat-label">支店数</div>
-      </div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <div>
-        <div class="stat-num">${reps.length}</div>
-        <div class="stat-label">担当者数</div>
-      </div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item" style="gap:12px">
-      <span class="status-badge status-A" style="font-size:12px;padding:4px 10px">A ${statusCounts.A}件</span>
-      <span class="status-badge status-B" style="font-size:12px;padding:4px 10px">B ${statusCounts.B}件</span>
-      <span class="status-badge status-C" style="font-size:12px;padding:4px 10px">C ${statusCounts.C}件</span>
-    </div>
-  `;
-
-  // フィルター選択肢
-  const branchSel = document.getElementById('filterBranch');
-  branches.sort().forEach(b => {
-    const opt = document.createElement('option');
-    opt.value = b; opt.textContent = b;
-    branchSel.appendChild(opt);
-  });
-  const repSel = document.getElementById('filterRep');
-  [...new Set(DATA.map(d => d.rep))].sort().forEach(r => {
-    const opt = document.createElement('option');
-    opt.value = r; opt.textContent = r;
-    repSel.appendChild(opt);
-  });
+  branches.sort();reps.sort();
+  var cnt={A:0,B:0,C:0};
+  DATA.forEach(function(d){if(d.status.indexOf("A")===0)cnt.A++;else if(d.status.indexOf("B")===0)cnt.B++;else if(d.status.indexOf("C")===0)cnt.C++;});
+  document.getElementById("statsBar").innerHTML=
+    '<div class="stat-item"><div><div class="stat-num">'+DATA.length+'</div><div class="stat-label">総件数</div></div></div>'
+    +'<div class="stat-div"></div>'
+    +'<div class="stat-item"><div><div class="stat-num">'+branches.length+'</div><div class="stat-label">支店数</div></div></div>'
+    +'<div class="stat-div"></div>'
+    +'<div class="stat-item"><div><div class="stat-num">'+reps.length+'</div><div class="stat-label">担当者数</div></div></div>'
+    +'<div class="stat-div"></div>'
+    +'<div class="stat-item" style="gap:10px">'
+    +'<span class="status-badge status-A" style="font-size:12px;padding:4px 10px">A '+cnt.A+'件</span>'
+    +'<span class="status-badge status-B" style="font-size:12px;padding:4px 10px">B '+cnt.B+'件</span>'
+    +'<span class="status-badge status-C" style="font-size:12px;padding:4px 10px">C '+cnt.C+'件</span></div>';
+  var fb=document.getElementById("fBranch"),fr=document.getElementById("fRep");
+  branches.forEach(function(b){var o=document.createElement("option");o.value=b;o.textContent=b;fb.appendChild(o);});
+  reps.forEach(function(r){var o=document.createElement("option");o.value=r;o.textContent=r;fr.appendChild(o);});
 }
-
-function applyFilters() {
-  const branch = document.getElementById('filterBranch').value;
-  const rep = document.getElementById('filterRep').value;
-  const status = document.getElementById('filterStatus').value;
-  const search = document.getElementById('searchInput').value.toLowerCase();
-
-  filtered = DATA.filter(d => {
-    if (branch && d.branch !== branch) return false;
-    if (rep && d.rep !== rep) return false;
-    if (status && !d.status.startsWith(status)) return false;
-    if (search && !d.customer.toLowerCase().includes(search) && !d.rep.toLowerCase().includes(search)) return false;
+function applyFilters(){
+  var b=document.getElementById("fBranch").value,r=document.getElementById("fRep").value,
+      s=document.getElementById("fStatus").value,q=document.getElementById("fSearch").value.toLowerCase();
+  filtered=DATA.filter(function(d){
+    if(b&&d.branch!==b)return false;
+    if(r&&d.rep!==r)return false;
+    if(s&&d.status.indexOf(s)!==0)return false;
+    if(q&&d.customer.toLowerCase().indexOf(q)<0&&d.rep.toLowerCase().indexOf(q)<0)return false;
     return true;
   });
-
-  document.getElementById('resultCount').textContent = `${filtered.length} 件表示`;
+  document.getElementById("cnt").textContent=filtered.length+"件表示";
   renderView();
 }
-
-function resetFilters() {
-  document.getElementById('filterBranch').value = '';
-  document.getElementById('filterRep').value = '';
-  document.getElementById('filterStatus').value = '';
-  document.getElementById('searchInput').value = '';
-  applyFilters();
-}
-
-function setView(v) {
-  currentView = v;
-  document.getElementById('btnCard').classList.toggle('active', v === 'card');
-  document.getElementById('btnList').classList.toggle('active', v === 'list');
-  document.getElementById('cardView').classList.toggle('hidden', v !== 'card');
-  document.getElementById('listView').classList.toggle('hidden', v !== 'list');
-  renderView();
-}
-
-function renderView() {
-  if (currentView === 'card') renderCards();
-  else renderList();
-}
-
-function renderCards() {
-  const container = document.getElementById('cardView');
-  if (filtered.length === 0) {
-    container.innerHTML = '<div class="empty-state"><i class="ti ti-mood-empty"></i><p>条件に一致する案件がありません</p></div>';
-    return;
-  }
-
-  // 支店別グループ
-  const groups = {};
-  filtered.forEach(d => {
-    if (!groups[d.branch]) groups[d.branch] = [];
-    groups[d.branch].push(d);
+function reset(){["fBranch","fRep","fStatus"].forEach(function(id){document.getElementById(id).value="";});document.getElementById("fSearch").value="";applyFilters();}
+function setView(v){view=v;document.getElementById("btnCard").classList.toggle("active",v==="card");document.getElementById("btnList").classList.toggle("active",v==="list");document.getElementById("cardView").classList.toggle("hidden",v!=="card");document.getElementById("listView").classList.toggle("hidden",v!=="list");renderView();}
+function renderView(){if(view==="card")renderCards();else renderList();}
+function renderCards(){
+  var el=document.getElementById("cardView");
+  if(!filtered.length){el.innerHTML='<div class="empty">条件に一致する案件がありません</div>';return;}
+  var groups={};
+  filtered.forEach(function(d){if(!groups[d.branch])groups[d.branch]=[];groups[d.branch].push(d);});
+  var html="";
+  Object.keys(groups).sort().forEach(function(br){
+    var items=groups[br];
+    var gid="g"+br.replace(/[^a-zA-Z0-9]/g,"");
+    var repsArr=[];var repSeen={};
+    items.forEach(function(i){if(!repSeen[i.rep]){repSeen[i.rep]=1;repsArr.push(i.rep);}});
+    html+='<div class="branch-section">'
+      +'<div class="branch-header" onclick="tog(\''+gid+'\',this)">'
+      +'<i class="ti ti-building"></i>'
+      +'<span class="branch-name">'+esc(br)+'</span>'
+      +'<span class="branch-count">'+items.length+'件</span>'
+      +'<span class="branch-reps">'+esc(repsArr.join("・"))+'</span>'
+      +'<i class="ti ti-chevron-down chevron"></i></div>'
+      +'<div class="cards-grid" id="'+gid+'">'
+      +items.map(function(d){return cardHtml(d);}).join("")
+      +'</div></div>';
   });
-
-  let html = '';
-  Object.entries(groups).sort().forEach(([branch, items]) => {
-    const reps = [...new Set(items.map(i => i.rep))].join('・');
-    html += `
-    <div class="branch-section">
-      <div class="branch-header" onclick="toggleBranch('branch-${branch}', this)">
-        <i class="ti ti-building"></i>
-        <span class="branch-name">${branch}</span>
-        <span class="branch-count">${items.length}件</span>
-        <span class="branch-reps"><i class="ti ti-user" style="font-size:11px"></i> ${reps}</span>
-        <i class="ti ti-chevron-down branch-toggle"></i>
-      </div>
-      <div class="cards-grid" id="branch-${branch.replace(/[^a-zA-Z0-9]/g,'')}">
-        ${items.map((d,i) => cardHTML(d, DATA.indexOf(d))).join('')}
-      </div>
-    </div>`;
-  });
-  container.innerHTML = html;
+  el.innerHTML=html;
 }
-
-function cardHTML(d, idx) {
-  const purposes = d.purpose.split(',').map(p => `<span class="purpose-tag">${p.trim()}</span>`).join('');
-  const hasBudget = d.budget && d.budget !== '未定' && d.budget !== '未決定' && d.budget !== '検討中';
-  return `
-  <div class="case-card" onclick="openModal(${idx})">
-    <div class="card-top">
-      <div class="customer-name">${d.customer}</div>
-      <span class="status-badge ${getStatusClass(d.status)}">${getStatusShort(d.status)}</span>
-    </div>
-    <div class="card-meta">
-      <span class="meta-chip"><i class="ti ti-user"></i>${d.rep}</span>
-      <span class="meta-chip"><i class="ti ti-map-pin"></i>${d.env}</span>
-    </div>
-    <div class="card-specs">
-      <div class="spec-row"><span class="spec-label">搬送重量</span><span class="spec-val">${d.weight}</span></div>
-      <div class="spec-row"><span class="spec-label">稼働時間</span><span class="spec-val">${d.hours}</span></div>
-      <div class="spec-row"><span class="spec-label">通路幅</span><span class="spec-val">${d.width}</span></div>
-      <div class="spec-row"><span class="spec-label">段差・スロープ</span><span class="spec-val">${d.slope}</span></div>
-    </div>
-    <div class="card-purpose">${purposes}</div>
-    ${d.note ? `<div class="card-note"><i class="ti ti-note" style="font-size:11px"></i> ${d.note}</div>` : ''}
-    <div class="card-footer">
-      ${hasBudget ? `<span class="budget-badge">💰 ${d.budget}</span>` : '<span></span>'}
-      <span class="date-label">${d.date}</span>
-    </div>
-  </div>`;
+function cardHtml(d){
+  var idx=DATA.indexOf(d);
+  var purposes=d.purpose?d.purpose.split(",").map(function(p){return'<span class="purpose-tag">'+esc(p.trim())+'</span>';}).join(""):"";
+  var hasBudget=d.budget&&["未定","未決定","検討中",""].indexOf(d.budget)<0;
+  return '<div class="case-card" onclick="openModal('+idx+')">'
+    +'<div class="card-top"><div class="customer-name">'+esc(d.customer)+'</div>'
+    +'<span class="status-badge '+sc(d.status)+'">'+ss(d.status)+'</span></div>'
+    +'<div class="card-meta"><span><i class="ti ti-user"></i>'+esc(d.rep)+'</span><span><i class="ti ti-map-pin"></i>'+esc(d.env)+'</span></div>'
+    +'<div class="card-specs">'
+    +'<div class="spec-row"><span class="spec-label">搬送重量</span><span class="spec-val">'+esc(d.weight||"—")+'</span></div>'
+    +'<div class="spec-row"><span class="spec-label">稼働時間</span><span class="spec-val">'+esc(d.hours||"—")+'</span></div>'
+    +'<div class="spec-row"><span class="spec-label">通路幅</span><span class="spec-val">'+esc(d.width||"—")+'</span></div>'
+    +'<div class="spec-row"><span class="spec-label">段差</span><span class="spec-val">'+esc(d.slope||"—")+'</span></div>'
+    +'</div>'
+    +'<div class="card-purpose">'+purposes+'</div>'
+    +(d.note?'<div class="card-note">'+esc(d.note)+'</div>':"")
+    +'<div class="card-footer">'
+    +(hasBudget?'<span class="budget-badge">\u00A5 '+esc(d.budget)+'</span>':'<span></span>')
+    +'<span class="date-label">'+esc(d.date)+'</span></div>'
+    +'</div>';
 }
-
-function renderList() {
-  const container = document.getElementById('listView');
-  if (filtered.length === 0) {
-    container.innerHTML = '<div class="empty-state"><i class="ti ti-mood-empty"></i><p>条件に一致する案件がありません</p></div>';
-    return;
-  }
-  let rows = filtered.map(d => {
-    const idx = DATA.indexOf(d);
-    return `<tr onclick="openModal(${idx})">
-      <td>${d.date}</td>
-      <td><strong>${d.branch}</strong></td>
-      <td>${d.rep}</td>
-      <td><strong>${d.customer}</strong></td>
-      <td><span class="status-badge ${getStatusClass(d.status)}">${getStatusShort(d.status)}</span></td>
-      <td>${d.weight}</td>
-      <td>${d.budget}</td>
-      <td style="color:var(--text-sub);font-size:11px">${d.note ? d.note.substring(0,30)+'…' : ''}</td>
-    </tr>`;
-  }).join('');
-  container.innerHTML = `
-    <table class="list-table">
-      <thead><tr>
-        <th>日付</th><th>支店</th><th>担当者</th><th>顧客名</th>
-        <th>ステータス</th><th>搬送重量</th><th>予算</th><th>メモ</th>
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
+function tog(id,hdr){var g=document.getElementById(id);if(!g)return;var h=g.style.display==="none";g.style.display=h?"":"none";hdr.querySelector(".chevron").classList.toggle("col",!h);}
+function renderList(){
+  var el=document.getElementById("listView");
+  if(!filtered.length){el.innerHTML='<div class="empty">条件に一致する案件がありません</div>';return;}
+  var rows=filtered.map(function(d){
+    return '<tr onclick="openModal('+DATA.indexOf(d)+')">'
+      +'<td>'+esc(d.date)+'</td><td><strong>'+esc(d.branch)+'</strong></td><td>'+esc(d.rep)+'</td>'
+      +'<td><strong>'+esc(d.customer)+'</strong></td>'
+      +'<td><span class="status-badge '+sc(d.status)+'">'+ss(d.status)+'</span></td>'
+      +'<td>'+esc(d.weight||"—")+'</td><td>'+esc(d.budget||"—")+'</td>'
+      +'<td style="color:var(--text-sub);font-size:11px">'+esc(d.note?d.note.substring(0,30)+"…":"")+'</td></tr>';
+  }).join("");
+  el.innerHTML='<table class="list-table"><thead><tr><th>日付</th><th>支店</th><th>担当者</th><th>顧客名</th><th>ステータス</th><th>搬送重量</th><th>予算</th><th>メモ</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
-
-function toggleBranch(id, header) {
-  const grid = document.getElementById(id.replace('branch-','').replace(/[^a-zA-Z0-9]/g,''));
-  if (!grid) return;
-  const isHidden = grid.style.display === 'none';
-  grid.style.display = isHidden ? '' : 'none';
-  header.querySelector('.branch-toggle').classList.toggle('collapsed', !isHidden);
+function openModal(idx){
+  var d=DATA[idx];
+  document.getElementById("mTitle").textContent=d.customer;
+  document.getElementById("mSub").textContent=d.branch+" / "+d.rep+" / "+d.date;
+  var purposes=d.purpose?d.purpose.split(",").map(function(p){return'<span class="modal-tag">'+esc(p.trim())+'</span>';}).join(""):"—";
+  document.getElementById("mBody").innerHTML=
+    '<div class="modal-sec"><div class="modal-sec-title">ステータス・スケジュール</div>'
+    +'<div class="modal-grid">'
+    +'<div class="modal-field"><span class="modal-field-label">ステータス</span><span class="modal-field-val"><span class="status-badge '+sc(d.status)+'" style="font-size:12px">'+esc(d.status||"—")+'</span></span></div>'
+    +'<div class="modal-field"><span class="modal-field-label">導入検討時期</span><span class="modal-field-val">'+esc(d.timing||"—")+'</span></div>'
+    +'<div class="modal-field"><span class="modal-field-label">ご予算</span><span class="modal-field-val">'+esc(d.budget||"—")+'</span></div>'
+    +'</div></div>'
+    +'<div class="modal-sec"><div class="modal-sec-title">現場スペック</div>'
+    +'<div class="modal-grid">'
+    +'<div class="modal-field"><span class="modal-field-label">走行エリア</span><span class="modal-field-val">'+esc(d.env||"—")+'</span></div>'
+    +'<div class="modal-field"><span class="modal-field-label">通路幅</span><span class="modal-field-val">'+esc(d.width||"—")+'</span></div>'
+    +'<div class="modal-field"><span class="modal-field-label">床面の状態</span><span class="modal-field-val">'+esc(d.floor||"—")+'</span></div>'
+    +'<div class="modal-field"><span class="modal-field-label">温度環境</span><span class="modal-field-val">'+esc(d.temp||"—")+'</span></div>'
+    +'<div class="modal-field"><span class="modal-field-label">搬送物</span><span class="modal-field-val">'+esc(d.cargo||"—")+'</span></div>'
+    +'<div class="modal-field"><span class="modal-field-label">搬送重量</span><span class="modal-field-val">'+esc(d.weight||"—")+'</span></div>'
+    +'<div class="modal-field"><span class="modal-field-label">稼働時間</span><span class="modal-field-val">'+esc(d.hours||"—")+'</span></div>'
+    +'<div class="modal-field"><span class="modal-field-label">段差・スロープ</span><span class="modal-field-val">'+esc(d.slope||"—")+'</span></div>'
+    +'</div></div>'
+    +'<div class="modal-sec"><div class="modal-sec-title">自動化の目的</div><div class="modal-tags">'+purposes+'</div></div>'
+    +(d.note?'<div class="modal-sec"><div class="modal-sec-title">特記事項</div><div class="modal-note">'+esc(d.note)+'</div></div>':"")
+  ;
+  document.getElementById("modalOverlay").classList.add("active");
 }
-
-function openModal(idx) {
-  const d = DATA[idx];
-  document.getElementById('modalTitle').textContent = d.customer;
-  document.getElementById('modalSubtitle').textContent = `${d.branch} ／ ${d.rep} ／ ${d.date}`;
-  
-  const purposes = d.purpose.split(',').map(p => `<span class="modal-tag">${p.trim()}</span>`).join('');
-  document.getElementById('modalBody').innerHTML = `
-    <div class="modal-section">
-      <div class="modal-section-title">ステータス・スケジュール</div>
-      <div class="modal-grid">
-        <div class="modal-field"><span class="modal-field-label">ステータス</span><span class="modal-field-val"><span class="status-badge ${getStatusClass(d.status)}" style="font-size:12px">${d.status}</span></span></div>
-        <div class="modal-field"><span class="modal-field-label">導入検討時期</span><span class="modal-field-val">${d.timing}</span></div>
-        <div class="modal-field"><span class="modal-field-label">ご予算</span><span class="modal-field-val">${d.budget}</span></div>
-      </div>
-    </div>
-    <div class="modal-section">
-      <div class="modal-section-title">現場スペック</div>
-      <div class="modal-grid">
-        <div class="modal-field"><span class="modal-field-label">走行エリア</span><span class="modal-field-val">${d.env}</span></div>
-        <div class="modal-field"><span class="modal-field-label">通路幅</span><span class="modal-field-val">${d.width}</span></div>
-        <div class="modal-field"><span class="modal-field-label">床面の状態</span><span class="modal-field-val">${d.floor}</span></div>
-        <div class="modal-field"><span class="modal-field-label">温度環境</span><span class="modal-field-val">${d.temp}</span></div>
-        <div class="modal-field"><span class="modal-field-label">搬送物</span><span class="modal-field-val">${d.cargo}</span></div>
-        <div class="modal-field"><span class="modal-field-label">搬送重量</span><span class="modal-field-val">${d.weight}</span></div>
-        <div class="modal-field"><span class="modal-field-label">稼働時間</span><span class="modal-field-val">${d.hours}</span></div>
-        <div class="modal-field"><span class="modal-field-label">段差・スロープ</span><span class="modal-field-val">${d.slope}</span></div>
-      </div>
-    </div>
-    <div class="modal-section">
-      <div class="modal-section-title">自動化の目的</div>
-      <div class="modal-tags">${purposes}</div>
-    </div>
-    ${d.note ? `<div class="modal-section">
-      <div class="modal-section-title">特記事項</div>
-      <div class="modal-note">${d.note}</div>
-    </div>` : ''}
-  `;
-  document.getElementById('modalOverlay').classList.add('active');
-}
-
-function closeModal(e) {
-  if (!e || e.target === document.getElementById('modalOverlay')) {
-    document.getElementById('modalOverlay').classList.remove('active');
-  }
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-['filterBranch','filterRep','filterStatus'].forEach(id => document.getElementById(id).addEventListener('change', applyFilters));
-document.getElementById('searchInput').addEventListener('input', applyFilters);
-
-buildStats();
-applyFilters();
+function closeModal(e){if(!e||e.target===document.getElementById("modalOverlay"))document.getElementById("modalOverlay").classList.remove("active");}
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeModal();});
+["fBranch","fRep","fStatus"].forEach(function(id){document.getElementById(id).addEventListener("change",applyFilters);});
+document.getElementById("fSearch").addEventListener("input",applyFilters);
+init();applyFilters();
 </script>
 </body>
 </html>
