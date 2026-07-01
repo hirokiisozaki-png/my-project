@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Pudu Robotics 産業用AMR 各種規格・法令クリア状況まとめ</title>
+<style>
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    background-color: #f5f6f8;
+    color: #222;
+    margin: 0;
+    padding: 40px 20px;
+    line-height: 1.7;
+  }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    padding: 32px 40px;
+  }
+  h1 {
+    font-size: 1.4em;
+    border-bottom: 3px solid #31B1B0;
+    padding-bottom: 12px;
+    margin-bottom: 28px;
+    color: #1a1a1a;
+  }
+  h2 {
+    font-size: 1.1em;
+    background-color: #31B1B0;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 4px;
+    margin-top: 32px;
+    margin-bottom: 4px;
+  }
+  .section-note {
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 14px;
+    margin-left: 4px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: top;
+  }
+  th {
+    background-color: #eef7f7;
+    width: 30%;
+    white-space: nowrap;
+  }
+  .status {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  .status-clear {
+    background-color: #e0f5ee;
+    color: #0a8f6a;
+  }
+  .status-substantial {
+    background-color: #e6f0fb;
+    color: #1a5fb4;
+  }
+  .status-ops {
+    background-color: #fdf0dc;
+    color: #b5720a;
+  }
+  .detail {
+    color: #444;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Pudu Robotics 産業用AMR 各種規格・法令クリア状況まとめ</h1>
+
+  <h2>1. 製品仕様・認証として公式にクリア（準拠）しているもの</h2>
+  <table>
+    <tr>
+      <th>ISO 3691-4</th>
+      <td><span class="status status-clear">クリア</span><br>
+      <span class="detail">産業用車両の安全規格。カタログ等で公式に準拠を明記。</span></td>
+    </tr>
+    <tr>
+      <th>ISO 12100</th>
+      <td><span class="status status-clear">クリア</span><br>
+      <span class="detail">リスクアセスメント。ISO 3691-4準拠の前提として対応。</span></td>
+    </tr>
+    <tr>
+      <th>PLd / SIL2</th>
+      <td><span class="status status-clear">クリア</span><br>
+      <span class="detail">機能安全レベル。ISO 3691-4の安全機能要求として対応。</span></td>
+    </tr>
+    <tr>
+      <th>電波法（技適マーク）</th>
+      <td><span class="status status-clear">クリア</span><br>
+      <span class="detail">国内正規代理店の流通品は取得済み。</span></td>
+    </tr>
+  </table>
+
+  <h2>2. 取得した国際規格によって実質的にカバーされているもの</h2>
+  <table>
+    <tr>
+      <th>JIS D 6802</th>
+      <td><span class="status status-substantial">実質クリア</span><br>
+      <span class="detail">無人搬送車システム。より最新・厳格なISO 3691-4を満たすことで、本規格のハードウェア要件を内包。</span></td>
+    </tr>
+  </table>
+
+  <h2>3. 機器単体ではなく「現場の運用」でクリアすべきもの（事業者責任）</h2>
+  <table>
+    <tr>
+      <th>労働安全衛生規則</th>
+      <td><span class="status status-ops">運用にて対応</span><br>
+      <span class="detail">導入企業が安全通路の確保やルール策定を実施することでクリア。</span></td>
+    </tr>
+    <tr>
+      <th>消防法</th>
+      <td><span class="status status-ops">運用にて対応</span><br>
+      <span class="detail">防火戸の作動範囲や消火栓を塞がないルート設計・マップ設定を実施することでクリア。</span></td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
