@@ -1,0 +1,96 @@
+name: Append 議事録
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  append:
+    if: contains(github.event.issue.labels.*.name, '議事録')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.issue.body || "";
+
+            function extractSection(label) {
+              const re = new RegExp("### " + label + "\\s*\\n+([\\s\\S]*?)(?=\\n### |$)");
+              const m = body.match(re);
+              return m ? m[1].trim() : "";
+            }
+
+            function escapeHtml(s) {
+              return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            }
+
+            const date = extractSection("日付");
+            const contentRaw = extractSection("内容");
+
+            const lines = contentRaw.split("\n")
+              .map(l => l.replace(/^[-*]\s*/, '').trim())
+              .filter(l => l.length > 0 && l !== "_No response_");
+
+            if (!date || lines.length === 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: "⚠️ 日付または内容が読み取れませんでした。フォームから投稿し直してください。"
+              });
+              return;
+            }
+
+            const liItems = lines.map(l => `        <li>\n          ${escapeHtml(l)}\n        </li>`).join("\n");
+            const entryHtml = `  <div class="entry">\n    <div class="entry-date">${escapeHtml(date)}</div>\n    <ul class="notes">\n${liItems}\n    </ul>\n  </div>\n\n`;
+
+            const path = "浦瀬さん定例mtg議事録.html";
+            const { data: fileData } = await github.rest.repos.getContent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path: path,
+            });
+
+            const currentContent = Buffer.from(fileData.content, 'base64').toString('utf-8');
+            const marker = "<!-- ここから議事録エントリ（新しい回を上に追加） -->";
+            const idx = currentContent.indexOf(marker);
+
+            if (idx === -1) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: "⚠️ ページ内の挿入位置マーカーが見つからず、自動追記に失敗しました。"
+              });
+              return;
+            }
+
+            const insertPos = idx + marker.length;
+            const newContent = currentContent.slice(0, insertPos) + "\n\n" + entryHtml + currentContent.slice(insertPos);
+
+            await github.rest.repos.createOrUpdateFileContents({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path: path,
+              message: `議事録追加: ${date} (Issue #${context.issue.number})`,
+              content: Buffer.from(newContent, 'utf-8').toString('base64'),
+              sha: fileData.sha,
+            });
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "✅ 議事録をポータルに追記しました。\nhttps://hirokiisozaki-png.github.io/my-project/%E6%B5%A6%E7%80%AC%E3%81%95%E3%82%93%E5%AE%9A%E4%BE%8Bmtg%E8%AD%B0%E4%BA%8B%E9%8C%B2.html"
+            });
+
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: "closed"
+            });
