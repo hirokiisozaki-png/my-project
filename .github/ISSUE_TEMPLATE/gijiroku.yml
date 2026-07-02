@@ -1,0 +1,23 @@
+name: 浦瀬さん定例mtg 議事録
+description: 定例mtgの議事録を投稿すると、自動的にポータルページに追記されます
+title: "議事録: "
+labels: ["議事録"]
+body:
+  - type: input
+    id: date
+    attributes:
+      label: 日付
+      description: 例）2026/7/10
+      placeholder: "2026/7/10"
+    validations:
+      required: true
+  - type: textarea
+    id: content
+    attributes:
+      label: 内容
+      description: 1行につき1項目でOK（自動的に箇条書きになります）
+      placeholder: |
+        4足歩行型ロボットに関心のある会社あり
+        TP30はいつ神戸支店に届くか
+    validations:
+      required: true
