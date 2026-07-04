@@ -5,831 +5,831 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>社内資料ポータルまとめ（個人）</title>
 <style>
-  :root {
-    --ink: #1e2a38;
-    --ink-sub: #4a5568;
-    --ink-muted: #8896a5;
-    --border: #d1dce8;
-    --surface: #f4f7fa;
-    --white: #ffffff;
-    --accent: #0f6e56;
-    --accent-mid: #1d9e75;
-    --accent-light: #e1f5ee;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: "Hiragino Sans","Meiryo","Arial",sans-serif; background: var(--surface); color: var(--ink); line-height: 1.7; }
+ :root {
+ --ink: #1e2a38;
+ --ink-sub: #4a5568;
+ --ink-muted: #8896a5;
+ --border: #d1dce8;
+ --surface: #f4f7fa;
+ --white: #ffffff;
+ --accent: #0f6e56;
+ --accent-mid: #1d9e75;
+ --accent-light: #e1f5ee;
+ }
+ * { box-sizing: border-box; margin: 0; padding: 0; }
+ body { font-family: "Hiragino Sans","Meiryo","Arial",sans-serif; background: var(--surface); color: var(--ink); line-height: 1.7; }
 
-  /* ── ヘッダー ── */
-  .site-header {
-    background: var(--accent);
-    color: #fff;
-    padding: 0 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .site-header .logo { font-size: 15px; font-weight: 700; letter-spacing: .02em; }
-  .site-header .logo span { opacity: .65; font-weight: 400; margin-left: 8px; font-size: 12px; }
-  .search-wrap { position: relative; }
-  .search-wrap input {
-    background: rgba(255,255,255,.15);
-    border: 1px solid rgba(255,255,255,.3);
-    border-radius: 20px;
-    color: #fff;
-    font-size: 13px;
-    padding: 6px 14px 6px 34px;
-    width: 240px;
-    outline: none;
-    transition: background .2s;
-  }
-  .search-wrap input::placeholder { color: rgba(255,255,255,.6); }
-  .search-wrap input:focus { background: rgba(255,255,255,.25); }
-  .search-wrap .icon {
-    position: absolute;
-    left: 11px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    color: rgba(255,255,255,.7);
-    pointer-events: none;
-  }
+ /* ── ヘッダー ── */
+ .site-header {
+ background: var(--accent);
+ color: #fff;
+ padding: 0 32px;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ height: 56px;
+ position: sticky;
+ top: 0;
+ z-index: 100;
+ }
+ .site-header .logo { font-size: 15px; font-weight: 700; letter-spacing: .02em; }
+ .site-header .logo span { opacity: .65; font-weight: 400; margin-left: 8px; font-size: 12px; }
+ .search-wrap { position: relative; }
+ .search-wrap input {
+ background: rgba(255,255,255,.15);
+ border: 1px solid rgba(255,255,255,.3);
+ border-radius: 20px;
+ color: #fff;
+ font-size: 13px;
+ padding: 6px 14px 6px 34px;
+ width: 240px;
+ outline: none;
+ transition: background .2s;
+ }
+ .search-wrap input::placeholder { color: rgba(255,255,255,.6); }
+ .search-wrap input:focus { background: rgba(255,255,255,.25); }
+ .search-wrap .icon {
+ position: absolute;
+ left: 11px;
+ top: 50%;
+ transform: translateY(-50%);
+ font-size: 14px;
+ color: rgba(255,255,255,.7);
+ pointer-events: none;
+ }
 
-  /* ── レイアウト ── */
-  .layout { display: flex; min-height: calc(100vh - 56px); }
+ /* ── レイアウト ── */
+ .layout { display: flex; min-height: calc(100vh - 56px); }
 
-  /* ── サイドバー ── */
-  .sidebar {
-    width: 220px;
-    flex-shrink: 0;
-    background: var(--white);
-    border-right: 1px solid var(--border);
-    padding: 24px 0;
-    position: sticky;
-    top: 56px;
-    height: calc(100vh - 56px);
-    overflow-y: auto;
-  }
-  .sidebar-section { margin-bottom: 8px; }
-  .sidebar-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: .1em;
-    color: var(--ink-muted);
-    text-transform: uppercase;
-    padding: 0 20px;
-    margin-bottom: 4px;
-  }
-  .sidebar-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 20px;
-    font-size: 13px;
-    color: var(--ink-sub);
-    cursor: pointer;
-    border-left: 3px solid transparent;
-    transition: all .15s;
-    user-select: none;
-  }
-  .sidebar-item-child {
-    padding-left: 28px !important;
-    font-size: 12px;
-  }
-  .sidebar-item-grandchild {
-    padding-left: 44px !important;
-    font-size: 11px;
-  }
-  .sidebar-item:hover { background: var(--surface); color: var(--ink); }
-  .sidebar-item.active { background: var(--accent-light); color: var(--accent); font-weight: 600; border-left-color: var(--accent); }
-  .sidebar-item i { font-size: 15px; }
-  .sidebar-divider { border: none; border-top: 1px solid var(--border); margin: 12px 16px; }
+ /* ── サイドバー ── */
+ .sidebar {
+ width: 220px;
+ flex-shrink: 0;
+ background: var(--white);
+ border-right: 1px solid var(--border);
+ padding: 24px 0;
+ position: sticky;
+ top: 56px;
+ height: calc(100vh - 56px);
+ overflow-y: auto;
+ }
+ .sidebar-section { margin-bottom: 8px; }
+ .sidebar-label {
+ font-size: 10px;
+ font-weight: 700;
+ letter-spacing: .1em;
+ color: var(--ink-muted);
+ text-transform: uppercase;
+ padding: 0 20px;
+ margin-bottom: 4px;
+ }
+ .sidebar-item {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ padding: 8px 20px;
+ font-size: 13px;
+ color: var(--ink-sub);
+ cursor: pointer;
+ border-left: 3px solid transparent;
+ transition: all .15s;
+ user-select: none;
+ }
+ .sidebar-item-child {
+ padding-left: 28px !important;
+ font-size: 12px;
+ }
+ .sidebar-item-grandchild {
+ padding-left: 44px !important;
+ font-size: 11px;
+ }
+ .sidebar-item:hover { background: var(--surface); color: var(--ink); }
+ .sidebar-item.active { background: var(--accent-light); color: var(--accent); font-weight: 600; border-left-color: var(--accent); }
+ .sidebar-item i { font-size: 15px; }
+ .sidebar-divider { border: none; border-top: 1px solid var(--border); margin: 12px 16px; }
 
-  /* ── メインコンテンツ ── */
-  .main { flex: 1; padding: 32px 36px; overflow-y: auto; }
+ /* ── メインコンテンツ ── */
+ .main { flex: 1; padding: 32px 36px; overflow-y: auto; }
 
-  /* ── ページタイトル ── */
-  .page-title { font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-  .page-sub { font-size: 13px; color: var(--ink-muted); margin-bottom: 28px; }
+ /* ── ページタイトル ── */
+ .page-title { font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+ .page-sub { font-size: 13px; color: var(--ink-muted); margin-bottom: 28px; }
 
-  /* ── 統計バー ── */
-  .stats { display: flex; gap: 16px; margin-bottom: 32px; }
-  .stat-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 10px;
-    flex: 1;
-  }
-  .stat-num { font-size: 14px; font-weight: 700; color: var(--accent); line-height: 1; }
-  .stat-label { font-size: 6px; color: var(--ink-muted); margin-top: 4px; }
+ /* ── 統計バー ── */
+ .stats { display: flex; gap: 16px; margin-bottom: 32px; }
+ .stat-card {
+ background: var(--white);
+ border: 1px solid var(--border);
+ border-radius: 8px;
+ padding: 8px 10px;
+ flex: 1;
+ }
+ .stat-num { font-size: 14px; font-weight: 700; color: var(--accent); line-height: 1; }
+ .stat-label { font-size: 6px; color: var(--ink-muted); margin-top: 4px; }
 
-  /* ── フォルダグリッド ── */
-  .section-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-  }
-  .section-head h2 { font-size: 15px; font-weight: 700; color: var(--ink); }
-  .folders { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 36px; }
-  .folder-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 18px 16px;
-    cursor: pointer;
-    transition: box-shadow .15s, border-color .15s;
-    user-select: none;
-  }
-  .folder-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.07); border-color: var(--accent-mid); }
-  .folder-card.active { border-color: var(--accent); background: var(--accent-light); }
-  .folder-icon { font-size: 26px; margin-bottom: 8px; }
-  .folder-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
-  .folder-count { font-size: 11px; color: var(--ink-muted); }
+ /* ── フォルダグリッド ── */
+ .section-head {
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ margin-bottom: 14px;
+ }
+ .section-head h2 { font-size: 15px; font-weight: 700; color: var(--ink); }
+ .folders { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 36px; }
+ .folder-card {
+ background: var(--white);
+ border: 1px solid var(--border);
+ border-radius: 8px;
+ padding: 18px 16px;
+ cursor: pointer;
+ transition: box-shadow .15s, border-color .15s;
+ user-select: none;
+ }
+ .folder-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.07); border-color: var(--accent-mid); }
+ .folder-card.active { border-color: var(--accent); background: var(--accent-light); }
+ .folder-icon { font-size: 26px; margin-bottom: 8px; }
+ .folder-name { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+ .folder-count { font-size: 11px; color: var(--ink-muted); }
 
-  /* ── ドキュメントリスト ── */
-  .doc-list { display: flex; flex-direction: column; gap: 10px; }
-  .doc-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    text-decoration: none;
-    color: inherit;
-    transition: box-shadow .15s;
-  }
-  .doc-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,.07); }
-  .doc-card.hidden { display: none; }
-  .doc-icon { font-size: 22px; flex-shrink: 0; }
-  .doc-info { flex: 1; min-width: 0; }
-  .doc-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
-  .doc-meta { font-size: 12px; color: var(--ink-muted); }
-  .doc-tag {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 10px;
-    background: var(--accent-light);
-    color: var(--accent);
-    flex-shrink: 0;
-  }
-  .doc-tag.purple { background: #eeedfe; color: #3c3489; }
-  .doc-tag.amber  { background: #faeeda; color: #854f0b; }
-  .doc-tag.coral  { background: #faece7; color: #712b13; }
+ /* ── ドキュメントリスト ── */
+ .doc-list { display: flex; flex-direction: column; gap: 10px; }
+ .doc-card {
+ background: var(--white);
+ border: 1px solid var(--border);
+ border-radius: 8px;
+ padding: 16px 20px;
+ display: flex;
+ align-items: center;
+ gap: 16px;
+ text-decoration: none;
+ color: inherit;
+ transition: box-shadow .15s;
+ }
+ .doc-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,.07); }
+ .doc-card.hidden { display: none; }
+ .doc-icon { font-size: 22px; flex-shrink: 0; }
+ .doc-info { flex: 1; min-width: 0; }
+ .doc-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+ .doc-meta { font-size: 12px; color: var(--ink-muted); }
+ .doc-tag {
+ display: inline-block;
+ font-size: 10px;
+ font-weight: 600;
+ padding: 2px 8px;
+ border-radius: 10px;
+ background: var(--accent-light);
+ color: var(--accent);
+ flex-shrink: 0;
+ }
+ .doc-tag.purple { background: #eeedfe; color: #3c3489; }
+ .doc-tag.amber { background: #faeeda; color: #854f0b; }
+ .doc-tag.coral { background: #faece7; color: #712b13; }
 
-  /* ── 空状態 ── */
-  .empty {
-    text-align: center;
-    padding: 48px 24px;
-    color: var(--ink-muted);
-    font-size: 13px;
-    display: none;
-  }
-  .empty i { font-size: 36px; display: block; margin-bottom: 12px; opacity: .4; }
+ /* ── 空状態 ── */
+ .empty {
+ text-align: center;
+ padding: 48px 24px;
+ color: var(--ink-muted);
+ font-size: 13px;
+ display: none;
+ }
+ .empty i { font-size: 36px; display: block; margin-bottom: 12px; opacity: .4; }
 
-  /* ── フッター ── */
-  .site-footer {
-    text-align: center;
-    font-size: 11px;
-    color: var(--ink-muted);
-    padding: 24px;
-    border-top: 1px solid var(--border);
-    background: var(--white);
-    margin-top: 24px;
-  }
+ /* ── フッター ── */
+ .site-footer {
+ text-align: center;
+ font-size: 11px;
+ color: var(--ink-muted);
+ padding: 24px;
+ border-top: 1px solid var(--border);
+ background: var(--white);
+ margin-top: 24px;
+ }
 
-  /* ── 検索ハイライト ── */
-  mark { background: #fef08a; border-radius: 2px; padding: 0 1px; }
+ /* ── 検索ハイライト ── */
+ mark { background: #fef08a; border-radius: 2px; padding: 0 1px; }
 
-  @media (max-width: 680px) {
-    .sidebar { display: none; }
-    .main { padding: 20px 16px; }
-    .stats { flex-wrap: wrap; }
-    .search-wrap input { width: 160px; }
-  }
+ @media (max-width: 680px) {
+ .sidebar { display: none; }
+ .main { padding: 20px 16px; }
+ .stats { flex-wrap: wrap; }
+ .search-wrap input { width: 160px; }
+ }
 
-  /* ── ドライブリンクカード ── */
-  .drive-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 20px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    text-decoration: none;
-    color: inherit;
-    transition: box-shadow .15s;
-  }
-  .drive-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,.07); }
-  .drive-card.hidden { display: none; }
-  .drive-card .doc-icon { font-size: 20px; flex-shrink: 0; }
-  .drive-card .doc-info { flex: 1; min-width: 0; }
-  .drive-card .doc-title { font-size: 13.5px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
-  .drive-card .doc-meta { font-size: 11.5px; color: var(--ink-muted); }
-  .drive-open-btn {
-    display: inline-block;
-    background: var(--mirabot, #0f6e56);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 5px 14px;
-    border-radius: 4px;
-    text-decoration: none;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .drive-open-btn:hover { opacity: .85; }
+ /* ── ドライブリンクカード ── */
+ .drive-card {
+ background: var(--white);
+ border: 1px solid var(--border);
+ border-radius: 8px;
+ padding: 14px 20px;
+ display: flex;
+ align-items: center;
+ gap: 14px;
+ text-decoration: none;
+ color: inherit;
+ transition: box-shadow .15s;
+ }
+ .drive-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,.07); }
+ .drive-card.hidden { display: none; }
+ .drive-card .doc-icon { font-size: 20px; flex-shrink: 0; }
+ .drive-card .doc-info { flex: 1; min-width: 0; }
+ .drive-card .doc-title { font-size: 13.5px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+ .drive-card .doc-meta { font-size: 11.5px; color: var(--ink-muted); }
+ .drive-open-btn {
+ display: inline-block;
+ background: var(--mirabot, #0f6e56);
+ color: #fff;
+ font-size: 11px;
+ font-weight: 700;
+ padding: 5px 14px;
+ border-radius: 4px;
+ text-decoration: none;
+ white-space: nowrap;
+ flex-shrink: 0;
+ }
+ .drive-open-btn:hover { opacity: .85; }
 </style>
 </head>
 <body>
 
 <!-- ヘッダー -->
 <header class="site-header">
-  <a href="index.html" class="logo" style="text-decoration:none;color:inherit;">
-    社内資料まとめ（個人）
-    <span>Mirabot Docs</span>
-  </a>
-  <div class="search-wrap">
-    <i class="ti ti-search icon" aria-hidden="true"></i>
-    <input type="text" id="search-input" placeholder="資料を検索...">
-  </div>
+ <a href="index.html" class="logo" style="text-decoration:none;color:inherit;">
+ 社内資料まとめ（個人）
+ <span>Mirabot Docs</span>
+ </a>
+ <div class="search-wrap">
+ <i class="ti ti-search icon" aria-hidden="true"></i>
+ <input type="text" id="search-input" placeholder="資料を検索...">
+ </div>
 </header>
 
 <div class="layout">
 
-  <!-- サイドバー -->
-  <nav class="sidebar">
-    <div class="sidebar-section">
-      <div class="sidebar-label">表示</div>
-      <div class="sidebar-item active" data-filter="all" onclick="filterSidebar('all', this)">
-        <i class="ti ti-layout-grid" aria-hidden="true"></i> すべての資料
-      </div>
-    </div>
-    <hr class="sidebar-divider">
-    <div class="sidebar-section">
-      <div class="sidebar-label">フォルダ</div>
-      <div class="sidebar-item" data-filter="folder-sier" onclick="filterSidebar('folder-sier', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> AGV/AMR導入
-      </div>
-      <div class="sidebar-item" data-filter="folder-proposal" onclick="filterSidebar('folder-proposal', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> 提案・営業資料
-      </div>
-      <div class="sidebar-item" data-filter="folder-product" onclick="filterSidebar('folder-product', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> 製品・技術資料
-      </div>
-      <div class="sidebar-item" data-filter="folder-training" onclick="filterSidebar('folder-training', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> 知識
-      </div>
-      <div class="sidebar-item" data-filter="folder-miura" onclick="filterSidebar('folder-miura', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> 三浦工業
-      </div>
-      <div class="sidebar-item" data-filter="folder-expense" onclick="filterSidebar('folder-expense', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> 経費
-      </div>
-      <div class="sidebar-item" data-filter="folder-apps" onclick="filterSidebar('folder-apps', this)">
-        <i class="ti ti-tools" aria-hidden="true"></i> 便利アプリ
-      </div>
-      <div class="sidebar-item" data-filter="folder-case" onclick="filterSidebar('folder-case', this)">
-        <i class="ti ti-briefcase" aria-hidden="true"></i> 案件まとめ
-      </div>
-      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-a" onclick="filterSidebar('folder-case-a', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> ア行
-      </div>
-      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ka" onclick="filterSidebar('folder-case-ka', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> カ行
-      </div>
-      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-sa" onclick="filterSidebar('folder-case-sa', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> サ行
-      </div>
-      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ta" onclick="filterSidebar('folder-case-ta', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> タ行
-      </div>
-      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-na" onclick="filterSidebar('folder-case-na', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> ナ行
-      </div>
-      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ha" onclick="filterSidebar('folder-case-ha', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> ハ行
-      </div>
-      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ma" onclick="filterSidebar('folder-case-ma', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> マ行
-      </div>
-      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ya" onclick="filterSidebar('folder-case-ya', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> ヤ行
-      </div>
-      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ra" onclick="filterSidebar('folder-case-ra', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> ラ行
-      </div>
-      <div class="sidebar-item sidebar-item-child" data-filter="folder-case-wa" onclick="filterSidebar('folder-case-wa', this)">
-        <i class="ti ti-folder" aria-hidden="true"></i> ワ行
-      </div>
+ <!-- サイドバー -->
+ <nav class="sidebar">
+ <div class="sidebar-section">
+ <div class="sidebar-label">表示</div>
+ <div class="sidebar-item active" data-filter="all" onclick="filterSidebar('all', this)">
+ <i class="ti ti-layout-grid" aria-hidden="true"></i> すべての資料
+ </div>
+ </div>
+ <hr class="sidebar-divider">
+ <div class="sidebar-section">
+ <div class="sidebar-label">フォルダ</div>
+ <div class="sidebar-item" data-filter="folder-sier" onclick="filterSidebar('folder-sier', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> AGV/AMR導入
+ </div>
+ <div class="sidebar-item" data-filter="folder-proposal" onclick="filterSidebar('folder-proposal', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> 提案・営業資料
+ </div>
+ <div class="sidebar-item" data-filter="folder-product" onclick="filterSidebar('folder-product', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> 製品・技術資料
+ </div>
+ <div class="sidebar-item" data-filter="folder-training" onclick="filterSidebar('folder-training', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> 知識
+ </div>
+ <div class="sidebar-item" data-filter="folder-miura" onclick="filterSidebar('folder-miura', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> 三浦工業
+ </div>
+ <div class="sidebar-item" data-filter="folder-expense" onclick="filterSidebar('folder-expense', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> 経費
+ </div>
+ <div class="sidebar-item" data-filter="folder-apps" onclick="filterSidebar('folder-apps', this)">
+ <i class="ti ti-tools" aria-hidden="true"></i> 便利アプリ
+ </div>
+ <div class="sidebar-item" data-filter="folder-case" onclick="filterSidebar('folder-case', this)">
+ <i class="ti ti-briefcase" aria-hidden="true"></i> 案件まとめ
+ </div>
+ <div class="sidebar-item sidebar-item-child" data-filter="folder-case-a" onclick="filterSidebar('folder-case-a', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> ア行
+ </div>
+ <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ka" onclick="filterSidebar('folder-case-ka', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> カ行
+ </div>
+ <div class="sidebar-item sidebar-item-child" data-filter="folder-case-sa" onclick="filterSidebar('folder-case-sa', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> サ行
+ </div>
+ <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ta" onclick="filterSidebar('folder-case-ta', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> タ行
+ </div>
+ <div class="sidebar-item sidebar-item-child" data-filter="folder-case-na" onclick="filterSidebar('folder-case-na', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> ナ行
+ </div>
+ <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ha" onclick="filterSidebar('folder-case-ha', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> ハ行
+ </div>
+ <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ma" onclick="filterSidebar('folder-case-ma', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> マ行
+ </div>
+ <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ya" onclick="filterSidebar('folder-case-ya', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> ヤ行
+ </div>
+ <div class="sidebar-item sidebar-item-child" data-filter="folder-case-ra" onclick="filterSidebar('folder-case-ra', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> ラ行
+ </div>
+ <div class="sidebar-item sidebar-item-child" data-filter="folder-case-wa" onclick="filterSidebar('folder-case-wa', this)">
+ <i class="ti ti-folder" aria-hidden="true"></i> ワ行
+ </div>
 
-    </div>
-    <hr class="sidebar-divider">
-    <div class="sidebar-section">
-      <div class="sidebar-label">タグ</div>
-      <div class="sidebar-item" data-filter="tag-agv" onclick="filterSidebar('tag-agv', this)">
-        <i class="ti ti-tag" aria-hidden="true"></i> AGV/AMR
-      </div>
-      <div class="sidebar-item" data-filter="tag-mirabot" onclick="filterSidebar('tag-mirabot', this)">
-        <i class="ti ti-tag" aria-hidden="true"></i> ミラボット
-      </div>
-      <div class="sidebar-item" data-filter="tag-sier" onclick="filterSidebar('tag-sier', this)">
-        <i class="ti ti-tag" aria-hidden="true"></i> SIer
-      </div>
-    </div>
-  </nav>
+ </div>
+ <hr class="sidebar-divider">
+ <div class="sidebar-section">
+ <div class="sidebar-label">タグ</div>
+ <div class="sidebar-item" data-filter="tag-agv" onclick="filterSidebar('tag-agv', this)">
+ <i class="ti ti-tag" aria-hidden="true"></i> AGV/AMR
+ </div>
+ <div class="sidebar-item" data-filter="tag-mirabot" onclick="filterSidebar('tag-mirabot', this)">
+ <i class="ti ti-tag" aria-hidden="true"></i> ミラボット
+ </div>
+ <div class="sidebar-item" data-filter="tag-sier" onclick="filterSidebar('tag-sier', this)">
+ <i class="ti ti-tag" aria-hidden="true"></i> SIer
+ </div>
+ </div>
+ </nav>
 
-  <!-- メイン -->
-  <main class="main">
+ <!-- メイン -->
+ <main class="main">
 
-    <div class="page-title" id="page-title">すべての資料</div>
-    <div class="page-sub" id="page-sub">社内資料まとめ（個人）</div>
+ <div class="page-title" id="page-title">すべての資料</div>
+ <div class="page-sub" id="page-sub">社内資料まとめ（個人）</div>
 
-    <!-- 統計 -->
-    <div class="stats">
-      <div class="stat-card">
-        <div class="stat-num" id="stat-total">5</div>
-        <div class="stat-label">総資料数</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">7</div>
-        <div class="stat-label">フォルダ数</div>
-      </div>
-    </div>
+ <!-- 統計 -->
+ <div class="stats">
+ <div class="stat-card">
+ <div class="stat-num" id="stat-total">5</div>
+ <div class="stat-label">総資料数</div>
+ </div>
+ <div class="stat-card">
+ <div class="stat-num">7</div>
+ <div class="stat-label">フォルダ数</div>
+ </div>
+ </div>
 
-    <!-- フォルダ一覧 -->
-    <div id="folder-section">
-      <div class="section-head">
-        <h2>フォルダ</h2>
-      </div>
-      <div class="folders">
-        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-sier', null)">
-          <div class="folder-icon"><i class="ti ti-robot" aria-hidden="true"></i></div>
-          <div class="folder-name">AGV/AMR導入</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-proposal', null)">
-          <div class="folder-icon"><i class="ti ti-file-description" aria-hidden="true"></i></div>
-          <div class="folder-name">提案・営業資料</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-product', null)">
-          <div class="folder-icon"><i class="ti ti-cpu" aria-hidden="true"></i></div>
-          <div class="folder-name">製品・技術資料</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-training', null)">
-          <div class="folder-icon"><i class="ti ti-school" aria-hidden="true"></i></div>
-          <div class="folder-name">知識</div>
-          <div class="folder-count">3件</div>
-        </div>
-        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-case', null)">
-          <div class="folder-icon"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
-          <div class="folder-name">案件まとめ</div>
-          <div class="folder-count">10件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-a', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">ア行</div>
-          <div class="folder-count">1件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ka', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">カ行</div>
-          <div class="folder-count">1件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case-ka" onclick="filterSidebar('folder-case-gunze', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">グンゼ守山工場案件</div>
-          <div class="folder-count">1件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-sa', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">サ行</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ta', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">タ行</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-na', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">ナ行</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ha', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">ハ行</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ma', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">マ行</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ya', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">ヤ行</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ra', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">ラ行</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-wa', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">ワ行</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" style="display:none" data-parent="folder-case-a" onclick="filterSidebar('folder-nx-kato', null)">
-          <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
-          <div class="folder-name">NX商事加東市倉庫案件</div>
-          <div class="folder-count">3件</div>
-        </div>
-        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-miura', null)">
-          <div class="folder-icon"><i class="ti ti-building-factory-2" aria-hidden="true"></i></div>
-          <div class="folder-name">三浦工業</div>
-          <div class="folder-count">2件</div>
-        </div>
-        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-expense', null)">
-          <div class="folder-icon"><i class="ti ti-receipt" aria-hidden="true"></i></div>
-          <div class="folder-name">経費</div>
-          <div class="folder-count">0件</div>
-        </div>
-        <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-apps', null)">
-          <div class="folder-icon"><i class="ti ti-tools" aria-hidden="true"></i></div>
-          <div class="folder-name">便利アプリ</div>
-          <div class="folder-count">3件</div>
-        </div>
-      </div>
-    </div>
+ <!-- フォルダ一覧 -->
+ <div id="folder-section">
+ <div class="section-head">
+ <h2>フォルダ</h2>
+ </div>
+ <div class="folders">
+ <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-sier', null)">
+ <div class="folder-icon"><i class="ti ti-robot" aria-hidden="true"></i></div>
+ <div class="folder-name">AGV/AMR導入</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-proposal', null)">
+ <div class="folder-icon"><i class="ti ti-file-description" aria-hidden="true"></i></div>
+ <div class="folder-name">提案・営業資料</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-product', null)">
+ <div class="folder-icon"><i class="ti ti-cpu" aria-hidden="true"></i></div>
+ <div class="folder-name">製品・技術資料</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-training', null)">
+ <div class="folder-icon"><i class="ti ti-school" aria-hidden="true"></i></div>
+ <div class="folder-name">知識</div>
+ <div class="folder-count">3件</div>
+ </div>
+ <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-case', null)">
+ <div class="folder-icon"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
+ <div class="folder-name">案件まとめ</div>
+ <div class="folder-count">10件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-a', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">ア行</div>
+ <div class="folder-count">1件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ka', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">カ行</div>
+ <div class="folder-count">1件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case-ka" onclick="filterSidebar('folder-case-gunze', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">グンゼ守山工場案件</div>
+ <div class="folder-count">1件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-sa', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">サ行</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ta', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">タ行</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-na', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">ナ行</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ha', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">ハ行</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ma', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">マ行</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ya', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">ヤ行</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-ra', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">ラ行</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case" onclick="filterSidebar('folder-case-wa', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">ワ行</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" style="display:none" data-parent="folder-case-a" onclick="filterSidebar('folder-nx-kato', null)">
+ <div class="folder-icon"><i class="ti ti-folder" aria-hidden="true"></i></div>
+ <div class="folder-name">N社倉庫案件</div>
+ <div class="folder-count">3件</div>
+ </div>
+ <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-miura', null)">
+ <div class="folder-icon"><i class="ti ti-building-factory-2" aria-hidden="true"></i></div>
+ <div class="folder-name">三浦工業</div>
+ <div class="folder-count">2件</div>
+ </div>
+ <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-expense', null)">
+ <div class="folder-icon"><i class="ti ti-receipt" aria-hidden="true"></i></div>
+ <div class="folder-name">経費</div>
+ <div class="folder-count">0件</div>
+ </div>
+ <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-apps', null)">
+ <div class="folder-icon"><i class="ti ti-tools" aria-hidden="true"></i></div>
+ <div class="folder-name">便利アプリ</div>
+ <div class="folder-count">3件</div>
+ </div>
+ </div>
+ </div>
 
-    <!-- ドキュメント一覧 -->
-    <div class="section-head">
-      <h2 id="doc-section-title">資料一覧</h2>
-    </div>
+ <!-- ドキュメント一覧 -->
+ <div class="section-head">
+ <h2 id="doc-section-title">資料一覧</h2>
+ </div>
 
-    <div class="doc-list" id="doc-list">
+ <div class="doc-list" id="doc-list">
 
-      <a class="doc-card" target="_blank"
-         href="hearing-viewer.html"
-         data-folder="folder-sier"
-         data-tags="tag-agv tag-sier"
-         data-text="AGV AMR ヒアリング 回答 近畿エリア 支店 担当者 顧客 ヒアリングシート 案件一覧">
-        <div class="doc-icon"><i class="ti ti-clipboard-list" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">AGV/AMR ヒアリング回答ビューア</div>
-          <div class="doc-meta">AGV/AMR導入 ／ 近畿エリア ／ 更新：2026.06</div>
-        </div>
-        <span class="doc-tag" style="background:#e0f2fe;color:#0369a1">案件管理</span>
-      </a>
+ <a class="doc-card" target="_blank"
+ href="hearing-viewer.html"
+ data-folder="folder-sier"
+ data-tags="tag-agv tag-sier"
+ data-text="AGV AMR ヒアリング 回答 近畿エリア 支店 担当者 顧客 ヒアリングシート 案件一覧">
+ <div class="doc-icon"><i class="ti ti-clipboard-list" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">AGV/AMR ヒアリング回答ビューア</div>
+ <div class="doc-meta">AGV/AMR導入 ／ 近畿エリア ／ 更新：2026.06</div>
+ </div>
+ <span class="doc-tag" style="background:#e0f2fe;color:#0369a1">案件管理</span>
+ </a>
 
-      <a class="doc-card" target="_blank"
-         href="SIer業務概要.html"
-         data-folder="folder-training"
-         data-tags="tag-agv tag-sier"
-         data-text="SIer業務概要 AGV AMR 導入 システムインテグレーター フェーズ 業務内容 施工 要件定義 保守">
-        <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">SIer業務概要</div>
-          <div class="doc-meta">知識 ／ 更新：2026.06</div>
-        </div>
-        <span class="doc-tag">知識</span>
-      </a>
+ <a class="doc-card" target="_blank"
+ href="SIer業務概要.html"
+ data-folder="folder-training"
+ data-tags="tag-agv tag-sier"
+ data-text="SIer業務概要 AGV AMR 導入 システムインテグレーター フェーズ 業務内容 施工 要件定義 保守">
+ <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">SIer業務概要</div>
+ <div class="doc-meta">知識 ／ 更新：2026.06</div>
+ </div>
+ <span class="doc-tag">知識</span>
+ </a>
 
-      <a class="doc-card" target="_blank" rel="noopener noreferrer"
-         href="https://docs.google.com/document/d/1T4FS07CZFkZMOA_Nye2cM6GLWlGMFUZO00oxsP3E1e8/edit"
-         data-folder="folder-case-gunze"
-         data-tags="tag-agv tag-sier tag-mirabot"
-         data-text="グンゼ守山工場案件 業務分担 ミラボット SIer ロジエンス AiTEN 三浦工業 役割 商流 契約 RCS AGF 責任分界 グンゼ ロジエンス">
-        <div class="doc-icon"><i class="ti ti-brand-google-drive" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">グンゼ守山工場案件の業務分担</div>
-          <div class="doc-meta">案件まとめ ／ グンゼ守山工場案件 ／ Googleドキュメント（社外秘・非公開）</div>
-        </div>
-        <span class="doc-tag" style="background:#e8f0fe;color:#1a73e8;">Googleドキュメント</span>
-      </a>
+ <a class="doc-card" target="_blank" rel="noopener noreferrer"
+ href="https://docs.google.com/document/d/1T4FS07CZFkZMOA_Nye2cM6GLWlGMFUZO00oxsP3E1e8/edit"
+ data-folder="folder-case-gunze"
+ data-tags="tag-agv tag-sier tag-mirabot"
+ data-text="グンゼ守山工場案件 業務分担 ミラボット SIer ロジエンス AiTEN 三浦工業 役割 商流 契約 RCS AGF 責任分界 グンゼ ロジエンス">
+ <div class="doc-icon"><i class="ti ti-brand-google-drive" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">グンゼ守山工場案件の業務分担</div>
+ <div class="doc-meta">案件まとめ ／ グンゼ守山工場案件 ／ Googleドキュメント（社外秘・非公開）</div>
+ </div>
+ <span class="doc-tag" style="background:#e8f0fe;color:#1a73e8;">Googleドキュメント</span>
+ </a>
 
-      <a class="doc-card" target="_blank"
-         href="AGV_AMR用語集.html"
-         data-folder="folder-training"
-         data-tags="tag-agv tag-amr tag-mirabot"
-         data-text="AGV AMR AGF WMS WES WCS RCS SLAM VDA5050 PLC API イーサネット 用語集 物流 倉庫 システム 通信 技術 コミッショニング CE">
-        <div class="doc-icon"><i class="ti ti-book-2" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">AGV/AMR・物流システム 用語集</div>
-          <div class="doc-meta">知識 ／ 更新：2026.06</div>
-        </div>
-        <span class="doc-tag">知識</span>
-      </a>
+ <a class="doc-card" target="_blank"
+ href="AGV_AMR用語集.html"
+ data-folder="folder-training"
+ data-tags="tag-agv tag-amr tag-mirabot"
+ data-text="AGV AMR AGF WMS WES WCS RCS SLAM VDA5050 PLC API イーサネット 用語集 物流 倉庫 システム 通信 技術 コミッショニング CE">
+ <div class="doc-icon"><i class="ti ti-book-2" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">AGV/AMR・物流システム 用語集</div>
+ <div class="doc-meta">知識 ／ 更新：2026.06</div>
+ </div>
+ <span class="doc-tag">知識</span>
+ </a>
 
-      <a class="doc-card" target="_blank"
-         href="Pudu%20Robotics%E7%94%A3%E6%A5%AD%E7%94%A8AMR%E8%A6%8F%E6%A0%BC%E3%83%BB%E6%B3%95%E4%BB%A4%E3%82%AF%E3%83%AA%E3%82%A2%E7%8A%B6%E6%B3%81.html"
-         data-folder="folder-training"
-         data-tags="tag-agv tag-amr"
-         data-text="Pudu Robotics 産業用AMR 規格 法令 クリア状況 ISO3691-4 ISO12100 PLd SIL2 電波法 技適 JIS D6802 労働安全衛生規則 消防法 認証 準拠">
-        <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">Pudu Robotics 産業用AMR 各種規格・法令クリア状況まとめ</div>
-          <div class="doc-meta">知識 ／ 更新：2026.07</div>
-        </div>
-        <span class="doc-tag">知識</span>
-      </a>
+ <a class="doc-card" target="_blank"
+ href="Pudu%20Robotics%E7%94%A3%E6%A5%AD%E7%94%A8AMR%E8%A6%8F%E6%A0%BC%E3%83%BB%E6%B3%95%E4%BB%A4%E3%82%AF%E3%83%AA%E3%82%A2%E7%8A%B6%E6%B3%81.html"
+ data-folder="folder-training"
+ data-tags="tag-agv tag-amr"
+ data-text="Pudu Robotics 産業用AMR 規格 法令 クリア状況 ISO3691-4 ISO12100 PLd SIL2 電波法 技適 JIS D6802 労働安全衛生規則 消防法 認証 準拠">
+ <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">Pudu Robotics 産業用AMR 各種規格・法令クリア状況まとめ</div>
+ <div class="doc-meta">知識 ／ 更新：2026.07</div>
+ </div>
+ <span class="doc-tag">知識</span>
+ </a>
 
-      
-
-
-      <a class="doc-card" target="_blank"
-         href="https://hirokiisozaki-png.github.io/roi-calc-tool/roi_calc_app.html"
-         target="_blank"
-         data-folder="folder-apps"
-         data-tags="tag-apps"
-         data-text="ROI 簡易計算ツール 導入費用 人件費 ROI 計算 AMR AGV 投資回収 便利アプリ">
-        <div class="doc-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">ROI 簡易計算ツール</div>
-          <div class="doc-meta">便利アプリ ／ 更新：2026.06 ／ 導入費用・人件費を入力してROIを即時計算</div>
-        </div>
-        <span class="doc-tag purple">便利アプリ</span>
-      </a>
-
-      <a class="doc-card" target="_blank"
-         href="https://hirokiisozaki-png.github.io/avg-amr-roiapp/"
-         target="_blank"
-         data-folder="folder-apps"
-         data-tags="tag-apps tag-agv"
-         data-text="AGV AMR 導入提案書 生成ツール Gemini プロンプト ROI 便利アプリ CarriRo 提案">
-        <div class="doc-icon"><i class="ti ti-file-export" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">AGV/AMR 導入提案書 生成ツール</div>
-          <div class="doc-meta">便利アプリ ／ 更新：2026.06 ／ 入力内容からGemini向け提案プロンプトを自動生成</div>
-        </div>
-        <span class="doc-tag purple">便利アプリ</span>
-      </a>
-
-      <a class="doc-card" target="_blank"
-         href="https://hirokiisozaki-png.github.io/spec-calc/"
-         target="_blank"
-         data-folder="folder-apps"
-         data-tags="tag-apps tag-agv"
-         data-text="AGF AGV 能力計算ツール 必要台数 シミュレーター 搬送 速度 距離 稼働 計算 便利アプリ">
-        <div class="doc-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">AGF/AGV 能力計算ツール</div>
-          <div class="doc-meta">便利アプリ ／ 更新：2026.06 ／ 搬送条件から必要台数をシミュレーション</div>
-        </div>
-        <span class="doc-tag purple">便利アプリ</span>
-      </a>
+ 
 
 
-      <a class="doc-card" target="_blank"
-         href="https://drive.google.com/drive/folders/18rY-vEM0bAQhyGj92n76Q9Yx33QHHgUZ?usp=drive_link"
-         target="_blank"
-         rel="noopener noreferrer"
-         data-folder="folder-miura"
-         data-tags="tag-mirabot"
-         data-text="MIRABOT各資料 ドライブ Googleドライブ 三浦工業 ミラボット 資料">
-        <div class="doc-icon"><i class="ti ti-brand-google-drive" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">MIRABOT各資料（ドライブ）</div>
-          <div class="doc-meta">三浦工業 ／ Googleドライブ ／ クリックで別タブに開きます</div>
-        </div>
-        <span class="doc-tag" style="background:#e8f0fe;color:#1a73e8;">Googleドライブ</span>
-      </a>
+ <a class="doc-card" target="_blank"
+ href="https://hirokiisozaki-png.github.io/roi-calc-tool/roi_calc_app.html"
+ target="_blank"
+ data-folder="folder-apps"
+ data-tags="tag-apps"
+ data-text="ROI 簡易計算ツール 導入費用 人件費 ROI 計算 AMR AGV 投資回収 便利アプリ">
+ <div class="doc-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">ROI 簡易計算ツール</div>
+ <div class="doc-meta">便利アプリ ／ 更新：2026.06 ／ 導入費用・人件費を入力してROIを即時計算</div>
+ </div>
+ <span class="doc-tag purple">便利アプリ</span>
+ </a>
 
-      <a class="doc-card" target="_blank"
-         href="%E6%B5%A6%E7%80%AC%E3%81%95%E3%82%93%E5%AE%9A%E4%BE%8Bmtg%E8%AD%B0%E4%BA%8B%E9%8C%B2.html"
-         data-folder="folder-miura"
-         data-tags="tag-mirabot"
-         data-text="浦瀬さん定例mtg 議事録 三浦工業 ミラボット 定例ミーティング TP30 神戸支店">
-        <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">浦瀬さん定例mtg 議事録</div>
-          <div class="doc-meta">三浦工業 ／ 更新：2026.07.01 ／ 議事録を時系列で随時追記</div>
-        </div>
-        <span class="doc-tag">HTML</span>
-      </a>
+ <a class="doc-card" target="_blank"
+ href="https://hirokiisozaki-png.github.io/avg-amr-roiapp/"
+ target="_blank"
+ data-folder="folder-apps"
+ data-tags="tag-apps tag-agv"
+ data-text="AGV AMR 導入提案書 生成ツール Gemini プロンプト ROI 便利アプリ CarriRo 提案">
+ <div class="doc-icon"><i class="ti ti-file-export" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">AGV/AMR 導入提案書 生成ツール</div>
+ <div class="doc-meta">便利アプリ ／ 更新：2026.06 ／ 入力内容からGemini向け提案プロンプトを自動生成</div>
+ </div>
+ <span class="doc-tag purple">便利アプリ</span>
+ </a>
 
-      <a class="doc-card" target="_blank"
-         href="https://github.com/hirokiisozaki-png/my-project/issues/new?template=gijiroku.yml"
-         rel="noopener noreferrer"
-         data-folder="folder-miura"
-         data-tags="tag-mirabot"
-         data-text="浦瀬さん定例mtg 議事録を追加 新規投稿 Issue 三浦工業">
-        <div class="doc-icon"><i class="ti ti-square-rounded-plus" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">＋ 議事録を追加</div>
-          <div class="doc-meta">三浦工業 ／ GitHub Issueで投稿すると自動追記されます</div>
-        </div>
-        <span class="doc-tag" style="background:#fdf1e0;color:#b6620a;">投稿フォーム</span>
-      </a>
-
-      <a class="doc-card" target="_blank"
-         href="%E9%98%B2%E7%81%AB%E3%82%B7%E3%83%A3%E3%83%83%E3%82%BF%E3%83%BC%E9%80%A3%E6%90%BA_%E3%81%94%E6%8F%90%E6%A1%88%E8%B3%87%E6%96%99_A%E6%A1%88_C%E6%A1%88%E8%AA%98%E5%B0%8E%E7%89%88.html"
-         data-folder="folder-nx-kato"
-         data-tags="tag-agv tag-mirabot"
-         data-text="防火シャッター連携 ご提案資料 A案 C案誘導版 NX商事 加東市 CarriRo MIRABOT LINK 光電センサー 消防法 貸主承認不要">
-        <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">防火シャッター連携 ご提案資料（A案→C案誘導版）</div>
-          <div class="doc-meta">案件まとめ ／ NX商事加東市倉庫案件 ／ 更新：2026.06</div>
-        </div>
-        <span class="doc-tag">案件まとめ</span>
-      </a>
-
-      <a class="doc-card" target="_blank"
-         href="%E9%98%B2%E7%81%AB%E3%82%B7%E3%83%A3%E3%83%83%E3%82%BF%E3%83%BC%E9%80%A3%E6%90%BA_%E6%89%8B%E7%B6%9A%E3%81%8D%E3%81%94%E6%A1%88%E5%86%85_A%E6%A1%88%E6%89%8B%E9%A0%86%E8%AA%AC%E6%98%8E%E7%89%88.html"
-         data-folder="folder-nx-kato"
-         data-tags="tag-agv tag-mirabot"
-         data-text="防火シャッター連携 手続きご案内 A案 手順説明版 NX商事 加東市 消防法 届出 STEP 貸主承認 消防設備士">
-        <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">防火シャッター連携 手続きご案内（A案手順説明版）</div>
-          <div class="doc-meta">案件まとめ ／ NX商事加東市倉庫案件 ／ 更新：2026.06</div>
-        </div>
-        <span class="doc-tag">案件まとめ</span>
-      </a>
-
-      <a class="doc-card" target="_blank"
-         href="AGV%E9%98%B2%E7%81%AB%E3%82%B7%E3%83%A3%E3%83%83%E3%82%BF%E3%83%BC%E9%80%A3%E6%90%BA_%E7%A4%BE%E5%86%85%E5%90%91%E3%81%91%E7%B7%8F%E5%90%88%E8%B3%87%E6%96%99_%E4%BF%AE%E6%AD%A3%E7%89%88.html"
-         data-folder="folder-nx-kato"
-         data-tags="tag-agv tag-mirabot"
-         data-text="AGV防火シャッター連携 社内向け総合資料 修正版 NX商事 加東市 消防法 建築基準法 PLC MIRABOT LINK CarriRo 案A 案B 案C 光電センサー">
-        <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">AGV防火シャッター連携 社内向け総合資料（修正版）</div>
-          <div class="doc-meta">案件まとめ ／ NX商事加東市倉庫案件 ／ 更新：2026.06</div>
-        </div>
-        <span class="doc-tag">案件まとめ</span>
-      </a>
+ <a class="doc-card" target="_blank"
+ href="https://hirokiisozaki-png.github.io/spec-calc/"
+ target="_blank"
+ data-folder="folder-apps"
+ data-tags="tag-apps tag-agv"
+ data-text="AGF AGV 能力計算ツール 必要台数 シミュレーター 搬送 速度 距離 稼働 計算 便利アプリ">
+ <div class="doc-icon"><i class="ti ti-calculator" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">AGF/AGV 能力計算ツール</div>
+ <div class="doc-meta">便利アプリ ／ 更新：2026.06 ／ 搬送条件から必要台数をシミュレーション</div>
+ </div>
+ <span class="doc-tag purple">便利アプリ</span>
+ </a>
 
 
-      <a class="doc-card" target="_blank"
-         href="%E7%89%A9%E6%B5%81%E8%87%AA%E5%8B%95%E5%8C%96%E3%83%BBSI%E9%96%A2%E9%80%A3%20%E7%94%A8%E8%AA%9E%E3%81%BE%E3%81%A8%E3%82%81.html"
-         data-folder="folder-training"
-         data-tags="tag-agv tag-sier"
-         data-text="物流自動化 SI関連 用語まとめ SI SIer WMS WCS PLC API AGF AGV AMR ERP MES HMI SCADA FAT SAT 用語集 知識">
-        <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
-        <div class="doc-info">
-          <div class="doc-title">物流自動化・SI関連 用語まとめ</div>
-          <div class="doc-meta">知識 ／ 更新：2026.06</div>
-        </div>
-        <span class="doc-tag">知識</span>
-      </a>
-    </div>
+ <a class="doc-card" target="_blank"
+ href="https://drive.google.com/drive/folders/18rY-vEM0bAQhyGj92n76Q9Yx33QHHgUZ?usp=drive_link"
+ target="_blank"
+ rel="noopener noreferrer"
+ data-folder="folder-miura"
+ data-tags="tag-mirabot"
+ data-text="MIRABOT各資料 ドライブ Googleドライブ 三浦工業 ミラボット 資料">
+ <div class="doc-icon"><i class="ti ti-brand-google-drive" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">MIRABOT各資料（ドライブ）</div>
+ <div class="doc-meta">三浦工業 ／ Googleドライブ ／ クリックで別タブに開きます</div>
+ </div>
+ <span class="doc-tag" style="background:#e8f0fe;color:#1a73e8;">Googleドライブ</span>
+ </a>
 
-    <div class="empty" id="empty-state">
-      <i class="ti ti-mood-empty" aria-hidden="true"></i>
-      該当する資料が見つかりませんでした
-    </div>
+ <a class="doc-card" target="_blank"
+ href="%E6%B5%A6%E7%80%AC%E3%81%95%E3%82%93%E5%AE%9A%E4%BE%8Bmtg%E8%AD%B0%E4%BA%8B%E9%8C%B2.html"
+ data-folder="folder-miura"
+ data-tags="tag-mirabot"
+ data-text="浦瀬さん定例mtg 議事録 三浦工業 ミラボット 定例ミーティング TP30 神戸支店">
+ <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">浦瀬さん定例mtg 議事録</div>
+ <div class="doc-meta">三浦工業 ／ 更新：2026.07.01 ／ 議事録を時系列で随時追記</div>
+ </div>
+ <span class="doc-tag">HTML</span>
+ </a>
 
-  </main>
+ <a class="doc-card" target="_blank"
+ href="https://github.com/hirokiisozaki-png/my-project/issues/new?template=gijiroku.yml"
+ rel="noopener noreferrer"
+ data-folder="folder-miura"
+ data-tags="tag-mirabot"
+ data-text="浦瀬さん定例mtg 議事録を追加 新規投稿 Issue 三浦工業">
+ <div class="doc-icon"><i class="ti ti-square-rounded-plus" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">＋ 議事録を追加</div>
+ <div class="doc-meta">三浦工業 ／ GitHub Issueで投稿すると自動追記されます</div>
+ </div>
+ <span class="doc-tag" style="background:#fdf1e0;color:#b6620a;">投稿フォーム</span>
+ </a>
+
+ <a class="doc-card" target="_blank"
+ href="%E9%98%B2%E7%81%AB%E3%82%B7%E3%83%A3%E3%83%83%E3%82%BF%E3%83%BC%E9%80%A3%E6%90%BA_%E3%81%94%E6%8F%90%E6%A1%88%E8%B3%87%E6%96%99_A%E6%A1%88_C%E6%A1%88%E8%AA%98%E5%B0%8E%E7%89%88.html"
+ data-folder="folder-nx-kato"
+ data-tags="tag-agv tag-mirabot"
+ data-text="防火シャッター連携 ご提案資料 A案 C案誘導版 N社 CarriRo MIRABOT LINK 光電センサー 消防法 貸主承認不要">
+ <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">防火シャッター連携 ご提案資料（A案→C案誘導版）</div>
+ <div class="doc-meta">案件まとめ ／ N社倉庫案件 ／ 更新：2026.06</div>
+ </div>
+ <span class="doc-tag">案件まとめ</span>
+ </a>
+
+ <a class="doc-card" target="_blank"
+ href="%E9%98%B2%E7%81%AB%E3%82%B7%E3%83%A3%E3%83%83%E3%82%BF%E3%83%BC%E9%80%A3%E6%90%BA_%E6%89%8B%E7%B6%9A%E3%81%8D%E3%81%94%E6%A1%88%E5%86%85_A%E6%A1%88%E6%89%8B%E9%A0%86%E8%AA%AC%E6%98%8E%E7%89%88.html"
+ data-folder="folder-nx-kato"
+ data-tags="tag-agv tag-mirabot"
+ data-text="防火シャッター連携 手続きご案内 A案 手順説明版 N社 消防法 届出 STEP 貸主承認 消防設備士">
+ <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">防火シャッター連携 手続きご案内（A案手順説明版）</div>
+ <div class="doc-meta">案件まとめ ／ N社倉庫案件 ／ 更新：2026.06</div>
+ </div>
+ <span class="doc-tag">案件まとめ</span>
+ </a>
+
+ <a class="doc-card" target="_blank"
+ href="AGV%E9%98%B2%E7%81%AB%E3%82%B7%E3%83%A3%E3%83%83%E3%82%BF%E3%83%BC%E9%80%A3%E6%90%BA_%E7%A4%BE%E5%86%85%E5%90%91%E3%81%91%E7%B7%8F%E5%90%88%E8%B3%87%E6%96%99_%E4%BF%AE%E6%AD%A3%E7%89%88.html"
+ data-folder="folder-nx-kato"
+ data-tags="tag-agv tag-mirabot"
+ data-text="AGV防火シャッター連携 社内向け総合資料 修正版 N社 消防法 建築基準法 PLC MIRABOT LINK CarriRo 案A 案B 案C 光電センサー">
+ <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">AGV防火シャッター連携 社内向け総合資料（修正版）</div>
+ <div class="doc-meta">案件まとめ ／ N社倉庫案件 ／ 更新：2026.06</div>
+ </div>
+ <span class="doc-tag">案件まとめ</span>
+ </a>
+
+
+ <a class="doc-card" target="_blank"
+ href="%E7%89%A9%E6%B5%81%E8%87%AA%E5%8B%95%E5%8C%96%E3%83%BBSI%E9%96%A2%E9%80%A3%20%E7%94%A8%E8%AA%9E%E3%81%BE%E3%81%A8%E3%82%81.html"
+ data-folder="folder-training"
+ data-tags="tag-agv tag-sier"
+ data-text="物流自動化 SI関連 用語まとめ SI SIer WMS WCS PLC API AGF AGV AMR ERP MES HMI SCADA FAT SAT 用語集 知識">
+ <div class="doc-icon"><i class="ti ti-file-text" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">物流自動化・SI関連 用語まとめ</div>
+ <div class="doc-meta">知識 ／ 更新：2026.06</div>
+ </div>
+ <span class="doc-tag">知識</span>
+ </a>
+ </div>
+
+ <div class="empty" id="empty-state">
+ <i class="ti ti-mood-empty" aria-hidden="true"></i>
+ 該当する資料が見つかりませんでした
+ </div>
+
+ </main>
 </div>
 
 <footer class="site-footer">
-  社内資料まとめ（個人）　─　資料の追加・更新はClaudeにお問い合わせください
+ 社内資料まとめ（個人）　─　資料の追加・更新はClaudeにお問い合わせください
 </footer>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <script>
-  const docs = document.querySelectorAll('.doc-card');
-  const emptyState = document.getElementById('empty-state');
-  const statTotal = document.getElementById('stat-total');
-  const searchInput = document.getElementById('search-input');
-  const pageTitle = document.getElementById('page-title');
-  const pageSub = document.getElementById('page-sub');
-  const docSectionTitle = document.getElementById('doc-section-title');
-  const folderSection = document.getElementById('folder-section');
-  let currentFilter = 'all';
+ const docs = document.querySelectorAll('.doc-card');
+ const emptyState = document.getElementById('empty-state');
+ const statTotal = document.getElementById('stat-total');
+ const searchInput = document.getElementById('search-input');
+ const pageTitle = document.getElementById('page-title');
+ const pageSub = document.getElementById('page-sub');
+ const docSectionTitle = document.getElementById('doc-section-title');
+ const folderSection = document.getElementById('folder-section');
+ let currentFilter = 'all';
 
-  function updateStats() {
-    const visible = [...docs].filter(d => !d.classList.contains('hidden')).length;
-    statTotal.textContent = visible;
-    emptyState.style.display = visible === 0 ? 'block' : 'none';
-  }
+ function updateStats() {
+ const visible = [...docs].filter(d => !d.classList.contains('hidden')).length;
+ statTotal.textContent = visible;
+ emptyState.style.display = visible === 0 ? 'block' : 'none';
+ }
 
-  function filterSidebar(filter, el) {
-    currentFilter = filter;
-    // サイドバーのアクティブ状態更新
-    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-    if (el) el.classList.add('active');
-    else {
-      const match = document.querySelector(`[data-filter="${filter}"]`);
-      if (match) match.classList.add('active');
-    }
-    // フォルダカードのアクティブ
-    document.querySelectorAll('.folder-card').forEach(c => c.classList.remove('active'));
+ function filterSidebar(filter, el) {
+ currentFilter = filter;
+ // サイドバーのアクティブ状態更新
+ document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+ if (el) el.classList.add('active');
+ else {
+ const match = document.querySelector(`[data-filter="${filter}"]`);
+ if (match) match.classList.add('active');
+ }
+ // フォルダカードのアクティブ
+ document.querySelectorAll('.folder-card').forEach(c => c.classList.remove('active'));
 
-    // タイトル更新
-    const labels = {
-      'all': ['すべての資料', '社内資料まとめ（個人）'],
-      'folder-sier': ['AGV/AMR導入', 'AGV・AMR導入プロジェクト関連資料'],
-      'folder-proposal': ['提案・営業資料', '顧客提案・営業活動用資料'],
-      'folder-product': ['製品・技術資料', '製品仕様・技術解説資料'],
-      'folder-training': ['知識', '社内研修・教育用資料'],
-      'folder-case': ['案件まとめ', '案件ごとの業務分担・進捗・情報まとめ'],
-      'tag-agv': ['AGV/AMR タグ', 'AGV/AMR関連の資料'],
-      'tag-mirabot': ['ミラボット タグ', 'ミラボット関連の資料'],
-      'tag-sier': ['SIer タグ', 'SIer関連の資料'],
-      'folder-miura': ['三浦工業', '三浦工業グループ関連資料'],
-      'folder-expense': ['経費', '経費・費用関連資料'],
-      'folder-apps': ['便利アプリ', '業務に役立つWebアプリ'],
-      'folder-nx-kato': ['NX商事加東市倉庫案件', 'NX商事加東市倉庫案件の関連資料'],
-      'folder-case-a': ['ア行', '案件まとめ ／ ア行'],
-      'folder-case-ka': ['カ行', '案件まとめ ／ カ行'],
-      'folder-case-gunze': ['グンゼ守山工場案件', '案件まとめ ／ グンゼ守山工場案件'],
-      'folder-case-sa': ['サ行', '案件まとめ ／ サ行'],
-      'folder-case-ta': ['タ行', '案件まとめ ／ タ行'],
-      'folder-case-na': ['ナ行', '案件まとめ ／ ナ行'],
-      'folder-case-ha': ['ハ行', '案件まとめ ／ ハ行'],
-      'folder-case-ma': ['マ行', '案件まとめ ／ マ行'],
-      'folder-case-ya': ['ヤ行', '案件まとめ ／ ヤ行'],
-      'folder-case-ra': ['ラ行', '案件まとめ ／ ラ行'],
-      'folder-case-wa': ['ワ行', '案件まとめ ／ ワ行'],
-    };
-    const [title, sub] = labels[filter] || ['すべての資料', ''];
-    pageTitle.textContent = title;
-    pageSub.textContent = sub;
-    docSectionTitle.textContent = '資料一覧';
+ // タイトル更新
+ const labels = {
+ 'all': ['すべての資料', '社内資料まとめ（個人）'],
+ 'folder-sier': ['AGV/AMR導入', 'AGV・AMR導入プロジェクト関連資料'],
+ 'folder-proposal': ['提案・営業資料', '顧客提案・営業活動用資料'],
+ 'folder-product': ['製品・技術資料', '製品仕様・技術解説資料'],
+ 'folder-training': ['知識', '社内研修・教育用資料'],
+ 'folder-case': ['案件まとめ', '案件ごとの業務分担・進捗・情報まとめ'],
+ 'tag-agv': ['AGV/AMR タグ', 'AGV/AMR関連の資料'],
+ 'tag-mirabot': ['ミラボット タグ', 'ミラボット関連の資料'],
+ 'tag-sier': ['SIer タグ', 'SIer関連の資料'],
+ 'folder-miura': ['三浦工業', '三浦工業グループ関連資料'],
+ 'folder-expense': ['経費', '経費・費用関連資料'],
+ 'folder-apps': ['便利アプリ', '業務に役立つWebアプリ'],
+ 'folder-nx-kato': ['N社倉庫案件', 'N社倉庫案件の関連資料'],
+ 'folder-case-a': ['ア行', '案件まとめ ／ ア行'],
+ 'folder-case-ka': ['カ行', '案件まとめ ／ カ行'],
+ 'folder-case-gunze': ['グンゼ守山工場案件', '案件まとめ ／ グンゼ守山工場案件'],
+ 'folder-case-sa': ['サ行', '案件まとめ ／ サ行'],
+ 'folder-case-ta': ['タ行', '案件まとめ ／ タ行'],
+ 'folder-case-na': ['ナ行', '案件まとめ ／ ナ行'],
+ 'folder-case-ha': ['ハ行', '案件まとめ ／ ハ行'],
+ 'folder-case-ma': ['マ行', '案件まとめ ／ マ行'],
+ 'folder-case-ya': ['ヤ行', '案件まとめ ／ ヤ行'],
+ 'folder-case-ra': ['ラ行', '案件まとめ ／ ラ行'],
+ 'folder-case-wa': ['ワ行', '案件まとめ ／ ワ行'],
+ };
+ const [title, sub] = labels[filter] || ['すべての資料', ''];
+ pageTitle.textContent = title;
+ pageSub.textContent = sub;
+ docSectionTitle.textContent = '資料一覧';
 
-    // フォルダセクション表示制御
-    // 表示するfolder-cardを「現在のフォルダの直下の子」だけに絞る
-    const allFolderCards = document.querySelectorAll('.folder-card');
-    let hasChildFolders = false;
-    allFolderCards.forEach(card => {
-      const parent = card.dataset.parent;
-      const show = parent === filter;
-      // CSSの display:none を上書きするため '' ではなく 'block' を明示指定
-      card.style.display = show ? 'block' : 'none';
-      if (show) hasChildFolders = true;
-    });
+ // フォルダセクション表示制御
+ // 表示するfolder-cardを「現在のフォルダの直下の子」だけに絞る
+ const allFolderCards = document.querySelectorAll('.folder-card');
+ let hasChildFolders = false;
+ allFolderCards.forEach(card => {
+ const parent = card.dataset.parent;
+ const show = parent === filter;
+ // CSSの display:none を上書きするため '' ではなく 'block' を明示指定
+ card.style.display = show ? 'block' : 'none';
+ if (show) hasChildFolders = true;
+ });
 
-    // 子フォルダがある場合のみフォルダセクションを表示
-    // allの場合は常に表示（ルートフォルダ一覧）
-    if (filter === 'all') {
-      folderSection.style.display = 'block';
-    } else if (hasChildFolders) {
-      folderSection.style.display = 'block';
-    } else {
-      folderSection.style.display = 'none';
-    }
+ // 子フォルダがある場合のみフォルダセクションを表示
+ // allの場合は常に表示（ルートフォルダ一覧）
+ if (filter === 'all') {
+ folderSection.style.display = 'block';
+ } else if (hasChildFolders) {
+ folderSection.style.display = 'block';
+ } else {
+ folderSection.style.display = 'none';
+ }
 
-    applyFilters();
-  }
+ applyFilters();
+ }
 
-  function applyFilters() {
-    const q = searchInput.value.trim().toLowerCase();
+ function applyFilters() {
+ const q = searchInput.value.trim().toLowerCase();
 
-    // doc-card（通常資料カード）のフィルター
-    docs.forEach(doc => {
-      const folderMatch = currentFilter === 'all'
-        || doc.dataset.folder === currentFilter
-        || (currentFilter.startsWith('tag-') && doc.dataset.tags && doc.dataset.tags.includes(currentFilter));
-      const textMatch = !q || doc.dataset.text.toLowerCase().includes(q) || doc.querySelector('.doc-title').textContent.toLowerCase().includes(q);
-      doc.classList.toggle('hidden', !(folderMatch && textMatch));
+ // doc-card（通常資料カード）のフィルター
+ docs.forEach(doc => {
+ const folderMatch = currentFilter === 'all'
+ || doc.dataset.folder === currentFilter
+ || (currentFilter.startsWith('tag-') && doc.dataset.tags && doc.dataset.tags.includes(currentFilter));
+ const textMatch = !q || doc.dataset.text.toLowerCase().includes(q) || doc.querySelector('.doc-title').textContent.toLowerCase().includes(q);
+ doc.classList.toggle('hidden', !(folderMatch && textMatch));
 
-      // 検索ハイライト
-      const titleEl = doc.querySelector('.doc-title');
-      if (q && textMatch) {
-        const orig = titleEl.textContent;
-        const idx = orig.toLowerCase().indexOf(q);
-        if (idx >= 0) {
-          titleEl.innerHTML = orig.slice(0,idx) + '<mark>' + orig.slice(idx, idx+q.length) + '</mark>' + orig.slice(idx+q.length);
-        }
-      } else {
-        titleEl.innerHTML = titleEl.textContent;
-      }
-    });
-    // drive-card（ドライブリンクカード）のフィルター（doc-cardとは独立して処理）
-    const driveCards = document.querySelectorAll('.drive-card');
-    driveCards.forEach(card => {
-      const folderMatch = card.dataset.folder === currentFilter;
-      const textMatch = !q || (card.dataset.text && card.dataset.text.toLowerCase().includes(q))
-        || card.querySelector('.doc-title').textContent.toLowerCase().includes(q);
-      card.classList.toggle('hidden', !(folderMatch && textMatch));
-    });
+ // 検索ハイライト
+ const titleEl = doc.querySelector('.doc-title');
+ if (q && textMatch) {
+ const orig = titleEl.textContent;
+ const idx = orig.toLowerCase().indexOf(q);
+ if (idx >= 0) {
+ titleEl.innerHTML = orig.slice(0,idx) + '<mark>' + orig.slice(idx, idx+q.length) + '</mark>' + orig.slice(idx+q.length);
+ }
+ } else {
+ titleEl.innerHTML = titleEl.textContent;
+ }
+ });
+ // drive-card（ドライブリンクカード）のフィルター（doc-cardとは独立して処理）
+ const driveCards = document.querySelectorAll('.drive-card');
+ driveCards.forEach(card => {
+ const folderMatch = card.dataset.folder === currentFilter;
+ const textMatch = !q || (card.dataset.text && card.dataset.text.toLowerCase().includes(q))
+ || card.querySelector('.doc-title').textContent.toLowerCase().includes(q);
+ card.classList.toggle('hidden', !(folderMatch && textMatch));
+ });
 
-    updateStats();
-  }
+ updateStats();
+ }
 
-  searchInput.addEventListener('input', applyFilters);
+ searchInput.addEventListener('input', applyFilters);
 
-  // ページ完全読み込み後に初期表示を実行（CSS・DOM確定後）
-  window.addEventListener('load', function() {
-    filterSidebar('all', null);
-    updateStats();
-  });
+ // ページ完全読み込み後に初期表示を実行（CSS・DOM確定後）
+ window.addEventListener('load', function() {
+ filterSidebar('all', null);
+ updateStats();
+ });
 </script>
 </body>
 </html>
