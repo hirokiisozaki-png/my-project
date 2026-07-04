@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>クラウドとサーバーの違い（Q&A まとめ）</title>
+<style>
+  :root {
+    --blue: #2563eb;
+    --blue-light: #eff6ff;
+    --gray: #4b5563;
+    --gray-light: #f3f4f6;
+    --border: #e5e7eb;
+    --orange: #ea580c;
+    --orange-light: #fff7ed;
+    --green: #059669;
+    --green-light: #ecfdf5;
+    --red: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+    background: #f9fafb;
+    color: #1f2937;
+    margin: 0;
+    padding: 40px 16px;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+  .container { max-width: 880px; margin: 0 auto; width: 100%; }
+  h1 { text-align: center; font-size: 26px; margin-bottom: 8px; }
+  .subtitle { text-align: center; color: var(--gray); margin-bottom: 40px; font-size: 14px; }
+
+  h2 {
+    font-size: 19px;
+    border-left: 6px solid var(--blue);
+    padding-left: 12px;
+    margin-top: 48px;
+  }
+
+  .qa-block {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 20px;
+    max-width: 100%;
+  }
+  .q {
+    font-weight: bold;
+    color: var(--blue);
+    margin-bottom: 10px;
+    display: flex;
+    gap: 8px;
+  }
+  .q::before { content: "Q"; background: var(--blue); color: white; border-radius: 50%; width: 22px; height: 22px; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+  .a { display: flex; gap: 8px; }
+  .a::before { content: "A"; background: var(--green); color: white; border-radius: 50%; width: 22px; height: 22px; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; margin-top:2px; }
+  .a-content { flex: 1; min-width: 0; }
+
+  .correction {
+    background: var(--orange-light);
+    border-left: 4px solid var(--orange);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+
+  /* テーブル：デフォルト（PC）はそのまま表形式、横スクロール可能なラッパーで保護 */
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 16px;
+    border-radius: 8px;
+  }
+  table {
+    width: 100%;
+    min-width: 480px;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  th, td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; }
+  th { background: var(--blue); color: white; }
+  tr:nth-child(even) { background: var(--gray-light); }
+
+  .diagram {
+    background: var(--gray-light);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: monospace;
+    font-size: 12px;
+    margin: 14px 0;
+    overflow-x: auto;
+    white-space: pre;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .summary-box {
+    background: #1f2937;
+    color: white;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-top: 48px;
+  }
+  .summary-box h2 { color: white; border-left-color: #60a5fa; margin-top: 0; }
+  .summary-box p { margin: 8px 0; font-size: 14.5px; }
+
+  /* ===== スマホ（幅600px以下）向け調整 ===== */
+  @media (max-width: 600px) {
+    body { padding: 20px 10px; }
+    h1 { font-size: 21px; }
+    h1 span { display: block; margin-top: 4px; }
+    .subtitle { font-size: 12.5px; margin-bottom: 28px; }
+    h2 { font-size: 16px; margin-top: 32px; }
+    .qa-block { padding: 14px 14px; border-radius: 10px; }
+    .q { font-size: 14.5px; }
+    .a-content, .a { font-size: 14px; }
+    .correction { font-size: 12.5px; padding: 8px 10px; }
+    .summary-box { padding: 18px 16px; }
+    .summary-box p { font-size: 13px; }
+
+    /* テーブルをカード型（縦積み）に変換して枠はみ出しを防止 */
+    .table-wrap { overflow-x: visible; }
+    table { min-width: 0; width: 100%; }
+    table, thead, tbody, th, td, tr { display: block; }
+    table thead { display: none; }
+    table tr {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    table tr:first-child { display: none; } /* ヘッダー行(th)を非表示 */
+    table td {
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 10px;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      word-break: break-word;
+    }
+    table td:last-child { border-bottom: none; }
+    table td::before {
+      content: attr(data-label);
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--blue);
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>☁️ クラウドとサーバーの違い <span style="font-size:16px; color:#6b7280;">（Q&A まとめ）</span></h1>
+  <p class="subtitle">基礎知識から、ミラボットリンク（AWS）× オンプレ要件への応用までのQ&A記録</p>
+
+  <h2>1. サーバーとクラウドの基本</h2>
+
+  <div class="qa-block">
+    <div class="q">サーバーとは何か？</div>
+    <div class="a"><div class="a-content">
+      データやファイル、システムを保管し、他のパソコンやスマホからのリクエストに応じて情報を返す「コンピューター」のこと。<br>
+      例え：サーバーは「倉庫」。商品（データ）を保管しておき、注文（リクエスト）が来たら渡す。
+    </div></div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">クラウドとは何か？</div>
+    <div class="a"><div class="a-content">
+      サーバーを自分で持たずに、インターネット経由で借りて使う仕組み。Google・AWS・Microsoft等が世界中に用意した巨大なサーバー群を、必要な分だけ利用できる。<br>
+      例え：クラウドは「レンタル倉庫サービス」。自分で倉庫を建てず、必要な広さ・期間だけ借りる。管理（電気・警備・修理）はレンタル会社任せ。
+    </div></div>
+  </div>
+
+  <h2>2. よくある誤解と訂正</h2>
+
+  <div class="qa-block">
+    <div class="q">サーバー ＝ モニターと別にある「箱（本体）」という認識でよい？</div>
+    <div class="a"><div class="a-content">
+      それは違う。「モニターと別の箱」＝ PCの<strong>本体（タワー）</strong>という「形」の話であり、サーバーかどうかは「役割」で決まる。
+      <div class="correction">
+        普通のパソコン（操作する側）＝ クライアント<br>
+        情報を保管し、他PCの要求に応えて返す役割の機械 ＝ サーバー<br>
+        自宅PCでも共有設定をすれば一時的に「サーバーの役割」を果たす。
+      </div>
+    </div></div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">サーバーは目に見えないソフトウエアという認識でよい？</div>
+    <div class="a"><div class="a-content">
+      これも違う。正確には<strong>「ハードウェア（機械）＋ ソフトウェア（役割を果たすプログラム）」の組み合わせ</strong>。
+      <div class="correction">
+        クラウドサーバーの実体も、どこかのデータセンターにある物理の機械。ただし利用者からは画面操作だけで借りられるため「実体がない」ように見えるだけ。<br>
+        見えないのは「場所が遠いから」であって「ソフトウェアだから」ではない。
+      </div>
+    </div></div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">クラウド＝遠くのデータセンターで処理、サーバー＝会社内の機械、と「場所の違い」で覚えればよい？</div>
+    <div class="a"><div class="a-content">
+      惜しいが不十分。場所が違うことが多いのは事実だが、それは<strong>本質ではなく結果（副産物）</strong>。
+      <div class="correction">
+        社内の機械を外部からアクセス可能にしても、それは「社内サーバー」であってクラウドではない。<br>
+        本質的な違いは「誰が所有し、どういう契約・運用で使うか」。
+      </div>
+    </div></div>
+  </div>
+
+  <div class="table-wrap">
+  <table>
+    <tr><th>項目</th><th>サーバー（自社運用）</th><th>クラウド</th></tr>
+    <tr><td data-label="項目">機械の所有者</td><td data-label="サーバー（自社運用）">自社</td><td data-label="クラウド">クラウド事業者（Google・AWS等）</td></tr>
+    <tr><td data-label="項目">管理責任</td><td data-label="サーバー（自社運用）">自社（故障対応も自社）</td><td data-label="クラウド">事業者側</td></tr>
+    <tr><td data-label="項目">容量の増減</td><td data-label="サーバー（自社運用）">機械を買い足す／減らす</td><td data-label="クラウド">契約変更のみで即座に可能</td></tr>
+    <tr><td data-label="項目">初期費用</td><td data-label="サーバー（自社運用）">高い（購入・設置工事）</td><td data-label="クラウド">低い（申込みですぐ利用可）</td></tr>
+    <tr><td data-label="項目">料金体系</td><td data-label="サーバー（自社運用）">買い切り＋維持費</td><td data-label="クラウド">月額・従量課金が主流</td></tr>
+    <tr><td data-label="項目">複数企業での共有</td><td data-label="サーバー（自社運用）">基本は自社専有</td><td data-label="クラウド">裏側で他社と共有（仮想化で分離）</td></tr>
+  </table>
+  </div>
+
+  <h2>3. ミラボットリンク（AWS）とオンプレ要件</h2>
+
+  <div class="qa-block">
+    <div class="q">セキュリティの関係で自社サーバーのみ（オンプレ）の場合、ミラボットリンク（AWS利用）を組み込むことは不可能？</div>
+    <div class="a"><div class="a-content">
+      「完全に不可能」ではないが、AWSクラウド部分をそのまま使う限り「完全オンプレ・外部接続ゼロ」とは両立しない。要件のレベルによって対応が変わる。
+      <div class="table-wrap">
+      <table>
+        <tr><th>お客様の要件レベル</th><th>対応方法</th></tr>
+        <tr><td data-label="お客様の要件レベル">専用線・VPNならOK（閉域網）</td><td data-label="対応方法">AWS Direct Connect／拠点間VPN、AWS Outpostsで対応可能</td></tr>
+        <tr><td data-label="お客様の要件レベル">外部通信を一切禁止</td><td data-label="対応方法">AGV/AMR制御はオンプレで完結。クラウド機能（遠隔監視・分析等）はローカルサーバーで代替構築が必要（機能制限あり）。エッジサーバー／ゲートウェイ設置＋手動データ移送（USB等）で妥協することも</td></tr>
+      </table>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">社内回線は使えないが、別回線を設けてミラボットリンクを使う方法はある？セキュリティは守られる？</div>
+    <div class="a"><div class="a-content">
+      可能。正しく設計すればセキュリティは守れる。工場・倉庫のOT（制御）ネットワークでよく使われる方式（＝<strong>エアギャップ</strong>：社内基幹網とは物理的に分離する考え方）。
+      <div class="diagram">[社内基幹ネットワーク]
+   ← 完全に分離・接続なし →
+[AGV/AMR＋専用回線] → インターネット → AWS</div>
+      <strong>守るために必須の条件：</strong>
+      <div class="table-wrap">
+      <table>
+        <tr><th>条件</th><th>理由</th></tr>
+        <tr><td data-label="条件">物理的に別回線・別機器にする</td><td data-label="理由">同じPC/ルーターで両方繋ぐと分離の意味がなくなる</td></tr>
+        <tr><td data-label="条件">AGV/AMR制御機自体は社内網に繋がない</td><td data-label="理由">専用回線側のゲートウェイ機器のみAWSと通信させる</td></tr>
+        <tr><td data-label="条件">専用回線側にもファイアウォール等の対策</td><td data-label="理由">別回線＝無防備でよいわけではない。新しい入口ができるので対策が必要</td></tr>
+        <tr><td data-label="条件">安易な線の繋ぎ変えを防ぐ運用ルール</td><td data-label="理由">現場でのヒューマンエラー防止</td></tr>
+      </table>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">SIMルーターについて教えてほしい</div>
+    <div class="a"><div class="a-content">
+      携帯電話回線（docomo・au・SoftBank等）のSIMを挿して使う業務用インターネット接続機器。工事不要で電源を入れればすぐ接続できる。「別回線」要件における最も現実的な選択肢の一つ。
+      <div class="diagram">[AGV/AMR] → [SIMルーター(独自回線)]
+   → 携帯電話網 → インターネット
+   → AWS(ミラボットリンク)</div>
+      <div class="table-wrap">
+      <table>
+        <tr><th>メリット</th><th>内容</th></tr>
+        <tr><td data-label="メリット">工事不要</td><td data-label="内容">専用線と違い開通工事なしで即導入可能</td></tr>
+        <tr><td data-label="メリット">社内網から完全独立</td><td data-label="内容">既存の社内LAN・Wi-Fiに一切依存しない</td></tr>
+        <tr><td data-label="メリット">設置の柔軟性</td><td data-label="内容">電波が入ればどこでも設置可能</td></tr>
+        <tr><td data-label="メリット">コストが安い</td><td data-label="内容">専用線（Direct Connect等）より初期費用・月額が安いことが多い</td></tr>
+      </table>
+      </div>
+      <div class="table-wrap">
+      <table>
+        <tr><th>注意点</th><th>内容</th></tr>
+        <tr><td data-label="注意点">電波状況に依存</td><td data-label="内容">工場・倉庫は金属遮蔽が多く、事前の電波調査が必要</td></tr>
+        <tr><td data-label="注意点">通信量の上限</td><td data-label="内容">プランによっては月間容量制限があり、超過で速度制限</td></tr>
+        <tr><td data-label="注意点">セキュリティ設定が別途必要</td><td data-label="内容">ファイアウォール／VPN機能、宛先をAWSのみに制限する等の設定が必要</td></tr>
+        <tr><td data-label="注意点">閉域網SIM（推奨）</td><td data-label="内容">キャリア提供の閉域網接続サービス付きSIMなら、インターネットを経由せずAWSまで到達でき、よりセキュリティが高い</td></tr>
+      </table>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="summary-box">
+    <h2>全体まとめ</h2>
+    <p>🖥️ <strong>サーバー</strong> ＝ データを保管・処理する「ハード＋ソフトの組み合わせ」。役割で決まり、形（タワー型か否か）や場所は本質ではない。</p>
+    <p>☁️ <strong>クラウド</strong> ＝ そのサーバーを自分で持たずに、他社（AWS等）から契約・借用して使う仕組み。実体はやはりどこかの物理機械。</p>
+    <p>🔒 <strong>オンプレ要件への対応</strong> ＝ 「専用線・VPNならOK」か「外部通信ゼロ」かで対応方針が変わる。エアギャップ（物理分離）を保てば、別回線・SIMルーターでの構成も有効な選択肢。</p>
+  </div>
+
+</div>
+</body>
+</html>
