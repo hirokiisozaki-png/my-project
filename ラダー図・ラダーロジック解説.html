@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ラダー図・ラダーロジック解説 ─ AGV/AMR導入プロジェクト</title>
+<style>
+  :root {
+    --ink: #1e2a38;
+    --ink-sub: #4a5568;
+    --ink-muted: #8896a5;
+    --accent: #0f6e56;
+    --accent-light: #e1f5ee;
+    --accent-mid: #1d9e75;
+    --border: #d1dce8;
+    --surface: #f8fafc;
+    --white: #ffffff;
+    --warn: #854f0b;
+    --warn-bg: #faeeda;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Sans", "Meiryo", "Arial", sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--white);
+    line-height: 1.7;
+  }
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── ヘッダー ── */
+  .doc-header {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+  .doc-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    color: var(--accent-mid);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .doc-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .doc-sub {
+    font-size: 13px;
+    color: var(--ink-sub);
+  }
+  .doc-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  /* ── セクション ── */
+  .section { margin-bottom: 44px; }
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    border-left: 4px solid var(--accent);
+    padding-left: 12px;
+    margin-bottom: 14px;
+  }
+  .section-body {
+    font-size: 13.5px;
+    color: var(--ink-sub);
+    margin-bottom: 16px;
+    line-height: 1.8;
+  }
+
+  /* ── 図版 ── */
+  .figure-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 16px;
+    margin-bottom: 12px;
+  }
+  .figure-caption {
+    font-size: 12px;
+    color: var(--ink-muted);
+    text-align: center;
+    margin-top: 8px;
+  }
+  svg text { font-family: "Hiragino Sans", "Meiryo", "Arial", sans-serif; }
+
+  /* ── テーブル ── */
+  .phase-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  .phase-table th {
+    background: var(--ink);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 14px;
+    text-align: left;
+    border: 1px solid var(--ink);
+  }
+  .phase-table td {
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .phase-table tr:nth-child(even) td { background: var(--surface); }
+  .phase-table tr:hover td { background: var(--accent-light); }
+  .phase-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    margin-bottom: 4px;
+  }
+  .col-sym  { width: 16%; }
+  .col-name { width: 20%; }
+  .col-desc { width: 34%; }
+  .col-eg   { width: 30%; }
+
+  /* ── 注記ボックス ── */
+  .notice-box {
+    background: var(--warn-bg);
+    border-left: 4px solid var(--warn);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 8px;
+  }
+  .notice-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--warn);
+    margin-bottom: 8px;
+  }
+  .notice-box ul { padding-left: 20px; }
+  .notice-box li { font-size: 13px; color: var(--ink-sub); margin-bottom: 6px; line-height: 1.7; }
+
+  /* ── フッター ── */
+  .doc-footer {
+    margin-top: 60px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--ink-muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ── レスポンシブ（600px以下でテーブルをカード化）── */
+  @media (max-width: 600px) {
+    .page { padding: 28px 16px 60px; }
+    .doc-title { font-size: 21px; }
+    .phase-table, .phase-table thead, .phase-table tbody, .phase-table th, .phase-table td, .phase-table tr {
+      display: block;
+    }
+    .phase-table thead { display: none; }
+    .phase-table tr {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .phase-table td {
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 14px;
+    }
+    .phase-table td:last-child { border-bottom: none; }
+    .phase-table td::before {
+      content: attr(data-label);
+      display: block;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--accent-mid);
+      margin-bottom: 3px;
+    }
+    .figure-box svg { width: 100%; height: auto; }
+  }
+
+  @media print {
+    body { font-size: 12px; }
+    .page { padding: 20px 24px; }
+    .phase-table tr:hover td { background: inherit; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div class="doc-label">社内参考資料 ／ 知識</div>
+    <div class="doc-title">ラダー図・ラダーロジック解説</div>
+    <div class="doc-sub">PLC制御の基本と、AGV/AMR導入案件における位置づけ</div>
+    <div class="doc-meta">
+      <span>作成：ミラボット株式会社</span>
+      <span>区分：社外秘</span>
+    </div>
+  </div>
+
+  <!-- 1. ラダーとは -->
+  <div class="section">
+    <div class="section-title">1. ラダーとは</div>
+    <div class="section-body">
+      ラダー（ラダー図・ラダーロジック）とは、PLC（プログラマブルロジックコントローラ）を制御するためのプログラミング言語のひとつ。図の形状が「はしご（ladder）」に似ていることが名称の由来である。<br>
+      左右の縦線（母線）の間に、条件（接点）と結果（コイル）を1本の横棒（ラング）としてつなげ、上から下へ順番に実行される。電気回路と同じ感覚で読めるのが特徴。
+    </div>
+  </div>
+
+  <!-- 2. 基本構造（図） -->
+  <div class="section">
+    <div class="section-title">2. 基本構造</div>
+    <div class="section-body">
+      「起動SWがON、かつ、安全センサーが正常（未検知）のとき、モーターをONにする」という制御を例に示す。左側の接点がすべて導通すると、右側のコイル（出力）がONになる。
+    </div>
+    <div class="figure-box">
+      <svg viewBox="0 0 680 200" width="100%" xmlns="http://www.w3.org/2000/svg">
+        <line x1="50" y1="30" x2="50" y2="170" stroke="#1e2a38" stroke-width="2"/>
+        <line x1="630" y1="30" x2="630" y2="170" stroke="#1e2a38" stroke-width="2"/>
+        <text x="50" y="20" text-anchor="middle" font-size="12" fill="#4a5568">L</text>
+        <text x="630" y="20" text-anchor="middle" font-size="12" fill="#4a5568">N</text>
+
+        <line x1="50" y1="110" x2="168" y2="110" stroke="#1e2a38" stroke-width="1.5"/>
+        <line x1="170" y1="98" x2="170" y2="122" stroke="#1e2a38" stroke-width="1.5"/>
+        <line x1="182" y1="98" x2="182" y2="122" stroke="#1e2a38" stroke-width="1.5"/>
+        <text x="176" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#1e2a38">起動SW</text>
+        <text x="176" y="140" text-anchor="middle" font-size="11" fill="#4a5568">a接点</text>
+
+        <line x1="184" y1="110" x2="298" y2="110" stroke="#1e2a38" stroke-width="1.5"/>
+        <line x1="300" y1="98" x2="300" y2="122" stroke="#1e2a38" stroke-width="1.5"/>
+        <line x1="312" y1="98" x2="312" y2="122" stroke="#1e2a38" stroke-width="1.5"/>
+        <line x1="296" y1="124" x2="316" y2="96" stroke="#1e2a38" stroke-width="1.5"/>
+        <text x="306" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#1e2a38">安全センサー</text>
+        <text x="306" y="140" text-anchor="middle" font-size="11" fill="#4a5568">b接点</text>
+
+        <line x1="314" y1="110" x2="470" y2="110" stroke="#1e2a38" stroke-width="1.5"/>
+        <circle cx="500" cy="110" r="20" fill="none" stroke="#1e2a38" stroke-width="1.5"/>
+        <text x="500" y="115" text-anchor="middle" font-size="13" font-weight="700" fill="#1e2a38">M</text>
+        <text x="500" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="#1e2a38">モーター</text>
+        <text x="500" y="140" text-anchor="middle" font-size="11" fill="#4a5568">出力コイル</text>
+        <line x1="520" y1="110" x2="630" y2="110" stroke="#1e2a38" stroke-width="1.5"/>
+
+        <text x="340" y="180" text-anchor="middle" font-size="12" fill="#0f6e56" font-weight="600">起動SWがON かつ 安全センサーが正常（OFF）のときだけモーターがON</text>
+      </svg>
+      <div class="figure-caption">図1：AND条件の基本ラダー図（起動SW × 安全センサー → モーター出力）</div>
+    </div>
+  </div>
+
+  <!-- 3. 主な記号 -->
+  <div class="section">
+    <div class="section-title">3. 主な記号</div>
+    <table class="phase-table">
+      <thead>
+        <tr>
+          <th class="col-sym">記号</th>
+          <th class="col-name">名称</th>
+          <th class="col-desc">意味</th>
+          <th class="col-eg">読み方のイメージ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="記号"><span class="phase-tag">-| |-</span></td>
+          <td data-label="名称">a接点（ノーマルオープン）</td>
+          <td data-label="意味">普段はOFF（回路が開いている）。条件が成立するとONになる</td>
+          <td data-label="読み方のイメージ">ボタンを押すとON</td>
+        </tr>
+        <tr>
+          <td data-label="記号"><span class="phase-tag">-|/|-</span></td>
+          <td data-label="名称">b接点（ノーマルクローズ）</td>
+          <td data-label="意味">普段はON（回路が閉じている）。条件が成立するとOFFになる</td>
+          <td data-label="読み方のイメージ">普段ON、押すとOFF</td>
+        </tr>
+        <tr>
+          <td data-label="記号"><span class="phase-tag">-( )-</span></td>
+          <td data-label="名称">コイル（出力）</td>
+          <td data-label="意味">ラング左側の条件がすべて成立したときにONになる出力</td>
+          <td data-label="読み方のイメージ">ランプやモーターへの出力</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="section-body">
+      左側の接点がAND条件なら直列に、OR条件なら並列に並べる。この発想だけ押さえておけば、現場でラダー図を見たときに大まかな動作を追える。
+    </div>
+  </div>
+
+  <!-- 4. AGV/AMR案件での位置づけ -->
+  <div class="section">
+    <div class="section-title">4. AGV/AMR案件での位置づけ</div>
+    <div class="section-body">
+      AGV/AMRの周辺設備（自動ドア、シャッター、信号連携、充電ステーション等）の多くはPLCで制御されており、SIer側が既存のラダープログラムを解析・改修する場面がある。
+    </div>
+    <div class="notice-box">
+      <div class="notice-title">現場で押さえておくポイント</div>
+      <ul>
+        <li>AND条件は接点を直列に、OR条件は接点を並列に並べる、という基本形だけでも図面の大まかな動作は追える。</li>
+        <li>安全センサーやインターロックはb接点（普段ON）で組まれることが多く、断線時にも安全側（OFF）に倒れる設計思想（フェールセーフ）になっている。</li>
+        <li>既存設備との接続工事・PLC改修は電気工事士資格を要する場合があり、SIer業務概要（本フォルダ内）とあわせて確認するとよい。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <span>ミラボット株式会社　社外秘</span>
+    <span>本資料の外部への無断転用を禁じます</span>
+  </div>
+
+</div>
+</body>
+</html>
