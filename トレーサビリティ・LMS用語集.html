@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>トレーサビリティ・LMS 用語集 | ミラボット</title>
+<style>
+  :root {
+    --accent: #1a56db;
+    --accent-light: #eff6ff;
+    --ink: #1e293b;
+    --ink-muted: #64748b;
+    --border: #e2e8f0;
+    --bg: #f8fafc;
+    --white: #ffffff;
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --amber: #b45309;
+    --amber-light: #fef3c7;
+    --teal: #0f766e;
+    --teal-light: #ccfbf1;
+    --purple: #6d28d9;
+    --purple-light: #ede9fe;
+    --red: #b91c1c;
+    --red-light: #fee2e2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    padding: 32px 40px 28px;
+    color: #fff;
+  }
+  .page-header .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+    text-decoration: none;
+    margin-bottom: 16px;
+  }
+  .page-header .back-link:hover { color: #fff; }
+  .page-header h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+  .page-header .subtitle { font-size: 13px; color: #94a3b8; }
+  .page-header .badges { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(255,255,255,0.12);
+    color: #e2e8f0;
+  }
+
+  .toc-wrap {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  }
+  .toc-label { font-size: 11px; font-weight: 700; color: var(--ink-muted); margin-bottom: 8px; letter-spacing: .08em; }
+  .toc-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .toc-link {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-light);
+    text-decoration: none;
+    border: 1px solid #bfdbfe;
+  }
+  .toc-link:hover { background: var(--accent); color: #fff; }
+
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  .section { margin-bottom: 48px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title { font-size: 20px; font-weight: 800; color: var(--ink); }
+  .section-en { font-size: 12px; color: var(--ink-muted); font-weight: 500; margin-left: 4px; }
+
+  .term-block {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .term-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .term-icon {
+    font-size: 22px;
+    width: 40px; height: 40px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .term-name { font-size: 18px; font-weight: 800; }
+  .term-full { font-size: 12px; color: var(--ink-muted); margin-top: 1px; }
+  .term-tag {
+    margin-left: auto;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .term-body { padding: 18px 20px; }
+
+  .one-liner {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+  }
+
+  .detail { font-size: 13.5px; color: #374151; margin-bottom: 14px; }
+  .detail p { margin-bottom: 8px; }
+
+  .check-list { list-style: none; padding: 0; }
+  .check-list li {
+    font-size: 13px;
+    padding: 4px 0 4px 22px;
+    position: relative;
+    color: #374151;
+  }
+  .check-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .flow-box {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 2;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+  .flow-box .fl { color: #67e8f9; font-weight: 700; }
+  .flow-box .arrow { color: #4ade80; }
+  .flow-box .note { color: #94a3b8; }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .compare-table th {
+    background: var(--accent);
+    color: #fff;
+    padding: 9px 14px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 12px;
+  }
+  .compare-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    background: var(--white);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f9fafb; }
+  .good { color: var(--green); font-weight: 700; }
+  .bad  { color: var(--red);   font-weight: 700; }
+
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .summary-table th {
+    background: #1e293b;
+    color: #fff;
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 12px;
+  }
+  .summary-table td {
+    padding: 9px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    font-size: 12.5px;
+  }
+  .summary-table tr:nth-child(even) td { background: #f9fafb; }
+  .summary-table tr:last-child td { border-bottom: none; }
+
+  /* レスポンシブ：スマホでは表をカード化 */
+  @media (max-width: 640px) {
+    .page-header { padding: 24px 20px 20px; }
+    .toc-wrap { padding: 16px 20px; }
+    .content { padding: 28px 16px 60px; }
+    .term-head { flex-wrap: wrap; }
+    .compare-table, .compare-table thead, .compare-table tbody, .compare-table th, .compare-table td, .compare-table tr {
+      display: block;
+    }
+    .compare-table thead { display: none; }
+    .compare-table tr { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; padding: 8px 0; }
+    .compare-table td { border: none; padding: 6px 14px; }
+    .compare-table td::before {
+      content: attr(data-label);
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      margin-bottom: 2px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="badges">
+    <span class="badge">知識</span>
+    <span class="badge">物流・SI用語</span>
+  </div>
+  <h1>トレーサビリティ・LMS 用語集</h1>
+  <div class="subtitle">AGV/AMR導入・物流自動化の現場で頻出する用語をまとめた社内参考資料</div>
+</div>
+
+<div class="toc-wrap">
+  <div class="toc-label">目次</div>
+  <div class="toc-list">
+    <a class="toc-link" href="#traceability">① トレーサビリティ</a>
+    <a class="toc-link" href="#lms">② LMS（物流・倉庫管理システム）</a>
+    <a class="toc-link" href="#compare">③ 関連システムの違い</a>
+    <a class="toc-link" href="#summary">④ 用語早見表</a>
+  </div>
+</div>
+
+<div class="content">
+
+  <div class="section" id="traceability">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div>
+        <span class="section-title">トレーサビリティ</span>
+        <span class="section-en">Traceability</span>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon" style="background:var(--accent-light);">🔍</div>
+        <div>
+          <div class="term-name">トレーサビリティ</div>
+          <div class="term-full">Traceability（追跡可能性）</div>
+        </div>
+        <span class="term-tag" style="background:var(--accent-light); color:var(--accent);">基本用語</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">「いつ・どこで・誰が・何を・どう扱ったか」を後から追跡できる状態のこと</div>
+        <div class="detail">
+          <p>物流・製造現場では、荷物や部品がいつ入庫し、どの棚に置かれ、いつ誰（どのAGV/AMR、どの作業者）が搬送し、いつ出庫したかを記録・追跡できる仕組みを指す。品質トラブルやクレーム発生時に「原因の特定」「影響範囲の特定」「回収対象の絞り込み」を迅速に行うために不可欠。</p>
+          <p>AGV/AMR導入の文脈では、搬送ログ（いつ・どのロボットが・何を・どこからどこへ運んだか）を記録することがトレーサビリティ確保の中核になる。</p>
+        </div>
+        <ul class="check-list">
+          <li>ロット単位・個品単位など、追跡する粒度は業種・案件により異なる</li>
+          <li>AGV/AMRのMIRABOT LINKなどのフリート管理ソフトが搬送履歴ログを保持することで実現しやすくなる</li>
+          <li>食品・医薬品・自動車部品など、法令や取引先要求でトレーサビリティが必須の業界も多い</li>
+          <li>「入荷→保管→ピッキング→出荷」の各工程でデータが途切れないことが重要（工程間の連携が弱いと追跡が途切れる）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon" style="background:var(--teal-light);">🏷️</div>
+        <div>
+          <div class="term-name">トレース対象の粒度</div>
+          <div class="term-full">ロットトレース／個品トレース</div>
+        </div>
+        <span class="term-tag" style="background:var(--teal-light); color:var(--teal);">関連概念</span>
+      </div>
+      <div class="term-body">
+        <table class="compare-table">
+          <thead><tr><th>種類</th><th>内容</th><th>向いている業種</th></tr></thead>
+          <tbody>
+            <tr>
+              <td data-label="種類">ロットトレース</td>
+              <td data-label="内容">同じ製造ロット・入荷ロット単位でまとめて追跡</td>
+              <td data-label="向いている業種">食品、化学製品など</td>
+            </tr>
+            <tr>
+              <td data-label="種類">個品トレース</td>
+              <td data-label="内容">1点ごとにシリアル番号などで個別に追跡</td>
+              <td data-label="向いている業種">自動車部品、精密機器など</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="lms">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div>
+        <span class="section-title">LMS（物流・倉庫管理システム）</span>
+        <span class="section-en">Logistics / Warehouse Management System</span>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-head">
+        <div class="term-icon" style="background:var(--purple-light);">📦</div>
+        <div>
+          <div class="term-name">LMS</div>
+          <div class="term-full">Logistics Management System（物流管理システム）</div>
+        </div>
+        <span class="term-tag" style="background:var(--purple-light); color:var(--purple);">基本用語</span>
+      </div>
+      <div class="term-body">
+        <div class="one-liner">入荷から出荷まで、モノの流れ全体を管理・最適化するシステム</div>
+        <div class="detail">
+          <p>倉庫内の在庫管理だけでなく、輸配送計画、拠点間の在庫移動、コスト管理など、サプライチェーン全体の物流業務を統括的に管理するシステムを指す。WMS（倉庫管理システム）よりも扱う範囲が広く、複数拠点・複数倉庫をまたいだ物流全体の最適化を担うことが多い。</p>
+          <p>案件によっては「LMS」が特定の倉庫内の管理システムを指す狭義の意味で使われることもあるため、提案時にはどの範囲を指しているか案件ごとに確認するのが望ましい。</p>
+        </div>
+        <div class="flow-box">
+<span class="fl">受注</span> <span class="arrow">→</span> <span class="fl">出荷計画</span> <span class="arrow">→</span> <span class="fl">倉庫作業指示</span> <span class="arrow">→</span> <span class="fl">配車・配送</span> <span class="arrow">→</span> <span class="fl">着荷確認</span>
+<span class="note">　　　　　　　　　　　　LMSがこの一連の流れ全体を管理</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="compare">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div>
+        <span class="section-title">関連システムの違い</span>
+        <span class="section-en">LMS / WMS / WCS の違い</span>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-body">
+        <div class="detail">
+          <p>AGV/AMR導入の提案時に混同されやすい3つの略語の違いを整理する。</p>
+        </div>
+        <table class="compare-table">
+          <thead><tr><th>略称</th><th>正式名称</th><th>役割</th></tr></thead>
+          <tbody>
+            <tr>
+              <td data-label="略称"><strong>LMS</strong></td>
+              <td data-label="正式名称">Logistics Management System</td>
+              <td data-label="役割">拠点をまたぐ物流全体の管理・最適化（最も広い範囲）</td>
+            </tr>
+            <tr>
+              <td data-label="略称"><strong>WMS</strong></td>
+              <td data-label="正式名称">Warehouse Management System</td>
+              <td data-label="役割">単一倉庫内の在庫・入出庫・ロケーション管理</td>
+            </tr>
+            <tr>
+              <td data-label="略称"><strong>WCS</strong></td>
+              <td data-label="正式名称">Warehouse Control System</td>
+              <td data-label="役割">AGV/AMR・コンベア等の現場設備をリアルタイムに制御</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="detail" style="margin-top:14px;">
+          <p>MIRABOT LINKのようなAGV/AMRのフリート管理ソフトは、主にWCS（現場制御）の役割を担いつつ、API連携によってWMS・LMS側に搬送実績データを渡すことでトレーサビリティ確保に貢献する構成が一般的。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="summary">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div>
+        <span class="section-title">用語早見表</span>
+      </div>
+    </div>
+    <table class="summary-table">
+      <thead><tr><th>用語</th><th>意味</th></tr></thead>
+      <tbody>
+        <tr><td>トレーサビリティ</td><td>いつ・どこで・誰が・何を扱ったかを後から追跡できる状態</td></tr>
+        <tr><td>ロットトレース</td><td>製造・入荷ロット単位でまとめて追跡する方式</td></tr>
+        <tr><td>個品トレース</td><td>1点ごとに個別番号で追跡する方式</td></tr>
+        <tr><td>LMS</td><td>拠点をまたぐ物流全体を管理するシステム（物流管理システム）</td></tr>
+        <tr><td>WMS</td><td>単一倉庫内の在庫・入出庫を管理するシステム</td></tr>
+        <tr><td>WCS</td><td>AGV/AMRなど現場設備をリアルタイム制御するシステム</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>
