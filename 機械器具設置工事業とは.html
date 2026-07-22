@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>機械器具設置工事業とは ─ 建設業法・許可業種解説</title>
+<style>
+  :root {
+    --ink: #1e2a38;
+    --ink-sub: #4a5568;
+    --ink-muted: #8896a5;
+    --accent: #0f6e56;
+    --accent-light: #e1f5ee;
+    --accent-mid: #1d9e75;
+    --border: #d1dce8;
+    --surface: #f8fafc;
+    --white: #ffffff;
+    --warn: #854f0b;
+    --warn-bg: #faeeda;
+    --bad: #9f1d1d;
+    --bad-bg: #fbe9e9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Hiragino Sans", "Meiryo", "Arial", sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--white);
+    line-height: 1.7;
+  }
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── ヘッダー ── */
+  .doc-header {
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+  .doc-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    color: var(--accent-mid);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .doc-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+  .doc-sub {
+    font-size: 13px;
+    color: var(--ink-sub);
+  }
+  .doc-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--ink-muted);
+    flex-wrap: wrap;
+  }
+
+  /* ── セクション ── */
+  .section { margin-bottom: 44px; }
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink);
+    border-left: 4px solid var(--accent);
+    padding-left: 12px;
+    margin-bottom: 14px;
+  }
+  .section-body {
+    font-size: 13.5px;
+    color: var(--ink-sub);
+    margin-bottom: 16px;
+    line-height: 1.8;
+  }
+  .section-body b { color: var(--ink); }
+
+  /* ── 定義ボックス ── */
+  .def-box {
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.8;
+  }
+  .def-box .def-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  /* ── テーブル ── */
+  .data-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  .data-table th {
+    background: var(--ink);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 10px 14px;
+    text-align: left;
+    border: 1px solid var(--ink);
+  }
+  .data-table td {
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .data-table tr:nth-child(even) td { background: var(--surface); }
+  .data-table tr:hover td { background: var(--accent-light); }
+  .row-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .row-tag.bad { background: var(--bad); }
+
+  /* ── 該当／非該当 2カラム ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .compare-card {
+    border-radius: 6px;
+    padding: 16px 18px;
+  }
+  .compare-card.ok { background: var(--accent-light); border-left: 4px solid var(--accent); }
+  .compare-card.ng { background: var(--bad-bg); border-left: 4px solid var(--bad); }
+  .compare-card .compare-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .compare-card.ok .compare-title { color: var(--accent); }
+  .compare-card.ng .compare-title { color: var(--bad); }
+  .compare-card ul { list-style: none; padding: 0; }
+  .compare-card ul li {
+    font-size: 12.5px;
+    color: var(--ink-sub);
+    padding: 4px 0 4px 16px;
+    position: relative;
+  }
+  .compare-card.ok ul li::before { content: "○"; position: absolute; left: 0; color: var(--accent); }
+  .compare-card.ng ul li::before { content: "×"; position: absolute; left: 0; color: var(--bad); }
+
+  /* ── 資格注記ボックス ── */
+  .notice-box {
+    background: var(--warn-bg);
+    border-left: 4px solid var(--warn);
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+  }
+  .notice-box .notice-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--warn);
+    margin-bottom: 8px;
+  }
+  .notice-box ul { list-style: none; padding: 0; }
+  .notice-box ul li {
+    font-size: 13px;
+    color: #5a3a08;
+    padding: 3px 0 3px 16px;
+    position: relative;
+  }
+  .notice-box ul li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--warn);
+  }
+
+  /* ── 関連リンク ── */
+  .link-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-size: 12.5px;
+    color: var(--ink-sub);
+  }
+  .link-box a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .link-box a:hover { text-decoration: underline; }
+
+  /* ── フッター ── */
+  .doc-footer {
+    margin-top: 60px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--ink-muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ── レスポンシブ（スマホ：表→カード） ── */
+  @media (max-width: 680px) {
+    .page { padding: 28px 18px 60px; }
+    .doc-title { font-size: 21px; }
+    .compare-grid { grid-template-columns: 1fr; }
+
+    .data-table thead { display: none; }
+    .data-table, .data-table tbody, .data-table tr, .data-table td {
+      display: block;
+      width: 100%;
+    }
+    .data-table tr {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 12px;
+      padding: 10px 4px;
+      background: var(--white);
+    }
+    .data-table tr:nth-child(even) td { background: transparent; }
+    .data-table td {
+      border: none;
+      padding: 6px 12px;
+    }
+    .data-table td::before {
+      content: attr(data-label);
+      display: block;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--accent-mid);
+      letter-spacing: .04em;
+      margin-bottom: 2px;
+    }
+  }
+
+  @media print {
+    body { font-size: 12px; }
+    .page { padding: 20px 24px; }
+    .data-table tr:hover td { background: inherit; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div class="doc-label">社内参考資料 ／ 知識</div>
+    <div class="doc-title">機械器具設置工事業とは</div>
+    <div class="doc-sub">建設業法が定める29業種のひとつ／AGV・AMR導入プロジェクトとの関わり</div>
+    <div class="doc-meta">
+      <span>作成：ミラボット株式会社</span>
+      <span>区分：社内共有</span>
+    </div>
+  </div>
+
+  <!-- 1. 定義 -->
+  <div class="section">
+    <div class="section-title">1. 定義</div>
+    <div class="section-body">
+      機械器具設置工事業は、建設業法 別表第一（別表第二とする資料もあり）に定められた29の建設業許可業種のひとつである。設置というと「工事」のイメージが薄いが、法律上は明確に建設工事業種のひとつとして扱われる。
+    </div>
+    <div class="def-box">
+      <div class="def-label">法令上の定義</div>
+      機械器具の組立て等により、土木若しくは建築に関する工作物を建設し、または工作物の一部を組成し、若しくは工作物と一体となって効用を発揮する機械器具を工作物に取り付ける工事をいう。
+    </div>
+    <div class="section-body">
+      平たく言えば、<b>「すでにある設備等に材料を持ち込み、その場で複数の機械を組み立てて連動させ、設置する工事」</b>のことである。単に既製品を運んで置くだけの作業や、単体で完結する機械の設置は該当しない。
+    </div>
+  </div>
+
+  <!-- 2. 該当する/しない -->
+  <div class="section">
+    <div class="section-title">2. 該当する工事・該当しない工事</div>
+    <div class="section-body">
+      実務上、機械器具設置工事に該当するかどうかの判断は簡単ではなく、内容によっては「とび・土工工事」や「管工事」など他の専門工事業種に分類される。判断を誤ると建設業許可の実務経験証明が認められないため、注意が必要である。
+    </div>
+    <div class="compare-grid">
+      <div class="compare-card ok">
+        <div class="compare-title">該当する（機械器具設置工事）</div>
+        <ul>
+          <li>プラント設備・ボイラー設備の据付工事</li>
+          <li>運搬機器設置工事（コンベア、エレベーター等）</li>
+          <li>給排気機器設置工事（トンネル・地下道向け等）</li>
+          <li>立体駐車設備工事、遊技施設工事</li>
+          <li>内燃力発電設備工事、集塵機器設置工事</li>
+          <li>複数の設備・機械を連動させて組み立てる工事</li>
+        </ul>
+      </div>
+      <div class="compare-card ng">
+        <div class="compare-title">該当しない（他業種に分類）</div>
+        <ul>
+          <li>既製機械器具の搬入・運搬のみ（工事に該当せず）</li>
+          <li>ボルト止め・アンカー固定のみ →「とび・土工工事」</li>
+          <li>建築物内の一般的な空調機器設置 →「管工事」</li>
+          <li>単体で使用できる機械を組み立てるだけの設置</li>
+          <li>電気配線を伴う設置 →「電気工事」に該当する場合あり</li>
+          <li>他の専門工事業種に明確に該当する工事全般</li>
+        </ul>
+      </div>
+    </div>
+    <div class="notice-box">
+      <div class="notice-title">判断のポイント</div>
+      <ul>
+        <li>現場で複数の機械・設備を組み立てて「連動」させる必要があるか</li>
+        <li>他のどの専門工事業種（電気工事・管工事・とび土工工事等）にも当てはまらないか</li>
+        <li>この2点を満たす場合にはじめて「機械器具設置工事」と判断される</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. AGV/AMRとの関連 -->
+  <div class="section">
+    <div class="section-title">3. AGV/AMR導入プロジェクトとの関連</div>
+    <div class="section-body">
+      AGV/AMR導入では、本体・充電ステーション・ゲート・ラック等の周辺設備を工場や倉庫に据え付ける工事が発生する。これが機械器具設置工事に該当するかは、工事内容と規模によって判断が分かれる。
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ケース</th>
+          <th>想定される分類</th>
+          <th>備考</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="ケース"><span class="row-tag bad">非該当寄り</span></td>
+          <td data-label="想定される分類">AGV/AMR本体の搬入・設置のみ（アンカー固定程度）</td>
+          <td data-label="備考">「とび・土工工事」に近いと判断されやすい</td>
+        </tr>
+        <tr>
+          <td data-label="ケース"><span class="row-tag">該当し得る</span></td>
+          <td data-label="想定される分類">コンベア・ゲート・ラック等、複数設備と連動させる大規模な据付</td>
+          <td data-label="備考">機械器具設置工事業の許可が絡む可能性あり</td>
+        </tr>
+        <tr>
+          <td data-label="ケース"><span class="row-tag">要個別確認</span></td>
+          <td data-label="想定される分類">電源・配線工事を伴う設置</td>
+          <td data-label="備考">「電気工事」に該当し、電気工事士資格が必要な場合あり</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="section-body">
+      実際の許可要否は案件ごとの工事内容・規模で判断が分かれるため、個別に確認が必要である（詳細は「SIer業務概要」ページの関連セクションも参照）。
+    </div>
+  </div>
+
+  <!-- 4. 許可取得要件 -->
+  <div class="section">
+    <div class="section-title">4. 建設業許可の取得要件（請負金額500万円以上の場合）</div>
+    <div class="section-body">
+      請負代金500万円未満の工事（軽微な工事）は建設業許可不要で実施できる。500万円以上の場合は建設業許可が必要となり、営業所ごとに専任技術者の配置が義務づけられる。
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>要件区分</th>
+          <th>内容</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-label="要件区分">実務経験による場合</td>
+          <td data-label="内容">機械器具設置工事に関する実務経験10年以上の証明が必要（指定学科卒業者は5年・3年に短縮される場合あり）</td>
+        </tr>
+        <tr>
+          <td data-label="要件区分">資格による場合</td>
+          <td data-label="内容">1級／2級機械施工管理技士、技術士（機械部門等）等の保有者を専任技術者として配置</td>
+        </tr>
+        <tr>
+          <td data-label="要件区分">許可の難易度</td>
+          <td data-label="内容">「他の専門工事」と判定され実務経験が認められないケースが多く、他業種より取得難易度が高いとされる</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="notice-box">
+      <div class="notice-title">社内に有資格者がいない場合の実務対応</div>
+      <ul>
+        <li>該当工事を専門のSIerや工事業者へ外注（下請け）するのが実務上一般的</li>
+        <li>ミラボット社が元請けとして500万円以上の工事を直接契約する場合は、自社での許可取得（専任技術者の確保）が必要</li>
+        <li>個別案件での許可要否の最終判断は、行政書士または都道府県の建設業許可担当窓口への確認を要する</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="link-box">
+      関連資料：<a href="SIer業務概要.html" target="_blank">SIer業務概要 ─ AGV/AMR導入プロジェクト</a>（フェーズ別業務内容・法的にSIerが必要な業務についても解説）
+    </div>
+  </div>
+
+  <div class="doc-footer">
+    <span>ミラボット株式会社　社内共有資料</span>
+    <span>個別案件の許可要否は行政書士等の専門家への確認を推奨</span>
+  </div>
+
+</div>
+</body>
+</html>
