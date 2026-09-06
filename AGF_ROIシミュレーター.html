@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGF ROIシミュレーター</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f4f7; color: #1a3a4a; min-height: 100vh; }
+  header { background: #1a3a4a; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+  header h1 { font-size: 18px; font-weight: 700; color: #fff; }
+  header .logo { font-size: 15px; font-weight: 800; color: #02C39A; letter-spacing: 0.1em; }
+  .container { max-width: 1260px; margin: 0 auto; padding: 24px 24px 48px; display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
+  .panel { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.07); overflow: hidden; margin-bottom: 16px; }
+  .panel:last-child { margin-bottom: 0; }
+  .panel-head { background: #028090; padding: 13px 20px; font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.04em; }
+  .panel-head.alert-head { background: #b45309; }
+  .panel-body { padding: 18px 20px; }
+  .confirm-banner { background: #fffbeb; border: 1.5px solid #d97706; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; font-size: 12px; color: #92400e; line-height: 1.6; }
+  .confirm-banner strong { color: #b45309; }
+  .machine-confirm { margin-bottom: 18px; }
+  .machine-confirm:last-child { margin-bottom: 0; }
+  .machine-name { font-size: 12px; font-weight: 700; color: #1a3a4a; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .machine-name .badge { background: #028090; color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 10px; }
+  .machine-sub { font-size: 11px; color: #94a3b8; margin-bottom: 8px; padding-left: 2px; }
+  .toggle-row { display: flex; gap: 0; border-radius: 8px; overflow: hidden; border: 1.5px solid #028090; width: fit-content; }
+  .toggle-btn { padding: 8px 24px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; transition: background 0.15s, color 0.15s; background: #fff; color: #028090; }
+  .toggle-btn.active { background: #028090; color: #fff; }
+  .toggle-btn:first-child { border-right: 1.5px solid #028090; }
+  .confirmed-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: #059669; background: #ecfdf5; border: 1px solid #059669; border-radius: 10px; padding: 2px 8px; }
+  .unconfirmed-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: #d97706; background: #fffbeb; border: 1px solid #d97706; border-radius: 10px; padding: 2px 8px; }
+  .param-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+  .param-row:last-child { border-bottom: none; }
+  .param-label { color: #64748b; }
+  .param-value { font-weight: 700; color: #1a3a4a; }
+  .task-section-label { font-size: 11px; font-weight: 700; color: #028090; letter-spacing: 0.06em; margin: 14px 0 7px; text-transform: uppercase; }
+  .task-item { display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; border-radius: 7px; margin-bottom: 3px; cursor: pointer; transition: background 0.15s; user-select: none; }
+  .task-item:hover { background: #f0f9fb; }
+  .task-item.zero-task { opacity: 0.35; pointer-events: none; }
+  .task-left { display: flex; align-items: center; gap: 10px; }
+  .task-item input[type="checkbox"] { display: none; }
+  .check-box { width: 17px; height: 17px; border: 2px solid #028090; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
+  .task-item input:checked + .check-box { background: #028090; }
+  .task-item input:not(:checked) + .check-box { background: #fff; }
+  .check-box::after { content:''; display:none; width:4px; height:8px; border:2px solid #fff; border-top:none; border-left:none; transform:rotate(42deg) translate(-1px,-1px); }
+  .task-item input:checked + .check-box::after { display: block; }
+  .task-name { font-size: 13px; color: #1a3a4a; font-weight: 500; }
+  .task-time { font-size: 11px; color: #64748b; font-weight: 600; white-space: nowrap; }
+  .select-all-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .btn-small { font-size: 11px; padding: 4px 10px; border-radius: 5px; border: 1px solid #028090; color: #028090; background: #fff; cursor: pointer; font-weight: 600; transition: background 0.15s, color 0.15s; }
+  .btn-small:hover { background: #028090; color: #fff; }
+  .right-col { display: flex; flex-direction: column; gap: 18px; }
+  .results-wrap { position: relative; }
+  .overlay { position: absolute; inset: 0; z-index: 10; background: rgba(240,244,247,0.85); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; backdrop-filter: blur(2px); }
+  .overlay-icon { font-size: 36px; }
+  .overlay-text { font-size: 15px; font-weight: 700; color: #b45309; text-align: center; line-height: 1.6; }
+  .overlay-sub  { font-size: 12px; color: #92400e; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+  .kpi-card { background: #fff; border-radius: 12px; padding: 15px 16px; box-shadow: 0 2px 12px rgba(0,0,0,.07); border-top: 3px solid #028090; }
+  .kpi-card.alert { border-top-color: #e53e3e; }
+  .kpi-card.warn  { border-top-color: #d97706; }
+  .kpi-card.good  { border-top-color: #059669; }
+  .kpi-label { font-size: 11px; color: #64748b; font-weight: 600; margin-bottom: 5px; }
+  .kpi-value { font-size: 22px; font-weight: 800; color: #1a3a4a; line-height: 1; }
+  .kpi-sub   { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+  .chart-panel { background: #fff; border-radius: 12px; padding: 18px 22px; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 18px; }
+  .chart-title { font-size: 13px; font-weight: 700; color: #1a3a4a; margin-bottom: 14px; }
+  .chart-wrap  { position: relative; height: 230px; }
+  .breakdown-panel { background: #fff; border-radius: 12px; padding: 18px 22px; box-shadow: 0 2px 12px rgba(0,0,0,.07); }
+  .breakdown-title { font-size: 13px; font-weight: 700; color: #1a3a4a; margin-bottom: 12px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; font-size: 12px; }
+  .bar-label  { width: 64px; color: #64748b; font-weight: 600; flex-shrink: 0; }
+  .bar-track  { flex: 1; height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; }
+  .bar-fill   { height: 100%; border-radius: 5px; transition: width 0.3s ease; }
+  .bar-val    { width: 76px; text-align: right; color: #1a3a4a; font-weight: 700; flex-shrink: 0; font-size: 11px; }
+  .bar-status { width: 54px; font-size: 10px; font-weight: 700; flex-shrink: 0; }
+  .bar-status.on  { color: #059669; }
+  .bar-status.off { color: #e53e3e; }
+  .note { font-size: 11px; color: #94a3b8; margin-top: 8px; }
+  footer { text-align: center; font-size: 11px; color: #94a3b8; padding: 0 0 24px; }
+  @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: repeat(2,1fr); } }
+</style>
+</head>
+<body>
+<header>
+  <h1>AGF 導入ROIシミュレーター</h1>
+  <span class="logo">MIRABOT</span>
+</header>
+<div class="container">
+  <div>
+    <!-- 現地確認パネル -->
+    <div class="panel">
+      <div class="panel-head alert-head">⚠ 現地確認：作業者人数の入力</div>
+      <div class="panel-body">
+        <div class="confirm-banner">
+          月〜金の作業者人数を現地で確認後、選択してください。<br>
+          <strong>土日は表の通り固定1名</strong>で自動計算します。<br>
+          両号機が確定するまでROIはグレーアウト表示されます。
+        </div>
+        <div class="machine-confirm">
+          <div class="machine-name">
+            <span class="badge">7号機</span>現場作業メイン
+            <span id="tag-7" class="unconfirmed-tag">⚠ 未確認</span>
+          </div>
+          <div class="machine-sub">月〜金の人数（土日は固定1名）</div>
+          <div class="toggle-row">
+            <button class="toggle-btn" id="btn7-1" onclick="setWorkers(7,1)">1名</button>
+            <button class="toggle-btn" id="btn7-2" onclick="setWorkers(7,2)">2名</button>
+          </div>
+        </div>
+        <div class="machine-confirm">
+          <div class="machine-name">
+            <span class="badge">9号機</span>荷受入・搬出メイン
+            <span id="tag-9" class="unconfirmed-tag">⚠ 未確認</span>
+          </div>
+          <div class="machine-sub">月〜金の人数（土日は固定1名）</div>
+          <div class="toggle-row">
+            <button class="toggle-btn" id="btn9-1" onclick="setWorkers(9,1)">1名</button>
+            <button class="toggle-btn" id="btn9-2" onclick="setWorkers(9,2)">2名</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 固定パラメータ -->
+    <div class="panel">
+      <div class="panel-head">固定パラメータ</div>
+      <div class="panel-body">
+        <div class="param-row"><span class="param-label">作業者年収（企業負担）</span><span class="param-value">400万円</span></div>
+        <div class="param-row"><span class="param-label">年間稼働日数</span><span class="param-value">365日</span></div>
+        <div class="param-row"><span class="param-label">時間給換算</span><span class="param-value">1,369円/h</span></div>
+        <div class="param-row"><span class="param-label">フォークリース削減（2台）</span><span class="param-value">206万円/年</span></div>
+        <div class="param-row"><span class="param-label">AGF導入費用</span><span class="param-value">5,000万円</span></div>
+      </div>
+    </div>
+
+    <!-- タスク選択 -->
+    <div class="panel">
+      <div class="panel-head">AGF対応タスク選択</div>
+      <div class="panel-body">
+        <div style="font-size:12px;color:#64748b;margin-bottom:10px;line-height:1.5;">AGFで<strong>対応可能なタスクにチェック</strong>を入れてください。</div>
+        <div class="select-all-row">
+          <button class="btn-small" onclick="selectAll(true)">すべて選択</button>
+          <button class="btn-small" onclick="selectAll(false)">すべて解除</button>
+        </div>
+        <div class="task-section-label">7号機（現場作業メイン）</div>
+        <div id="tasks-7"></div>
+        <div class="task-section-label" style="margin-top:14px;">9号機（荷受入・搬出メイン）</div>
+        <div id="tasks-9"></div>
+        <p class="note">※ 時間ゼロのタスクはグレー表示（除外固定）</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右カラム -->
+  <div class="right-col">
+    <div class="results-wrap">
+      <div class="overlay" id="overlay">
+        <div class="overlay-icon">🔍</div>
+        <div class="overlay-text">現地で作業者人数を確認し<br>左パネルで入力してください</div>
+        <div class="overlay-sub">7号機・9号機 両方の確認が必要です</div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">年間削減時間</div><div class="kpi-value" id="kpi-hours">－</div><div class="kpi-sub">h/年</div></div>
+        <div class="kpi-card"><div class="kpi-label">年間人件費削減</div><div class="kpi-value" id="kpi-labor">－</div><div class="kpi-sub">万円/年</div></div>
+        <div class="kpi-card"><div class="kpi-label">年間総削減額</div><div class="kpi-value" id="kpi-total">－</div><div class="kpi-sub">万円/年（リース込）</div></div>
+        <div class="kpi-card" id="kpi-payback-card"><div class="kpi-label">投資回収期間</div><div class="kpi-value" id="kpi-payback">－</div><div class="kpi-sub" id="kpi-payback-sub"></div></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-title">10年間 累積コスト比較（万円）</div>
+        <div class="chart-wrap"><canvas id="roiChart"></canvas></div>
+      </div>
+      <div class="breakdown-panel">
+        <div class="breakdown-title">タスク別 週間時間・対応状況（1人あたり換算）</div>
+        <div id="breakdown-bars"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>©2025 Mirabot Inc. All Rights Reserved. Confidential. ／ データ出典：_1階リフト業務.xlsx（Excel確定値）</footer>
+
+<script>
+// ══════════════════════════════════════════
+// 曜日別分離データ（Excel実値）
+// weekday = 月〜金合計（分）、weekend = 土日合計（分）
+// 土日は常に1名固定
+// ══════════════════════════════════════════
+const TASKS_7 = [
+  { id:"7_原料",    name:"原料搬送",   wd:349, we:31, checked:true  },
+  { id:"7_ドラム",  name:"ドラム搬送", wd:251, we:0,  checked:true  },
+  { id:"7_パレット",name:"パレット",   wd:50,  we:2,  checked:true  },
+  { id:"7_ゴミ",    name:"ゴミ",       wd:0,   we:0,  checked:false },
+  { id:"7_その他",  name:"その他",     wd:0,   we:0,  checked:false },
+  { id:"7_荷寄せ",  name:"荷寄せ",     wd:0,   we:0,  checked:false },
+  { id:"7_移動",    name:"移動",       wd:20,  we:0,  checked:true  },
+];
+const TASKS_9 = [
+  { id:"9_原料",    name:"原料搬送",   wd:1289, we:204, checked:true },
+  { id:"9_ドラム",  name:"ドラム搬送", wd:4,    we:0,   checked:true },
+  { id:"9_パレット",name:"パレット",   wd:57,   we:30,  checked:true },
+  { id:"9_ゴミ",    name:"ゴミ",       wd:178,  we:28,  checked:true },
+  { id:"9_その他",  name:"その他",     wd:81,   we:0,   checked:true },
+  { id:"9_荷寄せ",  name:"荷寄せ",     wd:99,   we:0,   checked:true },
+  { id:"9_移動",    name:"移動",       wd:72,   we:0,   checked:true },
+];
+
+const COLORS = {"原料搬送":"#028090","ドラム搬送":"#02C39A","パレット":"#5EEAD4","ゴミ":"#94a3b8","その他":"#cbd5e1","荷寄せ":"#1A3A4A","移動":"#64748b"};
+const HOURLY=1369, LEASE=206, AGF=5000, WEEKS=365/7;
+
+let workers = { 7:null, 9:null };
+
+function setWorkers(machine, n) {
+  workers[machine] = n;
+  document.getElementById(`btn${machine}-1`).classList.toggle('active', n===1);
+  document.getElementById(`btn${machine}-2`).classList.toggle('active', n===2);
+  const tag = document.getElementById(`tag-${machine}`);
+  tag.className = 'confirmed-tag';
+  tag.textContent = `✓ 月〜金 ${n}名確認済`;
+  const both = workers[7]!==null && workers[9]!==null;
+  document.getElementById('overlay').style.display = both ? 'none' : 'flex';
+  recalc();
+}
+
+// チェックボックスUI
+function totalMin(task) { return task.wd + task.we; }
+function buildCheckboxes(id, tasks) {
+  const wrap = document.getElementById(id);
+  tasks.forEach(task => {
+    const tot = totalMin(task);
+    const label = document.createElement('label');
+    label.className = 'task-item' + (tot===0?' zero-task':'');
+    label.innerHTML = `
+      <div class="task-left">
+        <input type="checkbox" id="${task.id}" ${task.checked?'checked':''} ${tot===0?'disabled':''}>
+        <span class="check-box"></span>
+        <span class="task-name">${task.name}</span>
+      </div>
+      <span class="task-time">${fmtH(tot)}/週</span>`;
+    label.querySelector('input').addEventListener('change', e => { task.checked=e.target.checked; recalc(); });
+    wrap.appendChild(label);
+  });
+}
+buildCheckboxes('tasks-7', TASKS_7);
+buildCheckboxes('tasks-9', TASKS_9);
+
+function selectAll(s) {
+  [...TASKS_7,...TASKS_9].forEach(t => { if(totalMin(t)===0)return; t.checked=s; document.getElementById(t.id).checked=s; });
+  recalc();
+}
+
+function fmtH(m) { const h=Math.floor(m/60),mn=Math.round(m%60); return mn>0?`${h}h${mn}m`:`${h}h`; }
+function comma(n) { return Math.round(n).toLocaleString('ja-JP'); }
+
+const ctx = document.getElementById('roiChart').getContext('2d');
+const chart = new Chart(ctx, {
+  type:'line', data:{labels:[],datasets:[]},
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{position:'bottom',labels:{font:{size:11},padding:14}},
+      tooltip:{callbacks:{label:c=>` ${c.dataset.label}：${comma(c.parsed.y)}万円`}}
+    },
+    scales:{
+      x:{grid:{color:'#f1f5f9'},ticks:{font:{size:11}}},
+      y:{grid:{color:'#f1f5f9'},ticks:{font:{size:11},callback:v=>comma(v)+'万'}}
+    }
+  }
+});
+
+function recalc() {
+  if (workers[7]===null || workers[9]===null) return;
+
+  // 月〜金は人数で割る（1人あたり）、土日は÷1固定
+  let checkedMin = 0;
+  TASKS_7.filter(t=>t.checked).forEach(t => checkedMin += t.wd/workers[7] + t.we/1);
+  TASKS_9.filter(t=>t.checked).forEach(t => checkedMin += t.wd/workers[9] + t.we/1);
+
+  const annualH = Math.round(checkedMin/60*WEEKS);
+  const labor   = Math.round(annualH*HOURLY/10000);
+  const total   = labor + LEASE;
+  const pbMon   = total>0 ? AGF/(total/12) : Infinity;
+  const pbY     = Math.floor(pbMon/12);
+  const pbM     = Math.round(pbMon%12);
+  const eff10   = Math.round(total*10-AGF);
+
+  document.getElementById('kpi-hours').textContent = comma(annualH);
+  document.getElementById('kpi-labor').textContent = comma(labor);
+  document.getElementById('kpi-total').textContent = comma(total);
+
+  const card = document.getElementById('kpi-payback-card');
+  card.className = 'kpi-card';
+  if (!isFinite(pbMon)) {
+    document.getElementById('kpi-payback').textContent='計算不可';
+    document.getElementById('kpi-payback-sub').textContent='タスクを選択してください';
+  } else if (pbMon>120) {
+    document.getElementById('kpi-payback').textContent=`${pbY}年${pbM}ヶ月`;
+    document.getElementById('kpi-payback-sub').textContent='10年以内に回収できません';
+    card.classList.add('alert');
+  } else if (pbMon>84) {
+    document.getElementById('kpi-payback').textContent=`${pbY}年${pbM}ヶ月`;
+    document.getElementById('kpi-payback-sub').textContent=`10年累積効果 ${comma(eff10)}万円`;
+    card.classList.add('warn');
+  } else {
+    document.getElementById('kpi-payback').textContent=`${pbY}年${pbM}ヶ月`;
+    document.getElementById('kpi-payback-sub').textContent=`10年累積効果 ${comma(eff10)}万円`;
+    card.classList.add('good');
+  }
+
+  const years=[1,2,3,4,5,6,7,8,9,10];
+  chart.data.labels=years.map(y=>`${y}年目`);
+  chart.data.datasets=[
+    {label:'全自動倉庫（参考）',          data:years.map(()=>10000),                   borderColor:'#94a3b8',borderDash:[5,4],borderWidth:2,pointRadius:3,tension:0},
+    {label:'AGF未導入（機会損失累積）',    data:years.map(y=>Math.round(total*y)),      borderColor:'#E87040',borderWidth:2.5,pointRadius:3,tension:0},
+    {label:'AGF導入（初期費用－削減効果）',data:years.map(y=>Math.round(AGF-total*y)), borderColor:'#028090',borderWidth:2.5,pointRadius:3,tension:0},
+  ];
+  chart.update();
+
+  // バー（1人あたり換算）
+  const groups={};
+  TASKS_7.forEach(t => {
+    if(!groups[t.name]) groups[t.name]={total:0,checked:false};
+    groups[t.name].total += t.wd/workers[7] + t.we;
+    if(t.checked) groups[t.name].checked=true;
+  });
+  TASKS_9.forEach(t => {
+    if(!groups[t.name]) groups[t.name]={total:0,checked:false};
+    groups[t.name].total += t.wd/workers[9] + t.we;
+    if(t.checked) groups[t.name].checked=true;
+  });
+
+  const sorted=Object.entries(groups).sort((a,b)=>b[1].total-a[1].total);
+  const maxMin=Math.max(...sorted.map(([,v])=>v.total),1);
+  const wrap=document.getElementById('breakdown-bars');
+  wrap.innerHTML='';
+  sorted.forEach(([name,val])=>{
+    if(val.total<0.5) return;
+    const isOn=[...TASKS_7,...TASKS_9].some(t=>t.name===name&&t.checked);
+    const pct=Math.round(val.total/maxMin*100);
+    const color=COLORS[name]||'#028090';
+    const row=document.createElement('div');
+    row.className='bar-row';
+    row.innerHTML=`
+      <div class="bar-label">${name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${isOn?color:'#e2e8f0'};"></div></div>
+      <div class="bar-val">${fmtH(Math.round(val.total))}/週</div>
+      <div class="bar-status ${isOn?'on':'off'}">${isOn?'✓ 対応':'✗ 除外'}</div>`;
+    wrap.appendChild(row);
+  });
+}
+</script>
+</body>
+</html>
