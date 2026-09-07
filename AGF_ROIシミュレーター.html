@@ -3,352 +3,487 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AGF ROIシミュレーター</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<title>ROI 簡易計算ツール</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f4f7; color: #1a3a4a; min-height: 100vh; }
-  header { background: #1a3a4a; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
-  header h1 { font-size: 18px; font-weight: 700; color: #fff; }
-  header .logo { font-size: 15px; font-weight: 800; color: #02C39A; letter-spacing: 0.1em; }
-  .container { max-width: 1260px; margin: 0 auto; padding: 24px 24px 48px; display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
-  .panel { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.07); overflow: hidden; margin-bottom: 16px; }
-  .panel:last-child { margin-bottom: 0; }
-  .panel-head { background: #028090; padding: 13px 20px; font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 0.04em; }
-  .panel-head.alert-head { background: #b45309; }
-  .panel-body { padding: 18px 20px; }
-  .confirm-banner { background: #fffbeb; border: 1.5px solid #d97706; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; font-size: 12px; color: #92400e; line-height: 1.6; }
-  .confirm-banner strong { color: #b45309; }
-  .machine-confirm { margin-bottom: 18px; }
-  .machine-confirm:last-child { margin-bottom: 0; }
-  .machine-name { font-size: 12px; font-weight: 700; color: #1a3a4a; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-  .machine-name .badge { background: #028090; color: #fff; font-size: 10px; padding: 2px 7px; border-radius: 10px; }
-  .machine-sub { font-size: 11px; color: #94a3b8; margin-bottom: 8px; padding-left: 2px; }
-  .toggle-row { display: flex; gap: 0; border-radius: 8px; overflow: hidden; border: 1.5px solid #028090; width: fit-content; }
-  .toggle-btn { padding: 8px 24px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; transition: background 0.15s, color 0.15s; background: #fff; color: #028090; }
-  .toggle-btn.active { background: #028090; color: #fff; }
-  .toggle-btn:first-child { border-right: 1.5px solid #028090; }
-  .confirmed-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: #059669; background: #ecfdf5; border: 1px solid #059669; border-radius: 10px; padding: 2px 8px; }
-  .unconfirmed-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: #d97706; background: #fffbeb; border: 1px solid #d97706; border-radius: 10px; padding: 2px 8px; }
-  .param-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
-  .param-row:last-child { border-bottom: none; }
-  .param-label { color: #64748b; }
-  .param-value { font-weight: 700; color: #1a3a4a; }
-  .task-section-label { font-size: 11px; font-weight: 700; color: #028090; letter-spacing: 0.06em; margin: 14px 0 7px; text-transform: uppercase; }
-  .task-item { display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; border-radius: 7px; margin-bottom: 3px; cursor: pointer; transition: background 0.15s; user-select: none; }
-  .task-item:hover { background: #f0f9fb; }
-  .task-item.zero-task { opacity: 0.35; pointer-events: none; }
-  .task-left { display: flex; align-items: center; gap: 10px; }
-  .task-item input[type="checkbox"] { display: none; }
-  .check-box { width: 17px; height: 17px; border: 2px solid #028090; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
-  .task-item input:checked + .check-box { background: #028090; }
-  .task-item input:not(:checked) + .check-box { background: #fff; }
-  .check-box::after { content:''; display:none; width:4px; height:8px; border:2px solid #fff; border-top:none; border-left:none; transform:rotate(42deg) translate(-1px,-1px); }
-  .task-item input:checked + .check-box::after { display: block; }
-  .task-name { font-size: 13px; color: #1a3a4a; font-weight: 500; }
-  .task-time { font-size: 11px; color: #64748b; font-weight: 600; white-space: nowrap; }
-  .select-all-row { display: flex; gap: 8px; margin-bottom: 10px; }
-  .btn-small { font-size: 11px; padding: 4px 10px; border-radius: 5px; border: 1px solid #028090; color: #028090; background: #fff; cursor: pointer; font-weight: 600; transition: background 0.15s, color 0.15s; }
-  .btn-small:hover { background: #028090; color: #fff; }
-  .right-col { display: flex; flex-direction: column; gap: 18px; }
-  .results-wrap { position: relative; }
-  .overlay { position: absolute; inset: 0; z-index: 10; background: rgba(240,244,247,0.85); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; backdrop-filter: blur(2px); }
-  .overlay-icon { font-size: 36px; }
-  .overlay-text { font-size: 15px; font-weight: 700; color: #b45309; text-align: center; line-height: 1.6; }
-  .overlay-sub  { font-size: 12px; color: #92400e; }
-  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
-  .kpi-card { background: #fff; border-radius: 12px; padding: 15px 16px; box-shadow: 0 2px 12px rgba(0,0,0,.07); border-top: 3px solid #028090; }
-  .kpi-card.alert { border-top-color: #e53e3e; }
-  .kpi-card.warn  { border-top-color: #d97706; }
-  .kpi-card.good  { border-top-color: #059669; }
-  .kpi-label { font-size: 11px; color: #64748b; font-weight: 600; margin-bottom: 5px; }
-  .kpi-value { font-size: 22px; font-weight: 800; color: #1a3a4a; line-height: 1; }
-  .kpi-sub   { font-size: 11px; color: #94a3b8; margin-top: 4px; }
-  .chart-panel { background: #fff; border-radius: 12px; padding: 18px 22px; box-shadow: 0 2px 12px rgba(0,0,0,.07); margin-bottom: 18px; }
-  .chart-title { font-size: 13px; font-weight: 700; color: #1a3a4a; margin-bottom: 14px; }
-  .chart-wrap  { position: relative; height: 230px; }
-  .breakdown-panel { background: #fff; border-radius: 12px; padding: 18px 22px; box-shadow: 0 2px 12px rgba(0,0,0,.07); }
-  .breakdown-title { font-size: 13px; font-weight: 700; color: #1a3a4a; margin-bottom: 12px; }
-  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; font-size: 12px; }
-  .bar-label  { width: 64px; color: #64748b; font-weight: 600; flex-shrink: 0; }
-  .bar-track  { flex: 1; height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; }
-  .bar-fill   { height: 100%; border-radius: 5px; transition: width 0.3s ease; }
-  .bar-val    { width: 76px; text-align: right; color: #1a3a4a; font-weight: 700; flex-shrink: 0; font-size: 11px; }
-  .bar-status { width: 54px; font-size: 10px; font-weight: 700; flex-shrink: 0; }
-  .bar-status.on  { color: #059669; }
-  .bar-status.off { color: #e53e3e; }
-  .note { font-size: 11px; color: #94a3b8; margin-top: 8px; }
-  footer { text-align: center; font-size: 11px; color: #94a3b8; padding: 0 0 24px; }
-  @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: repeat(2,1fr); } }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:#31B1B0; --blue:#1565C0; --red:#C62828; --green:#1B5E20;
+    --orange:#E65100; --gray:#546E7A; --amber:#F57F17;
+    --bg:#F4F6F9; --card:#FFFFFF; --border:#CFD8DC; --text:#212121; --muted:#607D8B;
+    --yellow:#FFF9C4; --calc:#E3F2FD; --roi:#E8F5E9; --roi-txt:#1B5E20; --radius:10px;
+  }
+  body { font-family:"Meiryo","Hiragino Kaku Gothic ProN",sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  header { background:var(--navy); color:#fff; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+  header h1 { font-size:17px; font-weight:500; }
+  header span { font-size:12px; background:rgba(255,255,255,.15); padding:3px 10px; border-radius:20px; }
+
+  .layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:1200px; margin:0 auto; padding:16px; }
+  @media(max-width:780px){ .layout{ grid-template-columns:1fr; } }
+
+  .panel { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
+  .panel-title { font-size:13px; font-weight:500; color:var(--muted); letter-spacing:.04em; text-transform:uppercase; padding-bottom:10px; border-bottom:1px solid var(--border); margin-bottom:14px; }
+
+  .sec-label { font-size:11px; font-weight:500; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; margin:14px 0 6px; }
+  .sec-label:first-child { margin-top:0; }
+
+  .field { margin-bottom:8px; }
+  .field label { display:block; font-size:12px; color:var(--muted); margin-bottom:3px; }
+  .field label .req { color:var(--red); margin-left:2px; }
+  .field input, .field select { width:100%; font-family:inherit; font-size:13px; padding:7px 10px; border:1px solid var(--border); border-radius:6px; background:var(--card); color:var(--text); transition:border-color .15s; }
+  .field input:focus, .field select:focus { outline:none; border-color:var(--blue); box-shadow:0 0 0 2px rgba(21,101,192,.12); }
+  .field input[type="number"] { text-align:right; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .row3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .hint { font-size:11px; color:var(--muted); margin:-4px 0 10px; line-height:1.5; }
+  .dd-select { background:#E8EAF6 !important; border-color:#5C6BC0 !important; font-weight:500; color:#283593 !important; }
+
+  /* サマリー */
+  .sum-group { margin-bottom:14px; }
+  .sum-group-title { font-size:11px; font-weight:500; color:var(--muted); letter-spacing:.06em; text-transform:uppercase; margin-bottom:5px; padding-bottom:4px; border-bottom:1px solid var(--border); }
+  .sum-row { display:flex; justify-content:space-between; align-items:baseline; padding:5px 0; border-bottom:1px solid #ECEFF1; font-size:13px; }
+  .sum-row:last-child { border-bottom:none; }
+  .sum-lbl { color:var(--muted); font-size:12px; }
+  .sum-val { font-weight:500; font-size:13px; }
+  .sum-val.empty { color:#B0BEC5; font-weight:400; }
+  .sum-val.calc { color:var(--blue); }
+
+  .inv-row { display:flex; justify-content:space-between; font-size:12px; padding:4px 0; color:var(--muted); }
+  .inv-row span:last-child { color:var(--blue); font-weight:500; }
+  .total-row { display:flex; justify-content:space-between; align-items:baseline; font-weight:500; padding:8px 0 4px; border-top:1px solid var(--border); margin-top:4px; }
+  .total-row span:last-child { font-size:16px; color:var(--blue); }
+
+  .method-badge { display:inline-block; font-size:11px; padding:3px 10px; border-radius:20px; margin-bottom:8px; }
+  .badge-none   { background:#ECEFF1; color:var(--muted); }
+  .badge-jinzai { background:#FFEBEE; color:var(--red); }
+  .badge-jikan  { background:#E3F2FD; color:var(--blue); }
+
+  .roi-card { border:1px solid var(--border); border-radius:8px; padding:10px 12px; margin-bottom:8px; background:#FAFAFA; transition:background .2s,border-color .2s; }
+  .roi-card.active { background:var(--roi); border-color:#A5D6A7; }
+  .roi-card-label { font-size:11px; color:var(--muted); margin-bottom:4px; }
+  .roi-card-value { font-size:22px; font-weight:500; color:#B0BEC5; }
+  .roi-card.active .roi-card-value { color:var(--roi-txt); }
+  .roi-card-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+  .hourly-row { display:flex; justify-content:space-between; align-items:baseline; background:var(--calc); border-radius:6px; padding:7px 10px; margin-bottom:8px; font-size:12px; }
+  .hourly-row span:last-child { font-weight:500; color:var(--blue); font-size:14px; }
+  .roi-none-msg { font-size:12px; color:#B0BEC5; padding:8px 0; text-align:center; }
+
+  .pdf-btn { width:100%; margin-top:14px; padding:10px; background:var(--card); color:var(--orange); border:1.5px solid var(--orange); border-radius:8px; font-size:13px; font-family:inherit; cursor:pointer; transition:background .15s,opacity .15s; }
+  .pdf-btn:hover { background:#FFF3E0; }
+  .pdf-btn:active { opacity:.8; }
+
+  #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:#263238; color:#fff; padding:10px 20px; border-radius:20px; font-size:13px; opacity:0; pointer-events:none; transition:opacity .2s,transform .2s; z-index:999; }
+  #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
+
 <header>
-  <h1>AGF 導入ROIシミュレーター</h1>
-  <span class="logo">MIRABOT</span>
+  <h1>ROI 簡易計算ツール</h1>
+  <span>導入費用・人件費を入力してROIを即時計算</span>
 </header>
-<div class="container">
-  <div>
-    <!-- 現地確認パネル -->
-    <div class="panel">
-      <div class="panel-head alert-head">⚠ 現地確認：作業者人数の入力</div>
-      <div class="panel-body">
-        <div class="confirm-banner">
-          月〜金の作業者人数を現地で確認後、選択してください。<br>
-          <strong>土日は表の通り固定1名</strong>で自動計算します。<br>
-          両号機が確定するまでROIはグレーアウト表示されます。
-        </div>
-        <div class="machine-confirm">
-          <div class="machine-name">
-            <span class="badge">7号機</span>現場作業メイン
-            <span id="tag-7" class="unconfirmed-tag">⚠ 未確認</span>
-          </div>
-          <div class="machine-sub">月〜金の人数（土日は固定1名）</div>
-          <div class="toggle-row">
-            <button class="toggle-btn" id="btn7-1" onclick="setWorkers(7,1)">1名</button>
-            <button class="toggle-btn" id="btn7-2" onclick="setWorkers(7,2)">2名</button>
-          </div>
-        </div>
-        <div class="machine-confirm">
-          <div class="machine-name">
-            <span class="badge">9号機</span>荷受入・搬出メイン
-            <span id="tag-9" class="unconfirmed-tag">⚠ 未確認</span>
-          </div>
-          <div class="machine-sub">月〜金の人数（土日は固定1名）</div>
-          <div class="toggle-row">
-            <button class="toggle-btn" id="btn9-1" onclick="setWorkers(9,1)">1名</button>
-            <button class="toggle-btn" id="btn9-2" onclick="setWorkers(9,2)">2名</button>
-          </div>
-        </div>
-      </div>
+
+<div class="layout">
+
+  <!-- ═══ 左：入力パネル ═══ -->
+  <div class="panel">
+    <div class="panel-title">条件入力</div>
+
+    <div class="sec-label">自動化対象</div>
+    <div class="field">
+      <label>企業名</label>
+      <input id="company" placeholder="株式会社〇〇" oninput="render()">
+    </div>
+    <div class="field">
+      <label>工程<span class="req">*</span></label>
+      <input id="process" placeholder="原材料倉庫〜製造ライン搬送" oninput="render()">
+    </div>
+    <div class="field">
+      <label>現在の作業内容</label>
+      <input id="current" placeholder="フォークリフトによる手動搬送" oninput="render()">
     </div>
 
-    <!-- 固定パラメータ -->
-    <div class="panel">
-      <div class="panel-head">固定パラメータ</div>
-      <div class="panel-body">
-        <div class="param-row"><span class="param-label">作業者年収（企業負担）</span><span class="param-value">400万円</span></div>
-        <div class="param-row"><span class="param-label">年間稼働日数</span><span class="param-value">365日</span></div>
-        <div class="param-row"><span class="param-label">時間給換算</span><span class="param-value">1,369円/h</span></div>
-        <div class="param-row"><span class="param-label">フォークリース削減（2台）</span><span class="param-value">206万円/年</span></div>
-        <div class="param-row"><span class="param-label">AGF導入費用</span><span class="param-value">5,000万円</span></div>
+    <div class="sec-label">搬送条件</div>
+    <div class="row2">
+      <div class="field">
+        <label>搬送物</label>
+        <input id="item" placeholder="パレット" oninput="render()">
       </div>
+      <div class="field">
+        <label>重量 (kg)</label>
+        <input id="weight" type="number" placeholder="例: 200" oninput="render()">
+      </div>
+    </div>
+    <div class="row3">
+      <div class="field">
+        <label>直数 (直/日)<span class="req">*</span></label>
+        <input id="shifts" type="number" placeholder="例: 1" oninput="render()">
+      </div>
+      <div class="field">
+        <label>1直あたり勤務時間 (h)<span class="req">*</span></label>
+        <input id="hrs" type="number" placeholder="例: 8" oninput="render()">
+      </div>
+      <div class="field">
+        <label>工場の年間稼働日数 (日)<span class="req">*</span></label>
+        <input id="days" type="number" placeholder="例: 350" oninput="render()">
+      </div>
+    </div>
+    <div class="hint">単直の場合は直数=1のまま。2直・3直体制の場合は直数を変更してください。</div>
+
+    <div class="sec-label">現状人員</div>
+    <div class="row2">
+      <div class="field">
+        <label>作業人数 (名・全直合計・参考)</label>
+        <input id="workers" type="number" placeholder="例: 6" oninput="render()">
+      </div>
+      <div class="field">
+        <label>年間人件費 (万円/人)<span class="req">*</span></label>
+        <input id="salary" type="number" placeholder="例: 500" oninput="render()">
+      </div>
+    </div>
+    <div class="field">
+      <label>個人の年間労働日数 (日)<span class="req">*</span></label>
+      <input id="personDays" type="number" placeholder="例: 240" oninput="render()">
+    </div>
+    <div class="hint">「工場の年間稼働日数」(350日など)と「個人の年間労働日数」(土日・有休等を除いた240日など)は異なります。時給単価は個人の年間労働日数を基準に算出し、削減額は工場の年間稼働日数を基準に算出します。「作業人数」は現状体制の記録用で計算には使用しません（対象人数に対する削減額の妥当性は下部の参考比率でご確認いただけます）。</div>
+
+    <div class="sec-label">導入費用</div>
+    <div class="field">
+      <label>ロボット種類</label>
+      <select id="robot_type" onchange="render()">
+        <option value="">── 選択 ──</option>
+        <option value="AMR">AMR（自律移動型）</option>
+        <option value="AGV">AGV（誘導型）</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>ロボット導入費用 (万円)<span class="req">*</span></label>
+      <input id="install" type="number" placeholder="例: 7500" oninput="render()">
     </div>
 
-    <!-- タスク選択 -->
-    <div class="panel">
-      <div class="panel-head">AGF対応タスク選択</div>
-      <div class="panel-body">
-        <div style="font-size:12px;color:#64748b;margin-bottom:10px;line-height:1.5;">AGFで<strong>対応可能なタスクにチェック</strong>を入れてください。</div>
-        <div class="select-all-row">
-          <button class="btn-small" onclick="selectAll(true)">すべて選択</button>
-          <button class="btn-small" onclick="selectAll(false)">すべて解除</button>
-        </div>
-        <div class="task-section-label">7号機（現場作業メイン）</div>
-        <div id="tasks-7"></div>
-        <div class="task-section-label" style="margin-top:14px;">9号機（荷受入・搬出メイン）</div>
-        <div id="tasks-9"></div>
-        <p class="note">※ 時間ゼロのタスクはグレー表示（除外固定）</p>
+    <div class="sec-label">ROI計算方式</div>
+    <div class="field">
+      <label>計算方式を選択<span class="req">*</span></label>
+      <select id="roi_method" onchange="toggleMethod();render()" class="dd-select">
+        <option value="">── 選択してください ──</option>
+        <option value="jinzai">人員削減型</option>
+        <option value="jikan">作業時間削減型</option>
+      </select>
+    </div>
+
+    <div id="jinzai_fields" style="display:none">
+      <div class="field">
+        <label>削減人数 (名)<span class="req">*</span></label>
+        <input id="reduce_ppl" type="number" placeholder="例: 2" oninput="render()">
       </div>
     </div>
+    <div id="jikan_fields" style="display:none">
+      <div class="row2">
+        <div class="field">
+          <label>1直あたり削減時間 (h)<span class="req">*</span></label>
+          <input id="reduce_hrs" type="number" step="0.5" placeholder="例: 2" oninput="render()">
+        </div>
+        <div class="field">
+          <label>対象人数 (参考・任意)</label>
+          <input id="target_ppl" type="number" placeholder="例: 2" oninput="render()">
+        </div>
+      </div>
+      <div class="hourly-row" id="per_person_row" style="display:none">
+        <span>1人あたり削減時間（参考）</span>
+        <span id="s_per_person">──</span>
+      </div>
+      <div class="hint">「1直あたり削減時間」には、その直全体で削減される作業時間の合計をご入力ください（例:1直2名で合計2h減る場合→2h。内訳が何人でも、合計時間が同じなら削減額は変わりません）。「対象人数」を入力すると1人あたりの削減時間を参考表示します（計算には使用しません）。上記の「直数」は自動で掛け合わされます。</div>
+    </div>
+
+    <button class="pdf-btn" onclick="savePdf()">
+      入力内容・ROI結果を PDF に保存する
+    </button>
   </div>
 
-  <!-- 右カラム -->
-  <div class="right-col">
-    <div class="results-wrap">
-      <div class="overlay" id="overlay">
-        <div class="overlay-icon">🔍</div>
-        <div class="overlay-text">現地で作業者人数を確認し<br>左パネルで入力してください</div>
-        <div class="overlay-sub">7号機・9号機 両方の確認が必要です</div>
+  <!-- ═══ 右：サマリーパネル ═══ -->
+  <div class="panel">
+    <div class="panel-title">入力サマリー / ROI 結果</div>
+
+    <div class="sum-group">
+      <div class="sum-group-title">自動化対象</div>
+      <div class="sum-row"><span class="sum-lbl">企業名</span><span class="sum-val empty" id="s_company">──</span></div>
+      <div class="sum-row"><span class="sum-lbl">工程</span><span class="sum-val empty" id="s_process">──</span></div>
+      <div class="sum-row"><span class="sum-lbl">作業内容</span><span class="sum-val empty" id="s_current">──</span></div>
+      <div class="sum-row"><span class="sum-lbl">ロボット種別</span><span class="sum-val empty" id="s_robot">──</span></div>
+    </div>
+
+    <div class="sum-group">
+      <div class="sum-group-title">稼働条件</div>
+      <div class="sum-row"><span class="sum-lbl">直数</span><span class="sum-val empty" id="s_shifts">──</span></div>
+      <div class="sum-row"><span class="sum-lbl">1直あたり勤務時間</span><span class="sum-val empty" id="s_hrs">──</span></div>
+      <div class="sum-row"><span class="sum-lbl">1日稼働(合計)</span><span class="sum-val empty" id="s_total_hrs">──</span></div>
+      <div class="sum-row"><span class="sum-lbl">工場の年間稼働日数</span><span class="sum-val empty" id="s_days">──</span></div>
+      <div class="sum-row"><span class="sum-lbl">作業人数</span><span class="sum-val empty" id="s_workers">──</span></div>
+      <div class="sum-row"><span class="sum-lbl">年間人件費/人</span><span class="sum-val empty" id="s_salary">──</span></div>
+      <div class="sum-row"><span class="sum-lbl">個人の年間労働日数</span><span class="sum-val empty" id="s_personDays">──</span></div>
+      <div class="sum-row"><span class="sum-lbl">個人年間労働時間</span><span class="sum-val empty" id="s_personHours">──</span></div>
+    </div>
+    <div id="days_warning" style="display:none; font-size:11px; color:#C62828; background:#FFEBEE; border:1px solid #FFCDD2; border-radius:6px; padding:6px 10px; margin:-8px 0 14px;">
+      ⚠ 「個人の年間労働日数」が「工場の年間稼働日数」を超えています。入力欄を取り違えていないかご確認ください。
+    </div>
+
+    <div class="sum-group">
+      <div class="sum-group-title">投資額</div>
+      <div class="total-row"><span>合計導入費用</span><span id="s_total">──</span></div>
+    </div>
+
+    <div class="sum-group">
+      <div class="sum-group-title">ROI 試算</div>
+      <div id="s_method_badge"><span class="method-badge badge-none">方式未選択</span></div>
+
+      <div id="roi_jinzai_block" style="display:none">
+        <div class="roi-card" id="jinzai_cost_card">
+          <div class="roi-card-label">年間削減コスト（人員削減型）</div>
+          <div class="roi-card-value" id="s_jinzai_cost">──</div>
+          <div class="roi-card-sub">削減人数 × 年間人件費</div>
+        </div>
+        <div class="roi-card" id="jinzai_roi_card">
+          <div class="roi-card-label">投資回収年数（人員削減型）</div>
+          <div class="roi-card-value" id="s_jinzai_roi">──</div>
+        </div>
       </div>
-      <div class="kpi-grid">
-        <div class="kpi-card"><div class="kpi-label">年間削減時間</div><div class="kpi-value" id="kpi-hours">－</div><div class="kpi-sub">h/年</div></div>
-        <div class="kpi-card"><div class="kpi-label">年間人件費削減</div><div class="kpi-value" id="kpi-labor">－</div><div class="kpi-sub">万円/年</div></div>
-        <div class="kpi-card"><div class="kpi-label">年間総削減額</div><div class="kpi-value" id="kpi-total">－</div><div class="kpi-sub">万円/年（リース込）</div></div>
-        <div class="kpi-card" id="kpi-payback-card"><div class="kpi-label">投資回収期間</div><div class="kpi-value" id="kpi-payback">－</div><div class="kpi-sub" id="kpi-payback-sub"></div></div>
+
+      <div id="roi_jikan_block" style="display:none">
+        <div class="hourly-row">
+          <span>1人時単価（自動計算）</span>
+          <span id="s_hourly">──</span>
+        </div>
+        <div class="roi-card" id="jikan_cost_card">
+          <div class="roi-card-label">年間削減コスト（作業時間削減型）</div>
+          <div class="roi-card-value" id="s_jikan_cost">──</div>
+          <div class="roi-card-sub" id="jikan_formula_sub">1人時単価 × 1直あたり削減h × 直数 × 工場年間稼働日数</div>
+        </div>
+        <div class="roi-card" id="jikan_roi_card">
+          <div class="roi-card-label">投資回収年数（作業時間削減型）</div>
+          <div class="roi-card-value" id="s_jikan_roi">──</div>
+        </div>
+        <div class="hourly-row" id="sanity_row" style="display:none">
+          <span>作業人数全体の人件費に対する削減比率（参考）</span>
+          <span id="s_sanity">──</span>
+        </div>
       </div>
-      <div class="chart-panel">
-        <div class="chart-title">10年間 累積コスト比較（万円）</div>
-        <div class="chart-wrap"><canvas id="roiChart"></canvas></div>
-      </div>
-      <div class="breakdown-panel">
-        <div class="breakdown-title">タスク別 週間時間・対応状況（1人あたり換算）</div>
-        <div id="breakdown-bars"></div>
-      </div>
+
+      <div class="roi-none-msg" id="roi_none_msg">ROI計算方式を選択すると結果が表示されます</div>
     </div>
   </div>
 </div>
-<footer>©2025 Mirabot Inc. All Rights Reserved. Confidential. ／ データ出典：_1階リフト業務.xlsx（Excel確定値）</footer>
+
+<div id="toast">PDFの保存画面を開きました</div>
 
 <script>
-// ══════════════════════════════════════════
-// 曜日別分離データ（Excel実値）
-// weekday = 月〜金合計（分）、weekend = 土日合計（分）
-// 土日は常に1名固定
-// ══════════════════════════════════════════
-const TASKS_7 = [
-  { id:"7_原料",    name:"原料搬送",   wd:349, we:31, checked:true  },
-  { id:"7_ドラム",  name:"ドラム搬送", wd:251, we:0,  checked:true  },
-  { id:"7_パレット",name:"パレット",   wd:50,  we:2,  checked:true  },
-  { id:"7_ゴミ",    name:"ゴミ",       wd:0,   we:0,  checked:false },
-  { id:"7_その他",  name:"その他",     wd:0,   we:0,  checked:false },
-  { id:"7_荷寄せ",  name:"荷寄せ",     wd:0,   we:0,  checked:false },
-  { id:"7_移動",    name:"移動",       wd:20,  we:0,  checked:true  },
-];
-const TASKS_9 = [
-  { id:"9_原料",    name:"原料搬送",   wd:1289, we:204, checked:true },
-  { id:"9_ドラム",  name:"ドラム搬送", wd:4,    we:0,   checked:true },
-  { id:"9_パレット",name:"パレット",   wd:57,   we:30,  checked:true },
-  { id:"9_ゴミ",    name:"ゴミ",       wd:178,  we:28,  checked:true },
-  { id:"9_その他",  name:"その他",     wd:81,   we:0,   checked:true },
-  { id:"9_荷寄せ",  name:"荷寄せ",     wd:99,   we:0,   checked:true },
-  { id:"9_移動",    name:"移動",       wd:72,   we:0,   checked:true },
-];
+function g(id){ return document.getElementById(id) }
+function val(id){ return (g(id).value||'').trim() }
+function num(id){ return parseFloat(g(id).value)||0 }
 
-const COLORS = {"原料搬送":"#028090","ドラム搬送":"#02C39A","パレット":"#5EEAD4","ゴミ":"#94a3b8","その他":"#cbd5e1","荷寄せ":"#1A3A4A","移動":"#64748b"};
-const HOURLY=1369, LEASE=206, AGF=5000, WEEKS=365/7;
-
-let workers = { 7:null, 9:null };
-
-function setWorkers(machine, n) {
-  workers[machine] = n;
-  document.getElementById(`btn${machine}-1`).classList.toggle('active', n===1);
-  document.getElementById(`btn${machine}-2`).classList.toggle('active', n===2);
-  const tag = document.getElementById(`tag-${machine}`);
-  tag.className = 'confirmed-tag';
-  tag.textContent = `✓ 月〜金 ${n}名確認済`;
-  const both = workers[7]!==null && workers[9]!==null;
-  document.getElementById('overlay').style.display = both ? 'none' : 'flex';
-  recalc();
+function toggleMethod(){
+  const m = val('roi_method')
+  g('jinzai_fields').style.display = m==='jinzai' ? 'block' : 'none'
+  g('jikan_fields').style.display  = m==='jikan'  ? 'block' : 'none'
 }
 
-// チェックボックスUI
-function totalMin(task) { return task.wd + task.we; }
-function buildCheckboxes(id, tasks) {
-  const wrap = document.getElementById(id);
-  tasks.forEach(task => {
-    const tot = totalMin(task);
-    const label = document.createElement('label');
-    label.className = 'task-item' + (tot===0?' zero-task':'');
-    label.innerHTML = `
-      <div class="task-left">
-        <input type="checkbox" id="${task.id}" ${task.checked?'checked':''} ${tot===0?'disabled':''}>
-        <span class="check-box"></span>
-        <span class="task-name">${task.name}</span>
-      </div>
-      <span class="task-time">${fmtH(tot)}/週</span>`;
-    label.querySelector('input').addEventListener('change', e => { task.checked=e.target.checked; recalc(); });
-    wrap.appendChild(label);
-  });
-}
-buildCheckboxes('tasks-7', TASKS_7);
-buildCheckboxes('tasks-9', TASKS_9);
-
-function selectAll(s) {
-  [...TASKS_7,...TASKS_9].forEach(t => { if(totalMin(t)===0)return; t.checked=s; document.getElementById(t.id).checked=s; });
-  recalc();
+function sv(id, text, isEmpty){
+  const el = g(id)
+  el.textContent = text
+  el.className = 'sum-val' + (isEmpty ? ' empty' : '')
 }
 
-function fmtH(m) { const h=Math.floor(m/60),mn=Math.round(m%60); return mn>0?`${h}h${mn}m`:`${h}h`; }
-function comma(n) { return Math.round(n).toLocaleString('ja-JP'); }
+function fmtMan(n){ return n>0 ? n.toLocaleString('ja-JP')+'万円' : '──' }
+function fmtEn(n) { return n>0 ? n.toLocaleString('ja-JP')+'円'   : '──' }
+function fmtYr(n) { return n>0 ? n.toFixed(1)+'年'                : '──' }
 
-const ctx = document.getElementById('roiChart').getContext('2d');
-const chart = new Chart(ctx, {
-  type:'line', data:{labels:[],datasets:[]},
-  options:{
-    responsive:true, maintainAspectRatio:false,
-    interaction:{mode:'index',intersect:false},
-    plugins:{
-      legend:{position:'bottom',labels:{font:{size:11},padding:14}},
-      tooltip:{callbacks:{label:c=>` ${c.dataset.label}：${comma(c.parsed.y)}万円`}}
-    },
-    scales:{
-      x:{grid:{color:'#f1f5f9'},ticks:{font:{size:11}}},
-      y:{grid:{color:'#f1f5f9'},ticks:{font:{size:11},callback:v=>comma(v)+'万'}}
+function render(){
+  const co   = val('company')
+  const pr   = val('process'), cur = val('current')
+  const shifts = num('shifts')
+  const hrs  = num('hrs'),    days = num('days')
+  const work = num('workers'), sal = num('salary')
+  const personDays = num('personDays')
+  const inst = num('install')
+  const total= inst
+  const method = val('roi_method')
+  const robot  = val('robot_type')
+
+  sv('s_company', co||'──',    !co)
+  sv('s_process', pr||'──',    !pr)
+  sv('s_current', cur||'──',   !cur)
+  sv('s_robot',   robot||'──', !robot)
+  sv('s_shifts', shifts ? shifts+'直' : '──', !shifts)
+  sv('s_hrs',   hrs  ? hrs+'h'   : '──', !hrs)
+  sv('s_total_hrs', (shifts&&hrs) ? (shifts*hrs)+'h' : '──', !(shifts&&hrs))
+  sv('s_days',  days ? days+'日' : '──', !days)
+  sv('s_workers', work ? work+'名'       : '──', !work)
+  sv('s_salary',  sal  ? sal+'万円/人'   : '──', !sal)
+  sv('s_personDays', personDays ? personDays+'日' : '──', !personDays)
+  sv('s_personHours', (personDays&&hrs) ? (personDays*hrs).toLocaleString('ja-JP')+'h' : '──', !(personDays&&hrs))
+  g('days_warning').style.display = (personDays>0 && days>0 && personDays>days) ? 'block' : 'none'
+
+  const te = g('s_total')
+  te.textContent = total ? fmtMan(total) : '──'
+  te.style.color = total ? 'var(--blue)' : 'var(--muted)'
+
+  g('roi_jinzai_block').style.display = method==='jinzai' ? 'block' : 'none'
+  g('roi_jikan_block').style.display  = method==='jikan'  ? 'block' : 'none'
+  g('roi_none_msg').style.display     = method ? 'none' : 'block'
+
+  const badge = g('s_method_badge')
+  if(method==='jinzai')
+    badge.innerHTML = '<span class="method-badge badge-jinzai">人員削減型を選択中</span>'
+  else if(method==='jikan')
+    badge.innerHTML = '<span class="method-badge badge-jikan">作業時間削減型を選択中</span>'
+  else
+    badge.innerHTML = '<span class="method-badge badge-none">方式未選択</span>'
+
+  if(method==='jinzai'){
+    const rp  = num('reduce_ppl')
+    const ann = rp>0&&sal>0 ? rp*sal*10000 : 0
+    const roi = ann>0&&total>0 ? total*10000/ann : 0
+    const ce = g('s_jinzai_cost'), re = g('s_jinzai_roi')
+    if(ann>0){ ce.textContent=fmtEn(ann); g('jinzai_cost_card').className='roi-card active' }
+    else     { ce.textContent='削減人数・人件費を入力してください'; g('jinzai_cost_card').className='roi-card' }
+    if(roi>0){ re.textContent=fmtYr(roi); g('jinzai_roi_card').className='roi-card active' }
+    else     { re.textContent='──'; g('jinzai_roi_card').className='roi-card' }
+  }
+
+  if(method==='jikan'){
+    const hourly = (sal>0&&personDays>0&&hrs>0) ? Math.round(sal*10000/(personDays*hrs)) : 0
+    g('s_hourly').textContent = hourly ? hourly.toLocaleString('ja-JP')+'円/時間' : '──'
+    const rh  = num('reduce_hrs'), tp = num('target_ppl')
+    const sf  = shifts>0 ? shifts : 1
+    const perRow = g('per_person_row')
+    if(rh>0 && tp>0){
+      perRow.style.display = 'flex'
+      g('s_per_person').textContent = (rh/tp).toFixed(2).replace(/\.00$/,'').replace(/(\.\d)0$/,'$1') + 'h/人'
+    } else {
+      perRow.style.display = 'none'
+    }
+    const ann = hourly>0&&rh>0&&days>0 ? Math.round(hourly*rh*sf*days) : 0
+    const roi = ann>0&&total>0 ? total*10000/ann : 0
+    const ce = g('s_jikan_cost'), re = g('s_jikan_roi')
+    if(ann>0){ ce.textContent=fmtEn(ann); g('jikan_cost_card').className='roi-card active' }
+    else     { ce.textContent='削減時間を入力してください'; g('jikan_cost_card').className='roi-card' }
+    if(roi>0){ re.textContent=fmtYr(roi); g('jikan_roi_card').className='roi-card active' }
+    else     { re.textContent='──'; g('jikan_roi_card').className='roi-card' }
+
+    const sanityRow = g('sanity_row')
+    if(ann>0 && work>0 && sal>0){
+      const totalLaborCost = work*sal*10000
+      const ratio = (ann/totalLaborCost)*100
+      sanityRow.style.display = 'flex'
+      g('s_sanity').textContent = ratio.toFixed(1) + '%'
+    } else {
+      sanityRow.style.display = 'none'
     }
   }
-});
+}
 
-function recalc() {
-  if (workers[7]===null || workers[9]===null) return;
+function savePdf(){
+  const co   = val('company')
+  const pr   = val('process'), cur = val('current')
+  const it   = val('item'),    wt  = num('weight')
+  const shifts = num('shifts')
+  const hrs  = num('hrs'),    days = num('days')
+  const work = num('workers'), sal = num('salary')
+  const personDays = num('personDays')
+  const inst = num('install')
+  const total= inst
+  const method = val('roi_method')
+  const hourly = (sal&&personDays&&hrs) ? Math.round(sal*10000/(personDays*hrs)) : 0
+  const sf = shifts>0 ? shifts : 1
 
-  // 月〜金は人数で割る（1人あたり）、土日は÷1固定
-  let checkedMin = 0;
-  TASKS_7.filter(t=>t.checked).forEach(t => checkedMin += t.wd/workers[7] + t.we/1);
-  TASKS_9.filter(t=>t.checked).forEach(t => checkedMin += t.wd/workers[9] + t.we/1);
-
-  const annualH = Math.round(checkedMin/60*WEEKS);
-  const labor   = Math.round(annualH*HOURLY/10000);
-  const total   = labor + LEASE;
-  const pbMon   = total>0 ? AGF/(total/12) : Infinity;
-  const pbY     = Math.floor(pbMon/12);
-  const pbM     = Math.round(pbMon%12);
-  const eff10   = Math.round(total*10-AGF);
-
-  document.getElementById('kpi-hours').textContent = comma(annualH);
-  document.getElementById('kpi-labor').textContent = comma(labor);
-  document.getElementById('kpi-total').textContent = comma(total);
-
-  const card = document.getElementById('kpi-payback-card');
-  card.className = 'kpi-card';
-  if (!isFinite(pbMon)) {
-    document.getElementById('kpi-payback').textContent='計算不可';
-    document.getElementById('kpi-payback-sub').textContent='タスクを選択してください';
-  } else if (pbMon>120) {
-    document.getElementById('kpi-payback').textContent=`${pbY}年${pbM}ヶ月`;
-    document.getElementById('kpi-payback-sub').textContent='10年以内に回収できません';
-    card.classList.add('alert');
-  } else if (pbMon>84) {
-    document.getElementById('kpi-payback').textContent=`${pbY}年${pbM}ヶ月`;
-    document.getElementById('kpi-payback-sub').textContent=`10年累積効果 ${comma(eff10)}万円`;
-    card.classList.add('warn');
+  let roiHtml = ''
+  if(method==='jinzai'){
+    const rp  = num('reduce_ppl')
+    const ann = rp&&sal ? rp*sal*10000 : 0
+    const roi = ann&&total ? (total*10000/ann).toFixed(1) : '-'
+    roiHtml = `
+    <tr><th>計算方式</th><td>人員削減型</td></tr>
+    <tr><th>削減人数</th><td>${rp||'-'} 名</td></tr>
+    <tr><th>年間削減コスト</th><td>${ann?ann.toLocaleString('ja-JP')+'円':'-'}</td></tr>
+    <tr><th>投資回収年数</th><td style="font-size:20px;font-weight:bold;color:#1B5E20">${roi} 年</td></tr>`
+  } else if(method==='jikan'){
+    const rh  = num('reduce_hrs'), tp = num('target_ppl')
+    const ann = hourly&&rh&&days ? Math.round(hourly*rh*sf*days) : 0
+    const roi = ann&&total ? (total*10000/ann).toFixed(1) : '-'
+    roiHtml = `
+    <tr><th>計算方式</th><td>作業時間削減型</td></tr>
+    <tr><th>1人時単価（自動計算）</th><td>${hourly?hourly.toLocaleString('ja-JP')+'円/時間':'-'}</td></tr>
+    <tr><th>直数</th><td>${shifts||'-'} 直</td></tr>
+    <tr><th>1直あたり削減時間</th><td>${rh||'-'} h</td></tr>
+    <tr><th>対象人数（参考）</th><td>${tp||'-'} 名</td></tr>
+    <tr><th>1人あたり削減時間（参考）</th><td>${(rh&&tp)?(rh/tp).toFixed(2).replace(/\.00$/,'').replace(/(\.\d)0$/,'$1')+'h':'-'}</td></tr>
+    <tr><th>年間削減コスト</th><td>${ann?ann.toLocaleString('ja-JP')+'円':'-'}</td></tr>
+    <tr><th>投資回収年数</th><td style="font-size:20px;font-weight:bold;color:#1B5E20">${roi} 年</td></tr>`
   } else {
-    document.getElementById('kpi-payback').textContent=`${pbY}年${pbM}ヶ月`;
-    document.getElementById('kpi-payback-sub').textContent=`10年累積効果 ${comma(eff10)}万円`;
-    card.classList.add('good');
+    roiHtml = '<tr><th>計算方式</th><td>未選択</td></tr>'
   }
 
-  const years=[1,2,3,4,5,6,7,8,9,10];
-  chart.data.labels=years.map(y=>`${y}年目`);
-  chart.data.datasets=[
-    {label:'全自動倉庫（参考）',          data:years.map(()=>10000),                   borderColor:'#94a3b8',borderDash:[5,4],borderWidth:2,pointRadius:3,tension:0},
-    {label:'AGF未導入（機会損失累積）',    data:years.map(y=>Math.round(total*y)),      borderColor:'#E87040',borderWidth:2.5,pointRadius:3,tension:0},
-    {label:'AGF導入（初期費用－削減効果）',data:years.map(y=>Math.round(AGF-total*y)), borderColor:'#028090',borderWidth:2.5,pointRadius:3,tension:0},
-  ];
-  chart.update();
+  const now = new Date()
+  const dateStr = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`
 
-  // バー（1人あたり換算）
-  const groups={};
-  TASKS_7.forEach(t => {
-    if(!groups[t.name]) groups[t.name]={total:0,checked:false};
-    groups[t.name].total += t.wd/workers[7] + t.we;
-    if(t.checked) groups[t.name].checked=true;
-  });
-  TASKS_9.forEach(t => {
-    if(!groups[t.name]) groups[t.name]={total:0,checked:false};
-    groups[t.name].total += t.wd/workers[9] + t.we;
-    if(t.checked) groups[t.name].checked=true;
-  });
+  const html = `<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">
+  <title>ROI計算結果 ${co?co+'_':''}${dateStr}</title>
+  <style>
+    body{font-family:"Meiryo",sans-serif;margin:0;padding:24px;color:#212121;font-size:13px}
+    h1{font-size:18px;font-weight:500;color:#31B1B0;border-bottom:2px solid #31B1B0;padding-bottom:8px;margin-bottom:4px}
+    .date{font-size:11px;color:#607D8B;margin-bottom:20px}
+    h2{font-size:13px;font-weight:500;color:#fff;background:#1565C0;padding:5px 10px;margin:16px 0 0;border-radius:4px 4px 0 0}
+    table{width:100%;border-collapse:collapse;margin-bottom:4px}
+    th{width:40%;background:#EFF3FB;padding:6px 10px;text-align:left;font-weight:500;color:#546E7A;border:1px solid #CFD8DC;font-size:12px}
+    td{padding:6px 10px;border:1px solid #CFD8DC;color:#212121}
+    .roi-table th{background:#E8F5E9;color:#2E7D32}
+    .total td{font-weight:bold;color:#1565C0;font-size:14px}
+    @media print{body{padding:12px}}
+  </style></head><body>
+  <h1>ROI 簡易計算結果</h1>
+  <div class="date">${co?co+'　|　':''}作成日：${dateStr}</div>
 
-  const sorted=Object.entries(groups).sort((a,b)=>b[1].total-a[1].total);
-  const maxMin=Math.max(...sorted.map(([,v])=>v.total),1);
-  const wrap=document.getElementById('breakdown-bars');
-  wrap.innerHTML='';
-  sorted.forEach(([name,val])=>{
-    if(val.total<0.5) return;
-    const isOn=[...TASKS_7,...TASKS_9].some(t=>t.name===name&&t.checked);
-    const pct=Math.round(val.total/maxMin*100);
-    const color=COLORS[name]||'#028090';
-    const row=document.createElement('div');
-    row.className='bar-row';
-    row.innerHTML=`
-      <div class="bar-label">${name}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${isOn?color:'#e2e8f0'};"></div></div>
-      <div class="bar-val">${fmtH(Math.round(val.total))}/週</div>
-      <div class="bar-status ${isOn?'on':'off'}">${isOn?'✓ 対応':'✗ 除外'}</div>`;
-    wrap.appendChild(row);
-  });
+  <h2>自動化対象・搬送条件</h2>
+  <table>
+    <tr><th>企業名</th><td>${co||'-'}</td></tr>
+    <tr><th>工程</th><td>${pr||'-'}</td></tr>
+    <tr><th>現在の作業内容</th><td>${cur||'-'}</td></tr>
+    <tr><th>ロボット種別</th><td>${val('robot_type')||'-'}</td></tr>
+    <tr><th>搬送物</th><td>${it||'-'}　重量：${wt?wt+'kg':'-'}</td></tr>
+    <tr><th>直数</th><td>${shifts?shifts+'直':'-'}</td></tr>
+    <tr><th>1直あたり勤務時間</th><td>${hrs?hrs+'h':'-'}</td></tr>
+    <tr><th>1日稼働時間(合計)</th><td>${(shifts&&hrs)?(shifts*hrs)+'h':'-'}</td></tr>
+    <tr><th>工場の年間稼働日数</th><td>${days?days+'日':'-'}</td></tr>
+  </table>
+
+  <h2>現状人員</h2>
+  <table>
+    <tr><th>作業人数</th><td>${work?work+'名':'-'}</td></tr>
+    <tr><th>年間人件費</th><td>${sal?sal+'万円/人':'-'}</td></tr>
+    <tr><th>個人の年間労働日数</th><td>${personDays?personDays+'日':'-'}</td></tr>
+    <tr><th>個人年間労働時間</th><td>${(personDays&&hrs)?(personDays*hrs).toLocaleString('ja-JP')+'h':'-'}</td></tr>
+  </table>
+
+  <h2>導入費用</h2>
+  <table>
+    <tr class="total"><th>ロボット導入費用</th><td>${inst?inst+'万円':'-'}</td></tr>
+  </table>
+
+  <h2 style="background:#C62828">ROI試算結果</h2>
+  <table class="roi-table">${roiHtml}</table>
+
+  <script>window.onload=function(){window.print()}<\/script>
+  </body></html>`
+
+  const blob = new Blob([html], {type:'text/html'})
+  const url  = URL.createObjectURL(blob)
+  const win  = window.open(url, '_blank')
+  if(!win) alert('ポップアップがブロックされました。ブラウザのポップアップ許可を確認してください。')
+  const toast = g('toast')
+  toast.classList.add('show')
+  setTimeout(()=>toast.classList.remove('show'), 3000)
 }
+
+render()
 </script>
 </body>
 </html>
