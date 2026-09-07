@@ -409,6 +409,7 @@ function savePdf(){
     const rh  = num('reduce_hrs'), tp = num('target_ppl')
     const ann = hourly&&rh&&days ? Math.round(hourly*rh*sf*days) : 0
     const roi = ann&&total ? (total*10000/ann).toFixed(1) : '-'
+    const ratio = (ann&&work&&sal) ? ((ann/(work*sal*10000))*100).toFixed(1) : null
     roiHtml = `
     <tr><th>計算方式</th><td>作業時間削減型</td></tr>
     <tr><th>1人時単価（自動計算）</th><td>${hourly?hourly.toLocaleString('ja-JP')+'円/時間':'-'}</td></tr>
@@ -417,6 +418,7 @@ function savePdf(){
     <tr><th>対象人数（参考）</th><td>${tp||'-'} 名</td></tr>
     <tr><th>1人あたり削減時間（参考）</th><td>${(rh&&tp)?(rh/tp).toFixed(2).replace(/\.00$/,'').replace(/(\.\d)0$/,'$1')+'h':'-'}</td></tr>
     <tr><th>年間削減コスト</th><td>${ann?ann.toLocaleString('ja-JP')+'円':'-'}</td></tr>
+    <tr><th>作業人数全体の人件費に対する削減比率（参考）</th><td>${ratio!==null?ratio+'%':'-'}</td></tr>
     <tr><th>投資回収年数</th><td style="font-size:20px;font-weight:bold;color:#1B5E20">${roi} 年</td></tr>`
   } else {
     roiHtml = '<tr><th>計算方式</th><td>未選択</td></tr>'
