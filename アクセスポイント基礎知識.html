@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>アクセスポイント基礎知識 ─ AGV/AMR導入</title>
+<style>
+  :root {
+    --ink: #1e2a38;
+    --ink-sub: #4a5568;
+    --ink-muted: #8896a5;
+    --accent: #0f6e56;
+    --accent-light: #e1f5ee;
+    --accent-mid: #1d9e75;
+    --border: #d1dce8;
+    --surface: #f8fafc;
+    --white: #ffffff;
+    --warn: #854f0b;
+    --warn-bg: #faeeda;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Hiragino Sans","Meiryo","Arial",sans-serif; font-size: 14px; color: var(--ink); background: var(--white); line-height: 1.8; }
+  .page { max-width: 900px; margin: 0 auto; padding: 48px 40px 80px; }
+
+  .doc-header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 40px; }
+  .doc-label { font-size: 11px; font-weight: 600; letter-spacing: .12em; color: var(--accent-mid); text-transform: uppercase; margin-bottom: 8px; }
+  .doc-title { font-size: 26px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .doc-sub { font-size: 13px; color: var(--ink-sub); }
+  .doc-meta { display: flex; gap: 24px; margin-top: 14px; font-size: 12px; color: var(--ink-muted); }
+
+  .section { margin-bottom: 40px; }
+  .section-title { font-size: 17px; font-weight: 700; color: var(--ink); border-left: 4px solid var(--accent); padding-left: 12px; margin-bottom: 14px; }
+  .section-body { font-size: 13.5px; color: var(--ink-sub); margin-bottom: 16px; line-height: 1.8; }
+
+  /* 構成図 */
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 2;
+    margin-bottom: 16px;
+    overflow-x: auto;
+  }
+
+  /* テーブル */
+  .data-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  .data-table th { background: var(--ink); color: #fff; font-size: 12px; font-weight: 600; padding: 10px 14px; text-align: left; border: 1px solid var(--ink); }
+  .data-table td { padding: 11px 14px; border: 1px solid var(--border); font-size: 13px; vertical-align: top; line-height: 1.7; }
+  .data-table tr:nth-child(even) td { background: var(--surface); }
+
+  /* ポイントボックス */
+  .point-box { background: var(--accent-light); border-left: 4px solid var(--accent); border-radius: 4px; padding: 14px 18px; margin-bottom: 12px; }
+  .point-box .point-title { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+  .point-box ul { list-style: none; padding: 0; }
+  .point-box ul li { font-size: 13px; color: #1a3d30; padding: 3px 0 3px 16px; position: relative; }
+  .point-box ul li::before { content: "▸"; position: absolute; left: 0; color: var(--accent); }
+
+  /* 注意ボックス */
+  .warn-box { background: var(--warn-bg); border-left: 4px solid var(--warn); border-radius: 4px; padding: 14px 18px; margin-bottom: 12px; }
+  .warn-box .warn-title { font-size: 13px; font-weight: 700; color: var(--warn); margin-bottom: 8px; }
+  .warn-box ul { list-style: none; padding: 0; }
+  .warn-box ul li { font-size: 13px; color: #5a3a08; padding: 3px 0 3px 16px; position: relative; }
+  .warn-box ul li::before { content: "▸"; position: absolute; left: 0; color: var(--warn); }
+
+  .doc-footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--ink-muted); display: flex; justify-content: space-between; }
+
+  @media (max-width: 600px) { .page { padding: 24px 16px 60px; } }
+  @media print { body { font-size: 12px; } .page { padding: 20px 24px; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div class="doc-label">知識資料 ／ AGV・AMR導入</div>
+    <div class="doc-title">アクセスポイント（AP）基礎知識</div>
+    <div class="doc-sub">AGV/AMR導入におけるWi-Fiアクセスポイントの役割・設置・注意点</div>
+    <div class="doc-meta">
+      <span>作成：ミラボット株式会社</span>
+      <span>更新：2026.07</span>
+    </div>
+  </div>
+
+  <!-- 1. APとは -->
+  <div class="section">
+    <div class="section-title">1. アクセスポイント（AP）とは</div>
+    <div class="section-body">
+      アクセスポイント（AP）とはWi-Fiの電波を飛ばす装置のことです。スマホやPCがWi-Fiに繋がるのと同じように、AGV/AMRもAPを通じてネットワークに接続します。AGV/AMRは走行中もリアルタイムでフリート管理システム（MIRABOT LINKなど）と常時通信しており、APはその通信を支える重要なインフラです。通信が途切れると搬送が止まったり指示が届かなくなるため、AGV/AMR導入においてAPの設計は非常に重要です。
+    </div>
+
+    <div class="diagram">
+フリート管理システム（MIRABOT LINK）
+　↕ 有線LAN
+ルーター
+　↕ 有線LAN
+AP①　　AP②　　AP③　← 天井・壁に設置
+　↕ Wi-Fi（無線・常時通信）
+AGF / AMR（走行中）
+    </div>
+  </div>
+
+  <!-- 2. 基本構成 -->
+  <div class="section">
+    <div class="section-title">2. 基本構成・設置方法</div>
+    <div class="section-body">APはルーターからイーサネットケーブル（有線LAN）で接続するのが基本です。無線でAPを繋ぐメッシュWi-Fiという方式もありますが、AGV/AMRのような常時通信が必要な用途では有線接続が推奨されます。</div>
+
+    <table class="data-table">
+      <thead><tr><th>項目</th><th>有線LAN接続（推奨）</th><th>メッシュWi-Fi（無線接続）</th></tr></thead>
+      <tbody>
+        <tr><td>安定性</td><td>◎ 高い</td><td>△ 有線より劣る</td></tr>
+        <tr><td>遅延</td><td>◎ 少ない</td><td>△ 発生しやすい</td></tr>
+        <tr><td>工事</td><td>△ 配線工事が必要</td><td>◎ 工事が少ない</td></tr>
+        <tr><td>AGV/AMR用途</td><td>◎ 推奨</td><td>△ 要検討</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. 重要ポイント -->
+  <div class="section">
+    <div class="section-title">3. 設計・設置の重要ポイント</div>
+
+    <div class="point-box">
+      <div class="point-title">① カバレッジ（電波の届く範囲）</div>
+      <ul>
+        <li>1台のAPが電波を届けられる範囲は限られている</li>
+        <li>工場・倉庫は広いため複数台のAPを設置して「どこでも繋がる」状態にする必要がある</li>
+        <li>AGFの走行エリア全体をカバーできるよう配置を設計する</li>
+      </ul>
+    </div>
+
+    <div class="point-box">
+      <div class="point-title">② ローミング（APの切り替え）</div>
+      <ul>
+        <li>AGV/AMRが移動してAPの電波範囲を越えると自動的に次のAPに切り替わる</li>
+        <li>この切り替えが遅いと通信が一時的に途切れ、搬送停止の原因になる</li>
+        <li>AGV/AMR向けには高速ローミング対応のAPを選定することが重要</li>
+      </ul>
+    </div>
+
+    <div class="point-box">
+      <div class="point-title">③ サイトサーベイ（電波強度測定）</div>
+      <ul>
+        <li>AP設置前に工場内の電波強度を測定する作業</li>
+        <li>電波の死角（届かない場所）や干渉がないか確認する</li>
+        <li>金属の棚・壁・他機器の電波が干渉する場合があるため設置場所の選定が重要</li>
+        <li>SIerが実施する専門作業（ミラボットは依頼側）</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. シャッター問題 -->
+  <div class="section">
+    <div class="section-title">4. シャッターによる電波遮断への対応</div>
+    <div class="section-body">金属製のシャッターは電波を大幅に減衰・遮断します。シャッターで区切られたエリアにAGFが移動する場合、通信が途切れるリスクがあります。</div>
+
+    <div class="warn-box">
+      <div class="warn-title">シャッターが閉まると起こる問題</div>
+      <ul>
+        <li>シャッター手前のAPからシャッター奥のAGFへ電波が届かなくなる</li>
+        <li>AGFの通信が途切れ搬送が停止する可能性がある</li>
+        <li>フリート管理システムがAGFの位置を把握できなくなる</li>
+      </ul>
+    </div>
+
+    <div class="section-body">解決策はシャッターの両側にAPを設置し、それぞれ独立して通信できる構成にすることです。</div>
+
+    <div class="diagram">
+エリアA（有線LAN接続）　　　　エリアB（有線LAN接続）
+ルーター ─────────────────────────────
+　↕ 有線LAN　　　　　　　　　　　↕ 有線LAN
+　AP①　　　　[シャッター]　　　AP②
+　↕ Wi-Fi　　　　　　　　　　　↕ Wi-Fi
+　AGF　　　　　　　　　　　　　AGF
+    </div>
+
+    <div class="point-box">
+      <div class="point-title">設置のポイント</div>
+      <ul>
+        <li>シャッター両側のAPはそれぞれ有線LANで同じルーターに接続する</li>
+        <li>シャッター付近の床・天井に配管を通してケーブルを引く施工が必要（SIer対応）</li>
+        <li>AGFがシャッター通過時に自動的に近い方のAPへローミングすることを試運転で確認する</li>
+        <li>「シャッターが閉まった状態でもAGFが正常通信できるか」を受け入れ基準に含める</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5. SIM -->
+  <div class="section">
+    <div class="section-title">5. SIM（モバイル通信）を使う場合</div>
+    <div class="section-body">SIMとは携帯電話回線（4G/5G）を使ってインターネットに接続する仕組みです。SIMを内蔵したAPを使えばイーサネットケーブルを引かずに通信できるため、シャッターをまたぐ配線工事が困難な場合の代替手段になります。</div>
+
+    <div class="diagram">
+エリアA（有線LAN）　　　　　エリアB（SIM回線）
+ルーター
+　↕ 有線LAN
+　AP①　　　　[シャッター]　　AP②（SIM内蔵）
+　↕ Wi-Fi　　　　　　　　　　↕ Wi-Fi
+　AGF　　　　　　　　　　　　AGF（4G/5G経由）
+    </div>
+
+    <table class="data-table">
+      <thead><tr><th>観点</th><th>メリット</th><th>デメリット・注意点</th></tr></thead>
+      <tbody>
+        <tr><td>工事</td><td>シャッターまたぎの配線不要</td><td>─</td></tr>
+        <tr><td>設置</td><td>比較的簡単・工期短縮</td><td>─</td></tr>
+        <tr><td>通信安定性</td><td>─</td><td>有線より遅延が発生しやすい</td></tr>
+        <tr><td>電波状況</td><td>─</td><td>工場内は4G/5G電波が弱い場合あり・事前確認必要</td></tr>
+        <tr><td>コスト</td><td>─</td><td>SIM月額費用が発生（エリア数分）</td></tr>
+        <tr><td>セキュリティ</td><td>─</td><td>インターネット経由のためVPN等の対策が必要</td></tr>
+      </tbody>
+    </table>
+
+    <table class="data-table" style="margin-top:12px;">
+      <thead><tr><th>状況</th><th>推奨方式</th></tr></thead>
+      <tbody>
+        <tr><td>配線工事が容易</td><td>有線LAN＋AP</td></tr>
+        <tr><td>シャッターまたぎの配線が困難</td><td>SIM内蔵AP</td></tr>
+        <tr><td>通信の安定性が最優先</td><td>有線LAN＋AP</td></tr>
+        <tr><td>工期・コストを抑えたい</td><td>SIM内蔵AP</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="doc-footer">
+    <span>ミラボット株式会社</span>
+    <span>更新：2026.07</span>
+  </div>
+
+</div>
+</body>
+</html>
