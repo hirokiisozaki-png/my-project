@@ -283,6 +283,9 @@
  <div class="sidebar-item" data-filter="folder-apps" onclick="filterSidebar('folder-apps', this)">
  <i class="ti ti-tools" aria-hidden="true"></i> 便利アプリ
  </div>
+ <div class="sidebar-item" data-filter="folder-simulation" onclick="filterSidebar('folder-simulation', this)">
+ <i class="ti ti-player-play" aria-hidden="true"></i> 運用シミュレーション
+ </div>
 
  </div>
  <hr class="sidebar-divider">
@@ -333,6 +336,11 @@
  <div class="folder-icon"><i class="ti ti-tools" aria-hidden="true"></i></div>
  <div class="folder-name">便利アプリ</div>
  <div class="folder-count">3件</div>
+ </div>
+ <div class="folder-card" data-parent="all" onclick="filterSidebar('folder-simulation', null)">
+ <div class="folder-icon"><i class="ti ti-player-play" aria-hidden="true"></i></div>
+ <div class="folder-name">運用シミュレーション</div>
+ <div class="folder-count">2件</div>
  </div>
  </div>
  </div>
@@ -558,6 +566,33 @@
  </div>
  <span class="doc-tag">知識</span>
  </a>
+
+ <a class="doc-card" target="_blank"
+ href="CarriRo2%E5%8F%B0%E9%81%8B%E7%94%A84%E3%83%AC%E3%83%BC%E3%83%B3%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3.html"
+ data-folder="folder-simulation"
+ data-tags="tag-agv tag-mirabot"
+ data-text="CarriRo 2台 4置き場 シミュレーション 運用 並列 SVG アニメーション AGV 搬送 台車">
+ <div class="doc-icon"><i class="ti ti-player-play" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">CarriRo 2台運用シミュレーション（4置き場・並列）</div>
+ <div class="doc-meta">運用シミュレーション ／ 更新：2026.09 ／ 2台のCarriRoが4ヵ所の台車置き場を並列稼働</div>
+ </div>
+ <span class="doc-tag amber">シミュレーション</span>
+ </a>
+
+ <a class="doc-card" target="_blank"
+ href="CarriRo2%E5%8F%B0%E9%81%8B%E7%94%A8%E3%80%81%E7%B8%A6%E5%88%97%E9%85%8D%E7%BD%AE.html"
+ data-folder="folder-simulation"
+ data-tags="tag-agv tag-mirabot"
+ data-text="CarriRo 2台 縦列配置 シミュレーション 運用 ゲート 荷積み 荷下ろし ステップ制御 AGV 搬送 台車">
+ <div class="doc-icon"><i class="ti ti-player-play" aria-hidden="true"></i></div>
+ <div class="doc-info">
+ <div class="doc-title">CarriRo 2台運用シミュレーション（縦列配置）</div>
+ <div class="doc-meta">運用シミュレーション ／ 更新：2026.09 ／ ゲートシステム・荷積み荷下ろしを含む縦列配置</div>
+ </div>
+ <span class="doc-tag amber">シミュレーション</span>
+ </a>
+
  </div>
 
  <div class="empty" id="empty-state">
@@ -610,6 +645,7 @@
  'tag-mirabot': ['ミラボット タグ', 'ミラボット関連の資料'],
  'tag-sier': ['SIer タグ', 'SIer関連の資料'],
  'folder-apps': ['便利アプリ', '業務に役立つWebアプリ'],
+ 'folder-simulation': ['運用シミュレーション', 'AGV/AMR運用シミュレーションツール'],
  };
  const [title, sub] = labels[filter] || ['すべての資料', ''];
  pageTitle.textContent = title;
