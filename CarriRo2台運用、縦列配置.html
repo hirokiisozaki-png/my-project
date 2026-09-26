@@ -60,6 +60,14 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
 .steps li.phase{padding:8px 12px 2px;display:block;font-size:.72rem;letter-spacing:.06em;color:var(--muted);font-weight:700}
 .steps li.cur{background:var(--active);border-left-color:var(--accent)}
 .steps li.done .t{color:var(--done)}
+.params{padding:10px 14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 14px;align-items:end}
+@media (max-width:620px){.params{grid-template-columns:1fr}}
+.params label{display:flex;flex-direction:column;gap:2px;font-size:.75rem;color:var(--muted)}
+.params label span{display:flex;align-items:center;gap:6px;color:var(--ink);font-size:.88rem}
+.params input{font:inherit;width:6.5em;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:7px;padding:5px 8px;font-variant-numeric:tabular-nums}
+.params input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.lapinfo{grid-column:1/-1;font-size:.8rem;color:var(--muted)}
+.lapinfo b{color:var(--ink);font-variant-numeric:tabular-nums}
 .stock{padding:10px 14px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 @media (max-width:620px){.stock{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .stock .k{font-size:.72rem;color:var(--muted);letter-spacing:.04em}
@@ -83,7 +91,7 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
 <div class="wrap">
   <header>
     <h1>CarriRo2台運用、縦列配置</h1>
-    <p>スタート位置は2レーンで、各レーンに置き場を縦に2つ並べています（1号機：上1・下2、2号機：上3・下4）。CarriRoは上下の置き場の間で待機し、持ち帰った台車は空いている置き場に戻します。</p>
+    <p>スタート位置は2レーンで、各レーンに置き場を縦に2つ並べています（1号機：上1・下2、2号機：上3・下4）。CarriRoは上段の台車（1・3）と連結した状態でスタートし、持ち帰った台車は空いている置き場に戻します。</p>
   </header>
 
   <div class="main">
@@ -117,12 +125,13 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
         <button class="primary" id="play" type="button">▶ 再生</button>
         <button id="next" type="button" title="次のタスクが終わるまで進めて止める">次 ▶</button>
         <button id="reset" type="button">リセット</button>
-        <label for="speed">速度
+        <label for="speed">再生倍率
           <select id="speed">
-            <option value="0.5">0.5×</option>
-            <option value="1" selected>1×</option>
-            <option value="2">2×</option>
-            <option value="4">4×</option>
+            <option value="1">1×（実時間）</option>
+            <option value="5">5×</option>
+            <option value="10" selected>10×</option>
+            <option value="20">20×</option>
+            <option value="50">50×</option>
           </select>
         </label>
         <label for="mode">運転号機
@@ -135,12 +144,19 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
         <label for="delay" id="delayWrap">2号機の発進
           <select id="delay">
             <option value="0" selected>同時</option>
-            <option value="5">5秒後</option>
-            <option value="10">10秒後</option>
-            <option value="20">20秒後</option>
+            <option value="30">30秒後</option>
+            <option value="60">1分後</option>
+            <option value="120">2分後</option>
           </select>
         </label>
         <span class="clock"><span id="stepNo">タスク 0</span>　<span id="clock">0.0 s</span></span>
+      </div>
+
+      <div class="card params">
+        <label for="kmh">走行速度（平均）<span><input id="kmh" type="number" min="0.5" max="6" step="0.1" value="2"> km/h</span></label>
+        <label for="L1">1号機 1周距離（置き場1から）<span><input id="L1" type="number" min="10" max="2000" step="1" value="260"> m</span></label>
+        <label for="L2">2号機 1周距離（置き場3から）<span><input id="L2" type="number" min="10" max="2000" step="1" value="180"> m</span></label>
+        <div class="lapinfo" id="lapinfo"></div>
       </div>
 
       <div class="card stock" id="stock"></div>
@@ -149,14 +165,21 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
         <div class="card unit" id="u1"></div>
         <div class="card unit" id="u2"></div>
       </div>
-      <p class="note">時間は画面上の目安で、実機の速度には合わせていません。手前の置き場（B・D）に台車がある状態で、台車を載せて奥（A・C）へ向かう動きはありません。ルートが重なる区間では、前にいる号機との距離を見て後ろの号機が停止待ちします。</p>
+      <p class="note">時間は実時間（走行速度と1周距離から計算）です。連結・切り離しは各1.2秒、積込み・荷降ろしは各10秒で計算しています。手前の置き場（B・D）に台車がある状態で、台車を載せて奥（A・C）へ向かう動きはありません。ルートが重なる区間では、前にいる号機との距離を見て後ろの号機が停止待ちします。</p>
     </div>
   </div>
 </div>
 
 <script>
 (function(){
-  const OFF=12, PXS=110, LOOK=48, CLEAR=21;
+  const OFF=12, LOOK=48, CLEAR=21;
+  // 実速度：1周の実距離(m)と平均速度(km/h)から、各号機の画面上の速度(px/秒)を求める
+  const num=(id,d)=>{const v=parseFloat(document.getElementById(id).value);return isFinite(v)&&v>0?v:d;};
+  const mps=()=>num("kmh",2)/3.6;
+  const lapM=u=>num("L"+u.id,u.id===1?260:180);
+  const mPerPx=u=>lapM(u)/u.R.L;
+  const pxs=u=>mps()/mPerPx(u);
+  const fmt=t=>{t=Math.max(0,t);const m=Math.floor(t/60),s=t-m*60;return m+"分"+(s<9.95?"0":"")+s.toFixed(1)+"秒";};
   const HOLD={attach:1.2,detach:1.2,load:10,pause:3};
   const UNLOAD=10;   // 置き場に届けてから荷物が取られるまでの秒数
   // ---- layout ----
@@ -186,7 +209,7 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
     R.st=s=>R.cum[3]+(STX[s]-LEFT);
     R.slot={up:0, low:R.L-(LOW-UP)};      // 台車の中心位置
     R.wait=R.L-(WAITY-UP);
-    R.turn=(UP-TOP)-16;                  // 上辺へ左旋回する手前
+    R.turn=(UP-TOP)-24;                  // 上辺へ左旋回する手前
     return R;
   }
   const ROUTES={1:loop(1),2:loop(2)};
@@ -195,8 +218,7 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
   function plan(P,Q,X,Y,c1,c2){
     return [
       {phase:`サイクル1　置き場${P} → ${X}`},
-      {t:"move",to:"up",couple:"S"+P,txt:`置き場${P}の台車${c1}に潜り込んで連結`},
-      {t:"load",txt:`台車${c1}に荷物を積込み（連結から10秒）`},
+      {t:"load",txt:`置き場${P}で台車${c1}と連結した状態から荷物を積込み（10秒）`},
       {t:"move",to:X,txt:`台車${c1}を${X}へ搬送`},
       {t:"detach",at:X,unload:true,txt:`${X}で台車${c1}を切り離し、前進して抜ける（10秒後に荷物を取り出し）`},
       {t:"move",to:"low",couple:"S"+Q,txt:`単独で戻り、置き場${Q}の台車${c2}に潜り込んで連結`},
@@ -214,8 +236,8 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
       {t:"move",to:Y,couple:Y,txt:`左旋回して${Y}へ行き、台車${c2}に潜り込んで連結（空になるまで手前で待機）`},
       {t:"move",to:"low",txt:`台車${c2}を置き場${Q}へ持ち帰る`},
       {t:"detach",at:"S"+Q,txt:`置き場${Q}で台車${c2}を切り離す`},
-      {t:"move",to:"wait",txt:`前進して台車${c2}から抜け、スタート位置（置き場${P}・${Q}の間）で停止`},
-      {t:"gate",next:1,loop:true,txt:`サイクル3完了：ボタンでサイクル1から再実行`}
+      {t:"move",to:"up",couple:"S"+P,txt:`前進して台車${c2}から抜け、置き場${P}の台車${c1}に潜り込んで連結`},
+      {t:"gate",next:1,loop:true,txt:`サイクル3完了：台車${c1}と連結した状態でボタン待ち（サイクル1から再実行）`}
     ];
   }
   const UNITS=[
@@ -276,7 +298,8 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
       u.R=ROUTES[u.id];
       [[u.R.slot.up,u.c[0],u.P],[u.R.slot.low,u.c[1],u.Q]].forEach(([s,id,k])=>{const p=posAt(u.R,s);carts[id]={x:p.x,y:p.y,a:-Math.PI/2,at:"S"+k,loaded:false};});
       const m=$("mode").value;
-      Object.assign(u,{i:0,s:u.R.wait,anim:null,carry:null,wait:0,uwait:0,unloadWait:false,release:false,lap:1,blocked:false,done:false,finishAt:null,active:m==="both"||m===String(u.id)});
+      carts[u.c[0]].at="car";   // スタート時は置き場の台車と連結済み
+      Object.assign(u,{i:0,s:OFF,anim:null,carry:u.c[0],wait:0,uwait:0,unloadWait:false,release:false,lap:1,dist:0,cycStart:0,lastCyc:null,lastCycNo:null,blocked:false,done:false,finishAt:null,active:m==="both"||m===String(u.id)});
       $("u"+u.id).style.opacity=u.active?1:.55;
       buildList(u);
     });
@@ -295,6 +318,7 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
       u.anim={type:"move",remain:d,tgt:((tgt%R.L)+R.L)%R.L};
     }else{
       u.anim={type:"hold",remain:HOLD[a.t],total:HOLD[a.t]};
+      if(a.t==="gate"){u.lastCyc=clock-u.cycStart; u.lastCycNo=a.next===1?3:a.next-1;}
       if(a.t==="attach") u.anim.id=Object.keys(carts).find(k=>carts[k].at===a.at);
     }
   }
@@ -304,6 +328,7 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
     if(a.couple){u.carry=u.anim.id;carts[u.carry].at="car";}
     if(a.t==="detach"){carts[u.carry].at=a.at; if(a.unload) timers.push({t:clock+UNLOAD,id:u.carry}); u.carry=null;}
     if(a.t==="load"){carts[u.carry].loaded=true;}
+    if(a.t==="gate") u.cycStart=clock;
     if(a.t==="gate"&&a.loop){ u.i=0; u.anim=null; u.lap++; buildList(u); taskDone=true; return; }  // 台車1に次の荷物を積んだ状態で再スタート
     u.i++; u.anim=null; buildList(u);
     if(u.i>=u.acts.length){u.done=true;u.finishAt=clock;}
@@ -342,8 +367,8 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
           if(cid&&carts[cid].loaded&&an.remain<=37){u.unloadWait=true;u.uwait+=sdt;return;}
         }
         u.unloadWait=false;
-        const st=Math.min(an.remain,PXS*sdt);
-        u.s=(u.s+st)%u.R.L; an.remain-=st;
+        const st=Math.min(an.remain,pxs(u)*sdt);
+        u.s=(u.s+st)%u.R.L; an.remain-=st; u.dist+=st*mPerPx(u);
         if(an.remain<=0.01){
           u.s=an.tgt;
           if(act.couple){ // 潜り込み完了 → そのまま連結動作
@@ -378,9 +403,11 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
       if(u.unloadWait) now=`荷物の取り出し待ち（台車${u.anim.id}が空になるまで待機）`;
       u.nowEl.textContent=now;
       u.carryEl.textContent=u.carry?(u.loadLeft!=null?`台車${u.carry}（積込み ${Math.ceil(u.loadLeft)}秒）`:tag(u.carry)):"なし";
-      u.waitEl.textContent=u.wait.toFixed(1)+" s";
+      u.waitEl.textContent=fmt(u.wait);
       u.waitEl.className=u.wait>0.05?"warn":"";
-      u.uwEl.textContent=u.uwait.toFixed(1)+" s"; u.uwEl.className=u.uwait>0.05?"warn":"";
+      u.uwEl.textContent=fmt(u.uwait);
+      u.distEl.textContent=u.dist.toFixed(0)+" m";
+      u.cycEl.textContent=u.lastCyc!=null?`サイクル${u.lastCycNo}：${fmt(u.lastCyc)}`:"—"; u.uwEl.className=u.uwait>0.05?"warn":"";
       u.endEl.textContent=u.lap+" 周目";
       const gb=$("go"+u.id), act=u.acts[u.i], ready=u.active&&act&&act.t==="gate"&&u.anim&&!u.release;
       gb.disabled=!ready; gb.classList.toggle("ready",!!ready);
@@ -394,7 +421,8 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
     const where=k=>{const ids=Object.keys(carts).filter(id=>carts[id].at===k);return ids.length?ids.map(tag).join("・"):"—";};
     $("stock").innerHTML=[["S1","置き場1"],["S2","置き場2"],["A","A"],["B","B"],["S3","置き場3"],["S4","置き場4"],["C","C"],["D","D"]]
       .map(([k,l])=>`<div><div class="k">${l}</div><div class="v">${where(k)}</div></div>`).join("");
-    $("clock").textContent=clock.toFixed(1)+" s";
+    $("clock").textContent=fmt(clock);
+    $("lapinfo").innerHTML=UNITS.map(u=>`${u.id}号機：1周 <b>${lapM(u)} m</b> ÷ <b>${num("kmh",2)} km/h</b> ＝ 走行だけで <b>${fmt(lapM(u)/mps())}</b>`).join("　／　");
     $("stepNo").textContent="タスク "+(history.length-1);
   }
 
@@ -403,9 +431,9 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
     if(!u.nowEl){
       box.innerHTML=`<div class="uhead"><h2><span class="badge">${u.id}</span>${u.id}号機　置き場${u.P}・${u.Q} → ${u.X}・${u.Y}</h2>
         <div class="now"></div>
-        <div class="kv"><span>連結 <b class="c"></b></span><span>停止待ち <b class="w"></b></span><span>荷降ろし待ち <b class="uw"></b></span><span>周回 <b class="e"></b></span></div></div>
+        <div class="kv"><span>連結 <b class="c"></b></span><span>停止待ち <b class="w"></b></span><span>荷降ろし待ち <b class="uw"></b></span><span>周回 <b class="e"></b></span><span>走行距離 <b class="d"></b></span><span>直前サイクル所要 <b class="cy"></b></span></div></div>
         <ol class="steps"></ol>`;
-      u.nowEl=box.querySelector(".now"); u.carryEl=box.querySelector(".c"); u.waitEl=box.querySelector(".w"); u.uwEl=box.querySelector(".uw"); u.endEl=box.querySelector(".e"); u.listEl=box.querySelector(".steps");
+      u.nowEl=box.querySelector(".now"); u.carryEl=box.querySelector(".c"); u.waitEl=box.querySelector(".w"); u.uwEl=box.querySelector(".uw"); u.distEl=box.querySelector(".d"); u.cycEl=box.querySelector(".cy"); u.endEl=box.querySelector(".e"); u.listEl=box.querySelector(".steps");
     }
     const ol=u.listEl; ol.innerHTML=""; let n=0;
     u.plan.forEach(p=>{
@@ -424,7 +452,7 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
     requestAnimationFrame(tick);
   }
   // ---- タスク単位の進む／戻る ----
-  const UKEYS=["i","s","anim","carry","wait","uwait","unloadWait","blocked","done","finishAt","loadLeft","release","lap"];
+  const UKEYS=["i","s","anim","carry","wait","uwait","unloadWait","blocked","done","finishAt","loadLeft","release","lap","dist","cycStart","lastCyc","lastCycNo"];
   function snapshot(){
     return JSON.parse(JSON.stringify({clock,timers,carts,units:UNITS.map(u=>{const o={};UKEYS.forEach(k=>o[k]=u[k]===undefined?null:u[k]);return o;})}));
   }
@@ -452,6 +480,7 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
   UNITS.forEach(u=>{ $("go"+u.id).onclick=()=>{ u.release=true; if(!playing){playing=true; stepMode=false; $("play").textContent="❚❚ 一時停止";} }; });
   $("delay").onchange=()=>init();
   $("mode").onchange=()=>init();
+  ["kmh","L1","L2"].forEach(id=>$(id).addEventListener("input",()=>render()));
 
   init(); requestAnimationFrame(tick);
 })();
