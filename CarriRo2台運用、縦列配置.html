@@ -103,6 +103,7 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
         <g id="stations"></g>
         <g id="veh"></g>
         <g id="carts"></g>
+        <g id="marks"></g>
       </svg>
         <div class="cyclebar" aria-label="次サイクル実行">
           <div class="ttl">次サイクル実行</div>
@@ -116,6 +117,8 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
         <span><i class="sw" style="width:16px;height:16px;background:#26292e"></i>台車（荷物あり）</span>
         <span><i class="sw" style="width:14px;height:14px;background:#ee7a33;border-radius:50%"></i>スタート置き場</span>
         <span><i style="display:inline-block;width:14px;height:14px;border-radius:50%;border:2.5px solid #f0a000"></i>停止待ち</span>
+        <span><b style="color:#1faa4a">▲</b>→<b style="color:#3b8ee0">▲</b> スタート合流：先に緑へ入った号機が青を通過するまで他方は緑で待機</span>
+        <span><b style="color:#c9bd00">▲</b>→<b style="color:#ee7a33">▲</b> 中央合流：先に黄へ入った号機がオレンジを通過するまで他方は黄で待機</span>
       </div>
     </div>
 
@@ -214,6 +217,21 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
   }
   const ROUTES={1:loop(1),2:loop(2)};
 
+  // ---- 合流区間の占有ルール ----
+  // 進入点（緑・黄）に先に入った号機が区間を占有し、もう一方は解除点（青・オレンジ）を通過するまで進入点で待機。
+  // 同時に到達した場合は2号機を優先。
+  const BLUEX=343, YEL2X=198, YEL1Y=427, ORGY=289, GREENY=64;
+  const segS=(R,i,d)=>R.cum[i]+d;           // i番目の区間の始点からd進んだ位置
+  const ZONES=[
+    {key:"start", name:"スタート合流", entryColor:"緑", exitColor:"青",
+     entry:{1:ROUTES[1].turn, 2:ROUTES[2].turn},
+     exit:{1:segS(ROUTES[1],1,LANEX[1]-BLUEX), 2:segS(ROUTES[2],1,LANEX[2]-BLUEX)}},
+    {key:"mid", name:"中央合流", entryColor:"黄", exitColor:"オレンジ",
+     entry:{1:segS(ROUTES[1],4,UY[1]-YEL1Y), 2:segS(ROUTES[2],3,YEL2X-LEFT)},
+     exit:{1:segS(ROUTES[1],4,UY[1]-ORGY), 2:segS(ROUTES[2],4,UY[2]-ORGY)}}
+  ];
+  let zoneOwner={start:null,mid:null};
+
   // 台車の下に潜り込む＝連結。単独のCarriRoが連結しない台車の下を通り抜ける動きは作らない
   function plan(P,Q,X,Y,c1,c2){
     return [
@@ -262,6 +280,14 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
   arrow(LANEX[1],TOP+14,"up",RED); arrow(LANEX[2],TOP+14,"up",BLUE);
   arrow(LEFT+10,TOP,"left",RED); arrow(LEFT,300,"down",RED); arrow(MID-14,UY[2],"right",BLUE);
   arrow(MID,EY+40,"up",RED); arrow(EX,COLL-40,"down",RED);
+  // 合流ルールの目印（三角）
+  const tri=(x,y,dir,fill)=>{const d={up:[[0,-7],[-6,5],[6,5]],left:[[-7,0],[5,-6],[5,6]],right:[[7,0],[-5,-6],[-5,6]]}[dir];
+    el("polygon",{points:d.map(([a,b])=>(x+a)+","+(y+b)).join(" "),fill,stroke:"#1d2b36","stroke-width":1.2},$("marks"));};
+  // 三角は動線上に表示。緑・黄は停止するCarriRoの車体のすぐ前方（停止位置の先端）に置く
+  tri(LANEX[1],GREENY-15,"up","#1faa4a"); tri(LANEX[2],GREENY-15,"up","#1faa4a");
+  tri(BLUEX,TOP,"left","#3b8ee0");
+  tri(YEL2X+15,UY[2],"right","#f2e600"); tri(MID,YEL1Y-15,"up","#f2e600");
+  tri(MID,ORGY,"up","#ee7a33");
 
   function hept(cx,cy,r){const a=[];for(let i=0;i<7;i++){const t=-Math.PI/2+i*2*Math.PI/7;a.push((cx+r*Math.cos(t)).toFixed(1)+","+(cy+r*Math.sin(t)).toFixed(1));}return a.join(" ");}
   const label=(l,x,y,c)=>{el("polygon",{points:hept(x,y,11),fill:c,stroke:"#1d2b36","stroke-width":1},sg);
@@ -293,7 +319,7 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
   // ---- state ----
   let carts, clock, playing, timers, history=[], stepMode=false, dirty=false, taskDone=false;
   function init(){
-    cg.innerHTML=""; cartEls={}; carts={}; clock=0; playing=false; timers=[];
+    cg.innerHTML=""; cartEls={}; carts={}; clock=0; playing=false; timers=[]; zoneOwner={start:null,mid:null};
     UNITS.forEach(u=>{
       u.R=ROUTES[u.id];
       [[u.R.slot.up,u.c[0],u.P],[u.R.slot.low,u.c[1],u.Q]].forEach(([s,id,k])=>{const p=posAt(u.R,s);carts[id]={x:p.x,y:p.y,a:-Math.PI/2,at:"S"+k,loaded:false};});
@@ -354,8 +380,8 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
     const [a,b]=UNITS, mv=u=>u.anim&&u.anim.type==="move";
     a.blocked=mv(a)&&blockedBy(a,b);
     b.blocked=mv(b)&&blockedBy(b,a);
-    if(a.blocked&&b.blocked) a.blocked=false;   // 両方止まる場合は1号機を優先
-    UNITS.forEach(u=>{
+    if(a.blocked&&b.blocked) b.blocked=false;   // 両方止まる場合は2号機を優先
+    [b,a].forEach(u=>{   // 2号機から処理：同時到達時は2号機が先に区間を確保
       if(!u.anim) return;
       const an=u.anim;
       if(an.type==="move"){
@@ -367,8 +393,22 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
           if(cid&&carts[cid].loaded&&an.remain<=37){u.unloadWait=true;u.uwait+=sdt;return;}
         }
         u.unloadWait=false;
-        const st=Math.min(an.remain,pxs(u)*sdt);
-        u.s=(u.s+st)%u.R.L; an.remain-=st; u.dist+=st*mPerPx(u);
+        let st=Math.min(an.remain,pxs(u)*sdt);
+        const L=u.R.L, ahead=p=>((p-u.s)%L+L)%L;
+        u.zoneWait=null;
+        for(const z of ZONES){
+          if(zoneOwner[z.key]===u.id) continue;
+          const d=ahead(z.entry[u.id]);
+          if(d<=st+1e-6 && d<an.remain-1e-6){          // この移動で進入点を越える
+            if(zoneOwner[z.key]==null) zoneOwner[z.key]=u.id;   // 空いていれば占有
+            else { st=Math.min(st,d); u.zoneWait=z; }          // 占有中なら進入点で待機
+          }
+        }
+        if(u.zoneWait && st<=1e-6){u.wait+=sdt; return;}
+        for(const z of ZONES){                                 // 解除点を通過したら区間を開放
+          if(zoneOwner[z.key]===u.id && ahead(z.exit[u.id])<=st+1e-6) zoneOwner[z.key]=null;
+        }
+        u.s=(u.s+st)%L; an.remain-=st; u.dist+=st*mPerPx(u);
         if(an.remain<=0.01){
           u.s=an.tgt;
           if(act.couple){ // 潜り込み完了 → そのまま連結動作
@@ -395,11 +435,12 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
     UNITS.forEach(u=>{
       const v=posAt(u.R,u.s);
       u.g.setAttribute("transform",`translate(${v.x.toFixed(1)},${v.y.toFixed(1)}) rotate(${deg(v.a+Math.PI/2)})`);
-      u.ring.setAttribute("opacity",u.blocked?1:0);
+      u.ring.setAttribute("opacity",(u.blocked||(u.zoneWait&&zoneOwner[u.zoneWait.key]!=null))?1:0);
       if(u.carry){const c=carts[u.carry],p=posAt(u.R,u.s-OFF);c.x=p.x;c.y=p.y;c.a=v.a;}
       const dl=$("mode").value==="both"?delay:0;
       let now=!u.active?"今回は運転しない（待機位置で停止）":u.done?"完了":(u.id===2&&clock<dl?"発進待ち":u.acts[u.i].txt);
       if(u.blocked) now="他号機との干渉で停止待ち";
+      if(u.zoneWait&&zoneOwner[u.zoneWait.key]!=null){const o=zoneOwner[u.zoneWait.key]; now=`${u.zoneWait.name}：${u.zoneWait.entryColor}三角で待機（${o}号機が${u.zoneWait.exitColor}三角を通過するまで）`;}
       if(u.unloadWait) now=`荷物の取り出し待ち（台車${u.anim.id}が空になるまで待機）`;
       u.nowEl.textContent=now;
       u.carryEl.textContent=u.carry?(u.loadLeft!=null?`台車${u.carry}（積込み ${Math.ceil(u.loadLeft)}秒）`:tag(u.carry)):"なし";
@@ -452,13 +493,13 @@ select{font:inherit;border:1px solid var(--line);background:var(--panel);color:v
     requestAnimationFrame(tick);
   }
   // ---- タスク単位の進む／戻る ----
-  const UKEYS=["i","s","anim","carry","wait","uwait","unloadWait","blocked","done","finishAt","loadLeft","release","lap","dist","cycStart","lastCyc","lastCycNo"];
+  const UKEYS=["i","s","anim","carry","wait","uwait","unloadWait","blocked","done","finishAt","loadLeft","release","lap","dist","cycStart","lastCyc","lastCycNo","zoneWait"];
   function snapshot(){
-    return JSON.parse(JSON.stringify({clock,timers,carts,units:UNITS.map(u=>{const o={};UKEYS.forEach(k=>o[k]=u[k]===undefined?null:u[k]);return o;})}));
+    return JSON.parse(JSON.stringify({clock,timers,carts,zoneOwner,units:UNITS.map(u=>{const o={};UKEYS.forEach(k=>o[k]=u[k]===undefined?null:u[k]);return o;})}));
   }
   function restore(sn){
     const c=JSON.parse(JSON.stringify(sn));
-    clock=c.clock; timers=c.timers; carts=c.carts;
+    clock=c.clock; timers=c.timers; carts=c.carts; zoneOwner=c.zoneOwner||{start:null,mid:null};
     UNITS.forEach((u,k)=>{Object.assign(u,c.units[k]); buildList(u);});
     dirty=false; render();
   }
