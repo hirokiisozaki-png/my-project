@@ -6,19 +6,19 @@
 <style>
   :root{
     --bg:#f4f3ef; --panel:#fcfcfb; --border:#e2e0d9; --text:#171614; --muted:#5c5a54;
-    --accent:#2a5fd6; --ok:#1f8a4c; --ok-bg:#e8f5ec; --ng:#b23a2e; --ng-bg:#fbeae7;
+    --accent:#2a5fd6; --ok:#1f8a4c; --ok-bg:#e8f5ec; --ng:#b23a2e; --ng-bg:#fbeae7; --warn:#9a6700; --warn-bg:#fdf3dc;
     --field:#ffffff; --dim:#1f5f7a;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
       --bg:#17181a; --panel:#202224; --border:#33353a; --text:#eceae5; --muted:#9b9a94;
-      --accent:#6d97ff; --ok:#5fd08a; --ok-bg:#173322; --ng:#f0897c; --ng-bg:#3a1e1b;
+      --accent:#6d97ff; --ok:#5fd08a; --ok-bg:#173322; --ng:#f0897c; --ng-bg:#3a1e1b; --warn:#e8b64c; --warn-bg:#3a2e14;
       --field:#2a2c2f; --dim:#7fb8d8;
     }
   }
   :root[data-theme="dark"]{
     --bg:#17181a; --panel:#202224; --border:#33353a; --text:#eceae5; --muted:#9b9a94;
-    --accent:#6d97ff; --ok:#5fd08a; --ok-bg:#173322; --ng:#f0897c; --ng-bg:#3a1e1b;
+    --accent:#6d97ff; --ok:#5fd08a; --ok-bg:#173322; --ng:#f0897c; --ng-bg:#3a1e1b; --warn:#e8b64c; --warn-bg:#3a2e14;
     --field:#2a2c2f; --dim:#7fb8d8;
   }
   *{box-sizing:border-box}
@@ -57,6 +57,17 @@
   .verdict{ margin-top:8px; padding:7px 10px; border-radius:6px; font-weight:600; font-size:12.5px; }
   .verdict.ok{ background:var(--ok-bg); color:var(--ok); }
   .verdict.ng{ background:var(--ng-bg); color:var(--ng); }
+  .load-table{ width:100%; border-collapse:collapse; margin-top:8px; font-size:11.5px; }
+  .load-table th{ text-align:left; font-weight:600; color:var(--muted); font-size:10.5px; padding:3px 4px; border-bottom:1px solid var(--border); }
+  .load-table td{ padding:5px 4px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  .load-table td.kg{ font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .load-table td.ex{ color:var(--text); line-height:1.35; }
+  .load-table td.jd{ white-space:nowrap; font-weight:700; text-align:center; border-radius:4px; }
+  .load-table tr.ok td.jd{ background:var(--ok-bg); color:var(--ok); }
+  .load-table tr.warn td.jd{ background:var(--warn-bg); color:var(--warn); }
+  .load-table tr.ng td.jd{ background:var(--ng-bg); color:var(--ng); }
+  .load-table tr.limit td{ border-bottom:2px solid var(--accent); color:var(--accent); font-weight:700; font-size:11px; padding:4px; }
+  .legend{ margin-top:6px; color:var(--muted); font-size:10.5px; line-height:1.5; }
   .note{ margin-top:12px; padding-top:10px; border-top:1px solid var(--border); color:var(--muted); font-size:11px; }
   button#reset{
     margin-top:12px; width:100%; padding:7px; border-radius:6px; border:1px solid var(--border);
@@ -136,6 +147,18 @@
     <div class="sub-result"><span>幅(W)方向に押した場合</span><b><span id="Fw"></span> kgf</b></div>
     <div class="sub-result"><span>奥行き(D)方向に押した場合</span><b><span id="Fd"></span> kgf</b></div>
     <div id="verdict" class="verdict"></div>
+  </div>
+
+  <div class="result">
+    <div>荷重ごとの目安表（最も倒れやすい向きに押した場合）</div>
+    <table class="load-table">
+      <thead><tr><th>横荷重</th><th>身近な例（目安）</th><th>判定</th></tr></thead>
+      <tbody id="loadTable"></tbody>
+    </table>
+    <div class="legend">
+      ○ 安全：安全率込みで倒れない ／ △ 注意：計算上は倒れないが安全率が足りない ／ × 転倒：倒れる<br>
+      ※ 1kgf ＝ 1kgの物を持ち上げるのと同じくらいの力（約9.8N）。「身近な例」は大まかな目安です。
+    </div>
   </div>
 
   <button id="reset">初期視点に戻す</button>
@@ -475,6 +498,31 @@
     const v = $('verdict');
     v.className = 'verdict ok';
     v.textContent = `この条件での許容横荷重は ${gov.toFixed(1)} kgf（安全率 ${p.SF.toFixed(1)} 込み）です`;
+
+    // 荷重ごとの目安表（支配方向＝倒れやすい方向で判定）
+    const Fraw = Math.min(FrawW, FrawD);
+    const LOADS = [
+      [1,  '指先で軽く押す（1Lペットボトル1本分の重さ）'],
+      [2,  '軽いドアを押し開ける程度'],
+      [3,  '手のひらで軽く押す'],
+      [5,  '片手でしっかり押す'],
+      [10, '両手で強く押す／荷物を載せた台車を押し出す'],
+      [15, '人が軽くもたれかかる'],
+      [20, '人が体重をかけて寄りかかる'],
+      [30, '人が肩からぶつかる'],
+      [50, '大人が全力で押す／人が勢いよく衝突する'],
+    ];
+    let html = '', limitShown = false;
+    for (const [kg, ex] of LOADS){
+      if (!limitShown && kg > gov){
+        html += `<tr class="limit"><td colspan="3">▲ ここまでが安全範囲（F<sub>max</sub> = ${gov.toFixed(1)} kgf）</td></tr>`;
+        limitShown = true;
+      }
+      const [cls, jd] = kg <= gov ? ['ok','○ 安全'] : kg <= Fraw ? ['warn','△ 注意'] : ['ng','× 転倒'];
+      html += `<tr class="${cls}"><td class="kg">${kg} kgf</td><td class="ex">${ex}</td><td class="jd">${jd}</td></tr>`;
+    }
+    if (!limitShown) html += `<tr class="limit"><td colspan="3">▲ 表の範囲はすべて安全（F<sub>max</sub> = ${gov.toFixed(1)} kgf）</td></tr>`;
+    $('loadTable').innerHTML = html;
 
     rebuild(p);
   }
