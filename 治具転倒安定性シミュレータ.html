@@ -74,6 +74,40 @@
     background:var(--field); color:var(--text); font-size:12px; cursor:pointer;
   }
   button#reset:hover{ border-color:var(--accent); }
+  button#pdf{
+    margin-top:8px; width:100%; padding:8px; border-radius:6px; border:1px solid var(--accent);
+    background:var(--accent); color:#fff; font-size:12.5px; font-weight:700; cursor:pointer;
+  }
+  button#pdf:hover{ filter:brightness(1.08); }
+
+  /* ---------- PDF出力（印刷）用レポート ---------- */
+  #printReport{ display:none; }
+  @page{ size:A4 portrait; margin:10mm; }
+  @media print{
+    html,body{ height:auto; overflow:visible; background:#fff !important; padding:0; }
+    body > *:not(#printReport){ display:none !important; }
+    #printReport{ display:block; }
+  }
+  #printReport{
+    --text:#171614; --muted:#5c5a54; --border:#d6d3cb; --accent:#2a5fd6;
+    --ok:#1f8a4c; --ok-bg:#e8f5ec; --ng:#b23a2e; --ng-bg:#fbeae7; --warn:#9a6700; --warn-bg:#fdf3dc;
+    color:#171614; background:#fff; font-size:10.5px; line-height:1.5;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  #printReport h1{ font-size:17px; margin:0; }
+  #printReport .rp-head{ display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2px solid #171614; padding-bottom:4px; margin-bottom:8px; }
+  #printReport .rp-date{ color:#5c5a54; font-size:10px; }
+  #printReport .rp-img{ width:100%; height:112mm; object-fit:contain; border:1px solid #d6d3cb; border-radius:4px; display:block; background:#f4f3ef; }
+  #printReport .rp-cols{ display:flex; gap:10px; margin-top:8px; }
+  #printReport .rp-cols > div{ flex:1; }
+  #printReport h2{ font-size:11.5px; margin:8px 0 4px; padding-left:6px; border-left:3px solid #2a5fd6; }
+  #printReport table.kv{ width:100%; border-collapse:collapse; }
+  #printReport table.kv td{ border-bottom:1px solid #d6d3cb; padding:2.5px 4px; }
+  #printReport table.kv td:last-child{ text-align:right; font-weight:700; white-space:nowrap; }
+  #printReport .rp-big{ margin-top:4px; padding:6px 8px; border-radius:4px; background:#e8f5ec; color:#1f8a4c; font-weight:700; font-size:12.5px; }
+  #printReport .load-table{ font-size:10px; }
+  #printReport .load-table td{ padding:3px 4px; }
+  #printReport .rp-note{ margin-top:6px; color:#5c5a54; font-size:9px; }
   #dimLabels{ position:fixed; inset:0; pointer-events:none; overflow:hidden; }
   .dim-label{
     position:absolute; left:0; top:0; white-space:nowrap; font-size:12px; font-weight:700;
@@ -162,12 +196,14 @@
   </div>
 
   <button id="reset">初期視点に戻す</button>
+  <button id="pdf">PDF出力（結果＋イメージ図）</button>
 
   <div class="note">
     ベース板は剛体・接地面全体で自重支持され、浮き上がり始める瞬間の転倒支点はベース底面の反対側エッジと仮定。重心はベース中心にあるため、腕は押す方向と垂直な寸法の半分（幅方向に押すなら奥行きD/2、奥行き方向に押すならW/2）。F<sub>raw</sub> = M<sub>total</sub>×(腕)/H、F<sub>max</sub> = F<sub>raw</sub>/SF。柱の本数・配置（1本中央／2本両端／4本四隅）自体は、対称配置である限り重心位置を変えないため腕には影響しません。ただし柱は30×30角パイプ（中空、肉厚は入力）として重量計算に反映しており、本数が増える・高さHが高くなるほど柱重量が増え、その分だけM_totalが増えてF_maxも大きくなります（4本の方が安定するとしたら、この鋼材重量の増加が理由です）。支柱・箱等その他の重量は「追加重量」に任意入力できます。実際に押す方向が分かっている場合は該当する方の値をご覧ください。
   </div>
 </div>
 
+<div id="printReport"></div>
 <div id="hint">左ドラッグで回転・ホイールで拡大縮小・ホイールクリック（右ドラッグ）で視点移動</div>
 
 <script>
@@ -562,6 +598,104 @@
   update();
 
   renderer.setAnimationLoop(()=>{ renderer.render(scene, camera); placeLabels(); });
+
+  // ---------- PDF出力 ----------
+  // 3D画面＋寸法ラベルを1枚の画像にする（ラベルはHTMLなのでcanvasに描き直す）
+  function snapshot(){
+    renderer.render(scene, camera); placeLabels();
+    const src = renderer.domElement;
+    const c = document.createElement('canvas'); c.width = src.width; c.height = src.height;
+    const g = c.getContext('2d');
+    g.drawImage(src, 0, 0);
+    const r = src.width / src.clientWidth;
+    const dimColor = getComputedStyle(document.documentElement).getPropertyValue('--dim').trim() || '#1f5f7a';
+    const bg = getComputedStyle(document.documentElement).getPropertyValue('--panel').trim() || '#fff';
+    g.font = `700 ${12*r}px "Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif`;
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    const boxes = [];
+    for (const k in labels){
+      const L = labels[k];
+      _v.copy(L.pos).project(camera);
+      if (_v.z > 1 || _v.z < -1) continue;
+      const x = (_v.x*0.5+0.5)*src.width, y = (-_v.y*0.5+0.5)*src.height;
+      const t = L.el.textContent, w = g.measureText(t).width + 14*r, h = 20*r;
+      g.fillStyle = bg; g.strokeStyle = dimColor; g.lineWidth = 1*r;
+      g.beginPath(); g.rect(x-w/2, y-h/2, w, h); g.fill(); g.stroke();
+      g.fillStyle = dimColor; g.fillText(t, x, y+0.5*r);
+      boxes.push([x-w/2, y-h/2, x+w/2, y+h/2]);
+    }
+    // 治具と寸法ラベルが収まる範囲だけを切り出す（余白つき）
+    let x0=Infinity, y0=Infinity, x1=-Infinity, y1=-Infinity;
+    const grow = (x,y)=>{ x0=Math.min(x0,x); y0=Math.min(y0,y); x1=Math.max(x1,x); y1=Math.max(y1,y); };
+    const bb = new THREE.Box3().setFromObject(world);
+    for (const X of [bb.min.x,bb.max.x]) for (const Y of [bb.min.y,bb.max.y]) for (const Z of [bb.min.z,bb.max.z]){
+      _v.set(X,Y,Z).project(camera);
+      if (_v.z <= 1) grow((_v.x*0.5+0.5)*src.width, (-_v.y*0.5+0.5)*src.height);
+    }
+    for (const b of boxes) { grow(b[0],b[1]); grow(b[2],b[3]); }
+    const padX = (x1-x0)*0.12 + 20*r, padY = (y1-y0)*0.06 + 20*r;
+    x0 = Math.max(0, x0-padX); y0 = Math.max(0, y0-padY);
+    x1 = Math.min(src.width, x1+padX); y1 = Math.min(src.height, y1+padY);
+    if (!(x1>x0 && y1>y0)) { x0=0; y0=0; x1=src.width; y1=src.height; }
+    const out = document.createElement('canvas');
+    out.width = x1-x0; out.height = y1-y0;
+    out.getContext('2d').drawImage(c, x0, y0, x1-x0, y1-y0, 0, 0, x1-x0, y1-y0);
+    return out.toDataURL('image/png');
+  }
+  function buildReport(){
+    const p = readParams();
+    const patName = $('postPattern').selectedOptions[0].textContent;
+    const now = new Date();
+    const d = `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    const row = (k,v)=>`<tr><td>${k}</td><td>${v}</td></tr>`;
+    $('printReport').innerHTML = `
+      <div class="rp-head"><h1>治具 転倒安定性 試算結果</h1><div class="rp-date">出力日時：${d}</div></div>
+      <img class="rp-img" src="${snapshot()}" alt="イメージ図">
+      <div class="rp-cols">
+        <div>
+          <h2>入力条件</h2>
+          <table class="kv">
+            ${row('高さ H（先端＝荷重作用点まで）', fmtMM(p.H))}
+            ${row('ベース板厚 t', fmtMM(p.T))}
+            ${row('ベース幅 W（横方向）', fmtMM(p.W))}
+            ${row('ベース奥行き D（前後方向）', fmtMM(p.D))}
+            ${row('柱の本数・配置', patName)}
+            ${row('角パイプ肉厚（30×30角パイプ）', p.pipeT.toFixed(1)+'mm')}
+            ${row('安全率 SF', p.SF.toFixed(1))}
+            ${row('追加重量', p.Wother+' kg')}
+            ${row('ベース材質／比重', '鉄／7.85 g/cm³')}
+          </table>
+        </div>
+        <div>
+          <h2>計算結果</h2>
+          <table class="kv">
+            ${row('ベース板重量', $('Mbase').textContent+' kg')}
+            ${row('柱重量合計', $('Mpost').textContent+' kg')}
+            ${row('総重量 M<sub>total</sub>', $('Mtotal').textContent+' kg')}
+            ${row('幅(W)方向に押した場合', $('Fw').textContent+' kgf')}
+            ${row('奥行き(D)方向に押した場合', $('Fd').textContent+' kgf')}
+          </table>
+          <div class="rp-big">転倒しない最大横荷重 F<sub>max</sub>：${$('Fgov').textContent} kgf（安全率 ${p.SF.toFixed(1)} 込み）</div>
+          <div class="rp-note">${$('govDir').textContent}</div>
+        </div>
+      </div>
+      <h2>荷重ごとの目安表（最も倒れやすい向きに押した場合）</h2>
+      <table class="load-table">
+        <thead><tr><th>横荷重</th><th>身近な例（目安）</th><th>判定</th></tr></thead>
+        <tbody>${$('loadTable').innerHTML}</tbody>
+      </table>
+      <div class="rp-note">○ 安全：安全率込みで倒れない ／ △ 注意：計算上は倒れないが安全率が足りない ／ × 転倒：倒れる<br>
+      ※ 1kgf ＝ 1kgの物を持ち上げるのと同じくらいの力（約9.8N）。「身近な例」は大まかな目安です。
+      ベース板は剛体、転倒支点はベース底面の反対側エッジと仮定。F<sub>max</sub> = M<sub>total</sub>×(腕)/H ÷ SF。</div>`;
+  }
+  $('pdf').addEventListener('click', ()=>{
+    buildReport();
+    const oldTitle = document.title, now = new Date();
+    document.title = `治具転倒安定性_試算結果_${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`; // PDFの既定ファイル名
+    const img = $('printReport').querySelector('img');
+    const go = ()=>{ window.print(); setTimeout(()=>{ document.title = oldTitle; }, 500); };
+    img.complete ? go() : img.onload = go;
+  });
 })();
 </script>
 </body></html>
