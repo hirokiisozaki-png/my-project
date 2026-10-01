@@ -82,11 +82,12 @@
 
   /* ---------- PDF出力（印刷）用レポート ---------- */
   #printReport{ display:none; }
-  @page{ size:A4 portrait; margin:10mm; }
+  /* 余白0にするとブラウザ自動のヘッダー・フッター（URL・日付・ページ番号）が出なくなる。余白はレポート側で確保 */
+  @page{ size:A4 portrait; margin:0; }
   @media print{
     html,body{ height:auto; overflow:visible; background:#fff !important; padding:0; }
     body > *:not(#printReport){ display:none !important; }
-    #printReport{ display:block; }
+    #printReport{ display:block; padding:10mm 12mm; }
   }
   #printReport{
     --text:#171614; --muted:#5c5a54; --border:#d6d3cb; --accent:#2a5fd6;
